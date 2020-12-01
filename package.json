@@ -1,0 +1,24 @@
+{
+  "name": "travel-consultant",
+  "version": "1.0.0",
+  "description": "A website that can help users to make a travel plan easier",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csu-iteam/CS-546-Final-Project.git"
+  },
+  "keywords": [
+    "web",
+    "travel",
+    "plan"
+  ],
+  "author": "Jianzheng Wang, Yujie He, Jingwei Li, Xietong Wei",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csu-iteam/CS-546-Final-Project/issues"
+  },
+  "homepage": "https://github.com/csu-iteam/CS-546-Final-Project#readme"
+}
