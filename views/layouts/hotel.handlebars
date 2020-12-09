@@ -1,7 +1,12 @@
 <div>
     <div>Hotel</div>
-    {{#each hotel}}
+    {{#each location}}
         <h2><a href="{{hotel_url}}">{{name}}</a></h2>
+        {{#each ../hotels}}
+            {{#each this}}
+                <h3>{{this.name}}</h3>
+            {{/each}}
+        {{/each}}
         <p></p>
     {{/each}}
 </div>

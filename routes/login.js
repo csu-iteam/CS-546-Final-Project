@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 //const bcrypt = require('bcryptjs');
-const data = require('../data');
+const data = require('../data/users');
 const user = data.users;
 
 router.get('/', async (req, res) => {
