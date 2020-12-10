@@ -69,4 +69,15 @@ router.get('/hotel/:loc', async (req, res) => {
     }
 })
 
+router.get('/meal/:loc', async (req, res) => {
+    const locQuery = req.params.loc.trim()
+    if (locQuery !== null) {
+        res.render('layouts/meal')
+    } else {
+        let messErr = 'No location'
+        res.render('layouts/error',
+            {errorMes: messErr})
+    }
+})
+
 module.exports = router
