@@ -1,0 +1,16 @@
+html,
+body {
+	font-size: 15pt;
+}
+
+h1 {
+	color: blue;
+}
+
+title {
+	background: white;
+}
+
+footer {
+	font-family: Times;
+}

@@ -1,5 +1,26 @@
 <main>
-    <div>{{username}}</div>
+    <div style="display:inline">{{username}}'s personal account</div>
+    <div style="display:inline">
+        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/account'" name="account-modify" id="button">Personal Account</button>
+    </div>
     <p></p>
-    <p>You have logged in the account.</p>
+    <div>
+        <label for="logs"></label>
+        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/logs'" name="user-logs" id="button">Logs</button>
+    </div>
+    <div>
+        <label for="plans"></label>
+        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/plans'" name="user-plans" id="button">Plans</button>
+    </div>
+    <div>
+        <label for="comments"></label>
+        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/comments'" name="user-comments" id="button">Comments</button>
+    </div>
+    <div>
+        <label for="replies"></label>
+        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/replies'" name="user-replies" id="button">Replies</button>
+    </div>
+    {{#if status}}
+        <ul id="loginInfo">Logging successful!</ul>
+    {{/if}}
 </main>

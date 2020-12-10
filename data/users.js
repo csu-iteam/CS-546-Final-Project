@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 let { ObjectId } = require('mongodb');
 
-async function insertUsers(lastUserName, firstUserName, password, nickName, plansId, logsId) {
+async function insertUsers(lastUserName, firstUserName, password, nickName, plansId, logsId, accImage) {
     const user = await users();
     const newInsert = {
         lastUserName: lastUserName,
@@ -10,7 +10,8 @@ async function insertUsers(lastUserName, firstUserName, password, nickName, plan
         password: password,
         nickName: nickName,
         plansId: plansId,
-        logsId: logsId
+        logsId: logsId,
+        accountImage: accImage
     };
     const result = await user.insertOne(newInsert);
     if (result.insertedCount === 0) {
@@ -26,7 +27,14 @@ async function getByPassword(p) {
     return result;
 }
 
+async function getByLastName(name) {
+    const user = await users();
+    const result = await user.findOne({ lastUserName: name });
+    return result;
+}
+
 module.exports = {
     insertUsers,
-    getByPassword
+    getByPassword,
+    getByLastName
 };
