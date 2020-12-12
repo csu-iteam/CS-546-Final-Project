@@ -13,10 +13,10 @@ const getCollectionFn = (collection) => {
 };
 
 module.exports = {
-	users: getCollectionFn('users')
+	users: getCollectionFn('users'),
     // logs: getCollectionFn('logs'),
     // comments: getCollectionFn('comments'),
-    // plans: getCollectionFn('plans'),
+    plans: getCollectionFn('plans')
     // reviews: getCollectionFn('reviews'),
     // replies: getCollectionFn('replies')
 };

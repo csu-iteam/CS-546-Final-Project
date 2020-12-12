@@ -15,8 +15,12 @@
         </div>
         <div>
             <label for="confirm-password">confirmPassword: </label>
-            <input id="confirmPassword" type="number" name="confirms"/>
-        </div>
+            <input id="confirmPassword" type="password" name="confirms"/>
+            {{#if status1}}
+                <div id="registering-checking" class="compare-password">{{compare}}</div>
+            {{/if}}
+            <li>{{errors}}</li>
+            </div>
         <div>
 		    <button type="submit" name="registers" id="button">Submit</button>
 	    </div>
