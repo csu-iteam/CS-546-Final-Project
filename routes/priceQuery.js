@@ -1,7 +1,21 @@
 const express = require("express")
 const axios = require('axios')
+const streamArray = require('stream-json/streamers/StreamArray')
+const fs = require('fs')
 const router = express.Router()
 const hotelApi = require('../config/hotelApi')
+
+const jsonStream = streamArray.withParser()
+
+fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
+
+jsonStream.on('data', ({key, value}) => {
+    console.log(key, value)
+})
+
+jsonStream.on('end', () => {
+    console.log('All Done')
+})
 
 async function renderHotelList(data, res) {
     locList = data.suggestions.find(o => {
@@ -77,6 +91,13 @@ router.get('/meal/:loc', async (req, res) => {
         let messErr = 'No location'
         res.render('layouts/error',
             {errorMes: messErr})
+    }
+})
+
+router.get('/airline/:loc', async function (req, res) {
+    const locQuery = req.params.loc.trim()
+    if (locQuery !== null) {
+
     }
 })
 
