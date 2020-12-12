@@ -1,6 +1,6 @@
 const user = require('./users');
 // const review = require('./reviews');
-// const log = require('./logs');
+const log = require('./logs');
 // const comment = require('./comments');
 const plan = require('./plans');
 // const reply = require('./replies');
@@ -8,7 +8,7 @@ const plan = require('./plans');
 module.exports = {
 	users: user,
     // reviews = review,
-    // logs = log,
+    logs: log,
     // comments = comment,
     plans: plan
     // replies = reply

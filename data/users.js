@@ -28,7 +28,7 @@ async function updateUser(id, updated) {
 	if (!updated) throw 'The update information has not been provided.';
 	const data = ObjectId(id);
 	const user = await users();
-	const obj = {};
+	let obj = {};
 	if (updated.lastUserName)
 		obj.lastUserName = updatedlastUserName;
 	if (updated.firstUserName)
