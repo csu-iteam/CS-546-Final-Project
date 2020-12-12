@@ -1,4 +1,5 @@
 <main>
+    <div id="plans-page">
     <h1>My Plans</h1>
     <form id="search-plans"  name="plans-search">
         <div>
@@ -6,15 +7,17 @@
             <input id="plan-search" type="text" name="thePlans" />
         </div>
     </form>
-    <button type="submit">Search</button>
+    <div id="plans-searchbutton">
+        <button type="submit">Search</button>
+    </div>
     
     <ul id="planList">
     </ul>
     <div id="planItem">
     </div>
 
-    <div>
-        <button onclick="location.href='http://localhost:3000/'" type="button" id="plan-add">Add a plan</button>
+    <div id="addplanbutton">
+        <button onclick="location.href='http://localhost:3000'" type="button" id="plan-add">Add a plan</button>
 	</div>
-
+    </div>
 </main>

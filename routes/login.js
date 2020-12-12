@@ -15,6 +15,19 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.get('/status', async (req, res) => {
+	if (req.session.username) {
+		const result = {};
+		result.status = true;
+		await res.json(result);
+	}
+	else {
+		const result = {};
+		result.status = false;
+		await res.json(result);
+	}
+});
+
 router.get('/database/plans', async (req, res) => {
 	const userData = await plan.getAllPlans();
 	await res.json(userData);
@@ -24,7 +37,6 @@ router.post('/database/plansdelete', async (req, res) => {
 	const id = req.body.id;
 	const userData = await plan.deleteById(id);
 	await res.redirect('/login/personal/plans');
-	//await res.json(userData);
 });
 
 router.get('/personal', async (req, res) => {
@@ -93,6 +105,12 @@ router.post('/register', async (req, res) => {
 			await res.render('form/login', { registeredMessage: 'Your account has been registered.' });
 		}
 	}
+});
+
+router.get('/logout', async (req, res) => {
+	await req.session.destroy();
+	//await res.clearCookie('');
+	await res.redirect('/login');
 });
 
 module.exports = router;
