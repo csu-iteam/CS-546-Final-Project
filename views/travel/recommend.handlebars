@@ -1,0 +1,14 @@
+<h2>Have no idea about where to go?</h2>
+<div>
+    <h3>Recommend places</h3>
+    {{#each picsData}}
+    <div class="recommend-pic">
+        <img src="{{this.url.source_url}}" alt="{{this.name}}" width="384px" height="216px" class="image">
+        <p>{{this.name}}</p>
+        <p>Location: {{this.location}}</p>
+        <p>Description: {{this.snippet}}</p>
+    </div>
+    {{/each}}
+</div>
+
+<button>More</button>
