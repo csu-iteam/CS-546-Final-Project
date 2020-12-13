@@ -1,5 +1,4 @@
-html,
-body {
+html, body {
 	font-size: 15pt;
 	font-family: Times;
 }
@@ -39,4 +38,12 @@ title {
 
 footer {
 	font-family: Times;
+}
+
+.more-around {
+	margin-bottom: 10px;
+}
+
+.recommend-pic, .more-around-div {
+	margin-bottom: 20px;
 }
