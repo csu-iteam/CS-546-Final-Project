@@ -5,31 +5,48 @@ const fs = require('fs')
 const router = express.Router()
 const hotelApi = require('../config/hotelApi')
 
+// read Airport JSON
+const airData = []
 const jsonStream = streamArray.withParser()
 
-fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
+const jsonPipe = fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
 
 jsonStream.on('data', ({key, value}) => {
-    console.log(key, value)
+    airData.push({key, value})
 })
 
 jsonStream.on('end', () => {
-    console.log('All Done')
+    console.log('Airport json read all done')
 })
 
-async function renderHotelList(data, res) {
-    locList = data.suggestions.find(o => {
+let cityTransport = []
+
+function TransportList(data) {
+    cityTransport = data.suggestions.find(o => {
+        return o.group === 'TRANSPORT_GROUP'
+    }).entities
+    return cityTransport
+}
+
+function getCityDestinationIdlList(data) {
+    cityList = data.suggestions.find(o => {
         return o.group === 'CITY_GROUP'
     }).entities
     let desIdArray = []
-    for (i of locList) {
+    for (i of cityList) {
         desIdArray.push(i.destinationId)
     }
-    hotelList = await queryHotelList(desIdArray)
+    return {cityList, desIdArray}
+}
+
+async function renderHotelList(data, res) {
+    let results = getCityDestinationIdlList(data)
+
+    hotelList = await queryHotelList(results.desIdArray)
 
     res.render('layouts/hotel',
         {
-            location: locList,
+            location: results.cityList,
             hotels: hotelList
         })
 }
@@ -64,21 +81,27 @@ async function queryHotelList(data) {
     return hotelList
 }
 
-router.get('/hotel/:loc', async (req, res) => {
-    const locQuery = req.params.loc.trim()
-    const localelang = req.headers["accept-language"].split(',')[0]
+async function queryCity(name) {
     let queryParms = {
-        query: locQuery,
+        query: name,
         locale: 'en_US'
     }
-    if (locQuery !== null) {
+    if (name !== null) {
         hotelApi.locQ.params = queryParms
-        const queryData = await axios.request(hotelApi.locQ).then(async function (response) {
+        return await axios.request(hotelApi.locQ).then(async function (response) {
             console.log(response.data)
             return response.data
         }).catch(function (error) {
             console.log(error)
         })
+    }
+}
+
+router.get('/hotel/:loc', async (req, res) => {
+    const locQuery = req.params.loc.trim()
+    const localelang = req.headers["accept-language"].split(',')[0]
+    if (locQuery !== null) {
+        const queryData = await queryCity(locQuery)
         renderHotelList(queryData, res)
     }
 })
