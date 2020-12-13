@@ -24,7 +24,7 @@ async function getById(id) {
 
 async function getByUserId(id) {
 	const plan = await plans();
-	const data = await plan.find({ userId: id });
+	const data = await plan.find({ userId: id.toString() });
 	let result = await data.toArray();
 	for (let i of result) {
 		i._id = i._id.toString();

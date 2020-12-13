@@ -43,8 +43,11 @@ router.post('/makelog', async (req, res) => {
 });
 
 router.get('/database/plans', async (req, res) => {
-	const userData = await plan.getAllPlans();
-	await res.json(userData);
+	if (req.session.username) {
+		const userData = await user.getByUsername(req.session.username);
+		const data = await plan.getByUserId(userData._id);
+		await res.json(data);
+	}
 });
 
 router.post('/database/plansdelete', async (req, res) => {
@@ -82,33 +85,59 @@ router.get('/register', async(req, res) => {
 });
 
 router.get('/personal/logs', async(req, res) => {
-	await res.render('form/logs', {});
+	if (req.session.username) {
+		await res.render('form/logs', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
 });
 
 router.get('/personal/plans', async(req, res) => {
-	await res.render('form/plans', {});
+	if (req.session.username) {
+		await res.render('form/plans', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
 });
 
 router.get('/personal/comments', async(req, res) => {
-	await res.render('form/comments', {});
+	if (req.session.username) {
+		await res.render('form/comments', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
 });
 
 router.get('/personal/account', async(req, res) => {
-	await res.render('form/account', {});
+	if (req.session.username) {
+		await res.render('form/account', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
 });
 
 router.get('/personal/replies', async(req, res) => {
-	await res.render('form/replies', {});
+	if (req.session.username) {
+		await res.render('form/replies', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
 });
 
 router.post('/personal', async (req, res) => {
 	const info = req.body;
-	const userData = await user.getByLastName(info.username);
+	const userData = await user.getByUsername(info.username);
 	if (userData) {
-		const pass = userData.password;
-		if (info.password === pass) {
+		//const pass = userData.password;
+		if (await bcrypt.compare(info.password, userData.password)) {
+		//if (info.password === pass) {
 			req.session.username = info.username;
-			await res.render('form/personal', { username: userData.firstUserName, status: true });
+			await res.render('form/personal', { username: userData.username, status: true });
 		}
 		else {
 			await res.render('form/login', { errorMessage: 'The password is not correct.' });
@@ -122,18 +151,26 @@ router.post('/personal', async (req, res) => {
 
 router.post('/register', async (req, res) => {
 	const info = req.body;
-	const userData = await user.getByLastName(info.lastNames);
-	const userData1 = await user.getByFirstName(info.firstNames);
-	if ((userData) && (userData1)) {
-		req.session.username = info.lastNames;
-		await res.render('form/personal', { username: info.lastNames, status: true });
+	//const userData = await user.getByLastName(info.lastNames);
+	//const userData1 = await user.getByFirstName(info.firstNames);
+	const userData = await user.getByUsername(info.userNames);
+	const userData1 = await user.getByEmail(info.userEmails);
+	if ((userData) || (userData1)) {
+	//if ((userData.username === info.userNames) || (userData1.email === info.userEmails)) {
+		req.session.username = info.userNames;
+		await res.render('form/personal', { username: info.userNames, status: true });
 	}
 	else {
 		if (xss(info.passwords) !== xss(info.confirms)) {
 			await res.render('form/register', { compare: "The re-type password does not match.", status1: true });
 		}
 		else {
-			user.insertUsers(info.lastNames, info.firstNames, info.passwords, null, null, null, null);
+			await bcrypt.genSalt(16, function(err, salt) {
+				bcrypt.hash(info.passwords, salt, function(err, hash) {
+					user.insertUsers(info.userNames, info.lastNames, info.firstNames, info.userEmails, hash, null, null, null, null);
+				});
+			});
+			//user.insertUsers(info.lastNames, info.firstNames, hashPassword, null, null, null, null);
 			await res.render('form/login', { registeredMessage: 'Your account has been registered.' });
 		}
 	}

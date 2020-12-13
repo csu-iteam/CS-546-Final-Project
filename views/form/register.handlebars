@@ -2,12 +2,20 @@
     <h1>Please register</h1>
     <form action="/login/register" method="POST" id="register-form">
         <div>
+            <label for="user-username">username: </label>
+            <input id="userName" type="text" name="userNames"/>
+        </div>
+        <div>
             <label for="user-lastname">lastName: </label>
             <input id="lastName" type="text" name="lastNames"/>
         </div>
         <div>
             <label for="user-firstname">firstName: </label>
             <input id="firstName" type="text" name="firstNames"/>
+        </div>
+        <div>
+            <label for="user-email">Email: </label>
+            <input id="userEmail" type="text" name="userEmails"/>
         </div>
         <div>
             <label for="user-password">password: </label>
@@ -19,7 +27,7 @@
             {{#if status1}}
                 <div id="registering-checking" class="compare-password">{{compare}}</div>
             {{/if}}
-            <li>{{errors}}</li>
+            {{!-- <li>{{errors}}</li> --}}
             </div>
         <div>
 		    <button type="submit" name="registers" id="button">Submit</button>

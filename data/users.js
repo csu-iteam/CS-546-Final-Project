@@ -2,11 +2,13 @@ const mongoCollections = require('../config/mongoCollections');
 const users = mongoCollections.users;
 let { ObjectId } = require('mongodb');
 
-async function insertUsers(lastUserName, firstUserName, password, nickName, plansId, logsId, accImage) {
+async function insertUsers(username, lastUserName, firstUserName, email, password, nickName, plansId, logsId, accImage) {
     const user = await users();
     const newInsert = {
+        username: username,
         lastUserName: lastUserName,
         firstUserName: firstUserName,
+        email: email,
         password: password,
         nickName: nickName,
         plansId: plansId,
@@ -53,11 +55,11 @@ async function updateUser(id, updated) {
 	return result1;
 }
 
-async function getByPassword(p) {
-    const user = await users();
-    const result = await user.findOne({ password: p });
-    return result;
-}
+// async function getByPassword(p) {
+//     const user = await users();
+//     const result = await user.findOne({ password: p });
+//     return result;
+// }
 
 async function getByLastName(name) {
     const user = await users();
@@ -69,6 +71,18 @@ async function getByFirstName(name) {
     const user = await users();
     const result = await user.findOne({ firstUserName: name });
     return result;
+}
+
+async function getByUsername(name) {
+    const user = await users();
+	const data = await user.findOne({ username: name });
+	return data;
+}
+
+async function getByEmail(email) {
+    const user = await users();
+	const data = await user.findOne({ email: email });
+	return data;
 }
 
 async function deleteById(id) {
@@ -85,11 +99,19 @@ async function deleteById(id) {
 		throw 'There is nothing in the collection.';
 }
 
+async function removeAll() {
+	const user = await users();
+	await user.deleteMany({});
+}
+
 module.exports = {
     insertUsers,
-    getByPassword,
+    //getByPassword,
     getByLastName,
     getByFirstName,
+    getByUsername,
+    getByEmail,
     updateUser,
-    deleteById
+    deleteById,
+    removeAll
 };
