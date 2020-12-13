@@ -28,19 +28,25 @@ function TransportList(data) {
     return cityTransport
 }
 
-async function renderHotelList(data, res) {
-    locList = data.suggestions.find(o => {
+function getCityDestinationIdlList(data) {
+    cityList = data.suggestions.find(o => {
         return o.group === 'CITY_GROUP'
     }).entities
     let desIdArray = []
-    for (i of locList) {
+    for (i of cityList) {
         desIdArray.push(i.destinationId)
     }
-    hotelList = await queryHotelList(desIdArray)
+    return {cityList, desIdArray}
+}
+
+async function renderHotelList(data, res) {
+    let results = getCityDestinationIdlList(data)
+
+    hotelList = await queryHotelList(results.desIdArray)
 
     res.render('layouts/hotel',
         {
-            location: locList,
+            location: results.cityList,
             hotels: hotelList
         })
 }
