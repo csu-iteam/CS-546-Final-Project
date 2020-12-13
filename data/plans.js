@@ -22,6 +22,16 @@ async function getById(id) {
     return result;
 }
 
+async function getByUserId(id) {
+	const plan = await plans();
+	const data = await plan.find({ userId: id });
+	let result = await data.toArray();
+	for (let i of result) {
+		i._id = i._id.toString();
+	}
+	return result;
+}
+
 async function getAllPlans() {
 	const plan = await plans();
 	const data = await plan.find({});
@@ -81,5 +91,6 @@ module.exports = {
     getById,
     updatePlan,
     deleteById,
-    getAllPlans
+	getAllPlans,
+	getByUserId
 }
