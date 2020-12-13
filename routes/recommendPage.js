@@ -38,14 +38,19 @@ async function getPicsData() {
 }
 
 function queryLists(data) {
+
     let dataLists = [];
-    for (let i = 0; i < 6; i++) {
+    const imagePerPage = 6;
+    const apiDataNumber = 110; //TODO: If use online API, shoule not be 110, 20 perhaps
+    for (let i = 0; i < imagePerPage; i++) {
+
+        let index = Math.round(apiDataNumber * Math.random());
         dataLists[i] = {
 
-            name: data.results[i].name,
-            url: data.results[i].images[0],
-            location: data.results[i].location_id,
-            snippet: data.results[i].snippet
+            name: data.results[index].name,
+            url: data.results[index].images[0],
+            location: data.results[index].location_id,
+            snippet: data.results[index].snippet
 
         }
     }
