@@ -8,7 +8,6 @@ const staticpage = express.static(__dirname + '/public')
 
 app.use(cookie())
 app.use(express.json())
-
 app.use('/public', staticpage)
 
 // CORS support settings
@@ -25,6 +24,17 @@ app.use(session({
     resave: false,
     saveUninitialized: true
 }))
+
+const handlebarsInstance = exphbs.create({
+    defaultLayout: 'main',
+    helpers: {
+        asJSON: (obj, spacing) => {
+        if (typeof spacing === 'number')
+            return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
+        return new Handlebars.SafeString(JSON.stringify(obj));
+        }
+    }
+});
 
 app.use(express.urlencoded({extended: true}))
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))

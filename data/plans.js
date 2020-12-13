@@ -39,7 +39,7 @@ async function updatePlan(id, updated) {
 	if (!updated) throw 'The update information has not been provided.';
 	const data = ObjectId(id);
 	const plan = await plans();
-	const obj = {};
+	let obj = {};
 	if (updated.nodes[0].position)
 		obj.position = updated.nodes[0].position;
 	if (updated.nodes[0].arrival_time)

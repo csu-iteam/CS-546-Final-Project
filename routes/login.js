@@ -5,6 +5,7 @@ const xss = require('xss');
 const data = require('../data');
 const user = data.users;
 const plan = data.plans;
+const log = data.logs;
 
 router.get('/', async (req, res) => {
 	if (req.session.username) {
@@ -28,6 +29,19 @@ router.get('/status', async (req, res) => {
 	}
 });
 
+router.post('/makelog', async (req, res) => {
+	const info = req.body;
+	const userInfo = await user.getByLastName(req.session.username);
+	const userId = userInfo._id;
+	const logtitle = info.logtitle;
+	const logfeel = info.logfeel;
+	const planId = info.id;
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, null, "10/31/2020", 0, 0);
+	const result1 = {};
+	result1.status = true;
+	await res.json(result1);
+});
+
 router.get('/database/plans', async (req, res) => {
 	const userData = await plan.getAllPlans();
 	await res.json(userData);
@@ -39,9 +53,27 @@ router.post('/database/plansdelete', async (req, res) => {
 	await res.redirect('/login/personal/plans');
 });
 
+router.get('/database/logs', async (req, res) => {
+	const userData = await log.getAllLogs();
+	await res.json(userData);
+});
+
+router.post('/database/logsUpdate', async (req, res) => {
+	const id = req.body.logId;
+	let change = {};
+	const data = await log.getById(id);
+	let temp = req.body.reading + data.reading;
+	change = { reading: temp };
+	const userData = await log.updateLog(id, change);
+	await res.redirect('/login/personal/plans');
+});
+
 router.get('/personal', async (req, res) => {
 	if (req.session.username) {
 		await res.render('form/personal', { username: req.session.username });
+	}
+	else {
+		await res.redirect('/login');
 	}
 });
 
