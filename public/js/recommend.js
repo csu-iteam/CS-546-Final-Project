@@ -136,7 +136,6 @@
 
         let dataLists = [];
         const imagePerPage = 6;
-        console.log(data)
         if (data.results) {
 
             for (let i = 0; i < imagePerPage; i++) {
