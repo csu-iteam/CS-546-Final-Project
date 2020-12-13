@@ -68,6 +68,7 @@
             var dataLists = queryLists(picData[0]);
             for (let i = 0; i < dataLists.length; i++) {
                 let targetPic = dataLists[i];
+
                 recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
                 recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
                 recommendPicsDivMore.append(`<p>${targetPic.location_id}</p>`);
