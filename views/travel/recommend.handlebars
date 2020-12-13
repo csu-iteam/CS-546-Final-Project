@@ -1,6 +1,6 @@
 <h2>Have no idea about where to go?</h2>
-<div>
-    <h3>Recommend places</h3>
+<h3>Recommend places</h3>
+<div id="recommendPics-div-origin">
     {{#each picsData}}
     <div class="recommend-pic">
         <img src="{{this.url.source_url}}" alt="{{this.name}}" width="384px" height="216px" class="image">
@@ -10,5 +10,6 @@
     </div>
     {{/each}}
 </div>
+<div id="recommendPics-div-more" hidden></div>
 
-<button>More</button>
+<button id="more-button">More</button>
