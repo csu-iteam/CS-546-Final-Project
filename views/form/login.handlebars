@@ -1,12 +1,22 @@
 <main>
 <h1>Welcome to our travel plan website!</h1>	
 <div>{{update}}</div>
-<form action="/login/personal" name="login_register" method="POST" >
-	<div>Username：<input type="text" name="username"/></div>
-	<div>Password：<input type="password" name="password"/></div>
+<form id="input-submit"  name="login-register" method="POST" action="/login/personal">
 	<div>
-		<input type="submit" name="login" id="button" value="Submit"/>
-		<input type="button"name="register" id="button1" value="Register" οnclick="pp()"/>
+		<label>Username：</label>
+		<input id="input-username" type="text" name="username" />
+	</div>
+	<div>
+		<label>Password：</label>
+		<input id="input-password" type="password" name="password"/>
+	</div>
+	<div>
+		<button type="submit" name="login" id="button">Submit</button>
+		<button onclick="location.href='http://localhost:3000/login/register'" type="button" id="button1">Register</button>
 	</div>
 </form>
+
+<div id="error-checking" class="error">{{errorMessage}}</div>
+<div id="register-checking" class="register">{{registeredMessage}}</div>
 </main>
+{{!-- <script src="/public/login.js"></script> --}}
