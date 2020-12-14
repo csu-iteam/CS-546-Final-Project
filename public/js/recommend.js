@@ -93,7 +93,7 @@
                         newDiv[i] = newDiv[i - 1].next();
                     }
 
-                    newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                    newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -104,7 +104,7 @@
             } else {
                 recommendPicsDivMore.append(`<p>Sorry, please try again</p>`)
             }
-            
+
             /*
                 This is about moreAround button, text is "See more around this place". 
                 To generate a group of places which in the same location as their father.
@@ -138,7 +138,7 @@
 
                                 if (targetPic.url) {
 
-                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} class="image">`);
                                     recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
                                     recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                                     recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
