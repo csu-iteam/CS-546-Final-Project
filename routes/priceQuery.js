@@ -49,23 +49,40 @@ function getAirportNameList(data) {
     return getTransportList(data).filter(o => o.type === 'AIRPORT').map(o => o.name);
 }
 
-function getIATAList(name) {
+async function getIATAList(name) {
+    let cityInfo = await queryCity(name)
     let nameList = getAirportNameList(cityInfo)
-    let iataList
+
+    let keyName = []
+    for (i of nameList) {
+        if (i.includes('(')) {
+            keyName.push(i.split('(')[1].substr(0, 3))
+        } else {
+            keyName.push(i.split(',')[0])
+        }
+    }
+
+    let iataList = []
     //fuse config
     const options = {
         includeScore: true,
         shouldSort: true,
         threshold: 0.3,
-        keys: ['value.name']
+        keys: ['value.name', 'value.iata']
     }
     const fuse = new Fuse(airportData, options)
 
-    let result = fuse.search(name)
+    for (i of keyName) {
+        iataList.push(fuse.search(i).map(o => o.item.value.iata)[0])
+    }
 
-    iataList = result.map(o => o.item.value.iata)
-    // console.log(result)
+    iataList = iataList.filter(o => o !== undefined)
+
     return iataList
+}
+
+async function getCityAirportIATA(name) {
+    return getIATAList(name)
 }
 
 function getCityDestinationIdlList(data) {
@@ -166,4 +183,4 @@ router.get('/airline/:loc', async function (req, res) {
     }
 })
 
-module.exports = router
+module.exports = {router, getCityAirportIATA}
