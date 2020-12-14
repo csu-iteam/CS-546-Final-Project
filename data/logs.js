@@ -29,6 +29,16 @@ async function getById(id) {
     return result;
 }
 
+async function getByUserId(id) {
+	const log = await logs();
+	const data = await log.find({ userId: id });
+	let result = await data.toArray();
+	for (let i of result) {
+		i._id = i._id.toString();
+	}
+	return result;
+}
+
 async function getAllLogs() {
 	const log = await logs();
 	const data = await log.find({});
@@ -47,6 +57,7 @@ async function updateLog(id, updated) {
 	const data = ObjectId(id);
 	const log = await logs();
 	let obj = {};
+	let condition = false;
 	if (updated.userId)
 		obj.userId = updated.userId;
 	if (updated.title)
@@ -65,8 +76,13 @@ async function updateLog(id, updated) {
     if (updated.like)
         obj.like = updated.like;
     if (updated.reading)
-        obj.reading = updated.reading;
-	const result = await log.updateOne({ _id: data }, { $set: obj });
+		obj.reading = updated.reading;
+	for (var i in obj) {
+		condition = true;
+	}
+	if (condition) {
+		const result = await log.updateOne({ _id: data }, { $set: obj });
+	}
 	const result1 = await log.findOne({ _id: data });
 	result1._id = result1._id.toString();
 	return result1;
@@ -91,5 +107,6 @@ module.exports = {
     getById,
     updateLog,
     deleteById,
-    getAllLogs
+	getAllLogs,
+	getByUserId
 }

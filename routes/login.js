@@ -31,12 +31,12 @@ router.get('/status', async (req, res) => {
 
 router.post('/makelog', async (req, res) => {
 	const info = req.body;
-	const userInfo = await user.getByLastName(req.session.username);
+	const userInfo = await user.getByUsername(req.session.username);
 	const userId = userInfo._id;
 	const logtitle = info.logtitle;
 	const logfeel = info.logfeel;
 	const planId = info.id;
-	const result = await log.insertLogs(userId, logtitle, planId, logfeel, null, "10/31/2020", 0, 0);
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0);
 	const result1 = {};
 	result1.status = true;
 	await res.json(result1);
@@ -46,6 +46,20 @@ router.get('/database/plans', async (req, res) => {
 	if (req.session.username) {
 		const userData = await user.getByUsername(req.session.username);
 		const data = await plan.getByUserId(userData._id);
+		let temp = [];
+		let count = false;
+		for (let j of data) {
+			for (let i of userData.plansId) {
+				if (j._id === i) {
+					count = true;
+				}
+			}
+			if (count === false) {
+				temp.push(j._id);
+			}
+			count = false;
+		}
+		const result = await user.updateUser(userData._id.toString(), { plansId: temp });
 		await res.json(data);
 	}
 });
@@ -57,8 +71,13 @@ router.post('/database/plansdelete', async (req, res) => {
 });
 
 router.get('/database/logs', async (req, res) => {
-	const userData = await log.getAllLogs();
-	await res.json(userData);
+	if (req.session.username) {
+		const userData = await user.getByUsername(req.session.username);
+		const data = await log.getByUserId(userData._id);
+		await res.json(data);
+	}
+	//const userData = await log.getAllLogs();
+	//await res.json(userData);
 });
 
 router.post('/database/logsUpdate', async (req, res) => {
@@ -167,7 +186,7 @@ router.post('/register', async (req, res) => {
 		else {
 			await bcrypt.genSalt(16, function(err, salt) {
 				bcrypt.hash(info.passwords, salt, function(err, hash) {
-					user.insertUsers(info.userNames, info.lastNames, info.firstNames, info.userEmails, hash, null, null, null, null);
+					user.insertUsers(info.userNames, info.lastNames, info.firstNames, info.userEmails, hash, '', [], [], '');
 				});
 			});
 			//user.insertUsers(info.lastNames, info.firstNames, hashPassword, null, null, null, null);

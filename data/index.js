@@ -4,12 +4,14 @@ const log = require('./logs');
 // const comment = require('./comments');
 const plan = require('./plans');
 // const reply = require('./replies');
+const planGenerator=require('./planGenerator')
 
 module.exports = {
 	users: user,
     // reviews = review,
     logs: log,
     // comments = comment,
-    plans: plan
+    plans: plan,
     // replies = reply
+    planGenerator:planGenerator
 };
