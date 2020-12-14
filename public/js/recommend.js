@@ -93,7 +93,7 @@
                         newDiv[i] = newDiv[i - 1].next();
                     }
 
-                    newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} class="image">`);
+                    newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384" height="216" class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -113,9 +113,7 @@
             $('.more-around').each(function () {
                 $(this).on('click', function (event) {
                     event.preventDefault();
-                    console.log($(this).children().text())
                     const location_id = $(this).prev().prev().text();
-                    console.log(location_id)
                     var requestConfig = {
                         method: 'GET',
                         url: `https://www.triposo.com/api/20201111/poi.json?location_id=${location_id}&account=T9TV2POT&token=2wve45tezxoq0kvv3dpd4odygaeb50rq`
@@ -138,7 +136,7 @@
 
                                 if (targetPic.url) {
 
-                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} class="image">`);
+                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                                     recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
                                     recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                                     recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -167,9 +165,7 @@
     $('.more-around').each(function () {
         $(this).on('click', function (event) {
             event.preventDefault();
-            console.log($(this).children().text())
             const location_id = $(this).prev().prev().text();
-            console.log(location_id)
             var requestConfig = {
                 method: 'GET',
                 url: `https://www.triposo.com/api/20201111/poi.json?location_id=${location_id}&account=T9TV2POT&token=2wve45tezxoq0kvv3dpd4odygaeb50rq`
@@ -192,7 +188,7 @@
 
                         if (targetPic.url) {
 
-                            recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                            recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                             recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
                             recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                             recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
