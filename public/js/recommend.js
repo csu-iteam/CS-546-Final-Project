@@ -3,6 +3,7 @@
     var recommendPicsDivMore = $('#recommendPics-div-more');
     var moreButton = $('#more-button');
     var moreAround = $('.more-around');
+    var moreAroundWrapper = $('.more-around-wrapper')
 
     /*
         If the user don't like the places on this page, click this button to get another group of pages.
@@ -91,11 +92,11 @@
                 newDiv[i].append(`<p>${targetPic.name}</p>`);
                 newDiv[i].append(`<span>Location: </span><p>${targetPic.location_id}</p>`);
                 newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
-                newDiv[i].append(`<button class="more-around">See more around this place</button>`);
+                newDiv[i].append(`<div class="more-around-wrapper"><button class="more-around">See more around this place</button></div>`);
             }
 
         })
-        $('body,html').animate({scrollTop:0},1000); // Back to top
+        $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
         moreButton.text("More"); // In case the button text was "Not here" 
     })
 
@@ -104,9 +105,9 @@
         This is about moreAround button, text is "See more around this place". 
         To generate a group of places which in the same location as their father.
     */
-    moreAround.each(function () {
+    moreAroundWrapper.each(function () {
 
-        $(this).on('click', function (event) {
+        $(this).on('click', '.more-around', function (event) {
 
             event.preventDefault();
 
