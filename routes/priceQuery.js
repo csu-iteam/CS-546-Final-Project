@@ -54,6 +54,9 @@ function getIATAList(name) {
     let iataList
     //fuse config
     const options = {
+        includeScore: true,
+        shouldSort: true,
+        threshold: 0.3,
         keys: ['value.name']
     }
     const fuse = new Fuse(airportData, options)
