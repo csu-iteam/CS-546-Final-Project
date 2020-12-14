@@ -3,7 +3,6 @@
     var recommendPicsDivMore = $('#recommendPics-div-more');
     var moreButton = $('#more-button');
     var moreAround = $('.more-around');
-    var moreAroundWrapper = $('.more-around-wrapper')
 
     /*
         If the user don't like the places on this page, click this button to get another group of pages.
@@ -76,25 +75,36 @@
             }
 
             var dataLists = queryLists(picData[0]);
-            var newDiv = [];
-            for (let i = 0; i < dataLists.length; i++) {
-                let targetPic = dataLists[i];
+            if (dataLists) {
 
-                recommendPicsDivMore.append(`<div class="more-around-div"></div>`);
+                var newDiv = [];
+                for (let i = 0; i < dataLists.length; i++) {
+                    var targetPic = dataLists[i];
+                    var validatedUrl;
+                    if (!targetPic.url.source_url) { //Sometimes no image source
+                        validatedUrl = "public/image/no_image.jpeg";
+                    } else {
+                        validatedUrl = targetPic.url.source_url;
+                    }
+                    recommendPicsDivMore.append(`<div class="more-around-div"></div>`);
 
-                if (i == 0) {
-                    newDiv[i] = recommendPicsDivMore.children('div');
-                } else {
-                    newDiv[i] = newDiv[i - 1].next();
+                    if (i == 0) {
+                        newDiv[i] = recommendPicsDivMore.children('div');
+                    } else {
+                        newDiv[i] = newDiv[i - 1].next();
+                    }
+
+                    newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                    newDiv[i].append(`<p>${targetPic.name}</p>`);
+                    newDiv[i].append(`<p>Duration: ${targetPic.duration}</p>`);
+                    newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
+                    newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
+                    newDiv[i].append(`<button class="more-around">See more around this place</button>`);
+
                 }
-
-                newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
-                newDiv[i].append(`<p>${targetPic.name}</p>`);
-                newDiv[i].append(`<span>Location: </span><p>${targetPic.location_id}</p>`);
-                newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
-                newDiv[i].append(`<div class="more-around-wrapper"><button class="more-around">See more around this place</button></div>`);
+            } else {
+                recommendPicsDivMore.append(`<p>Sorry, please try again</p>`)
             }
-
         })
         $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
         moreButton.text("More"); // In case the button text was "Not here" 
@@ -105,14 +115,13 @@
         This is about moreAround button, text is "See more around this place". 
         To generate a group of places which in the same location as their father.
     */
-    moreAroundWrapper.each(function () {
+    moreAround.each(function () {
 
-        $(this).on('click', '.more-around', function (event) {
+        $(this).on('click', function (event) {
 
             event.preventDefault();
 
             const location_id = $(this).prev().prev().text();
-            console.log(location_id)
             var requestConfig = {
                 method: 'GET',
                 url: `https://www.triposo.com/api/20201111/poi.json?location_id=${location_id}&account=T9TV2POT&token=2wve45tezxoq0kvv3dpd4odygaeb50rq`
@@ -127,7 +136,7 @@
                     recommendPicsDivMore.show();
                 }
 
-                var dataLists = queryLists(picData[0]);
+                var dataLists = queryLists(picData[0], 10);
                 if (dataLists) {
 
                     for (let i = 0; i < dataLists.length; i++) {
@@ -135,12 +144,14 @@
 
                         recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
                         recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
-                        recommendPicsDivMore.append(`<span>Location: </span><p>${targetPic.location_id}</p>`);
+                        recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration}</p>`);
+                        recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                         recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
                     }
                 }
 
             })
+            $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
             moreButton.text("Not here");  //For better readbility, change the "More" button text on this page.
         })
     })
@@ -149,13 +160,29 @@
     /*
         Put the data into array with objects for easier to use.
     */
-    function queryLists(data) {
+    function queryLists(data, imagePerPage) {
 
         let dataLists = [];
-        const imagePerPage = 6;
+        let displayImagePerPage;
+        if (imagePerPage) {
+
+            displayImagePerPage = imagePerPage;
+
+        } else {
+
+            displayImagePerPage = 6;
+
+        }
+
         if (data.results) {
 
-            for (let i = 0; i < imagePerPage; i++) {
+            const maxTime = 6;
+            const minTime = 1;
+
+            for (let i = 0; i < displayImagePerPage; i++) {
+
+                let estimateDutation = 30 * Math.round((maxTime - minTime + 1) * Math.random() + minTime);
+                JSON.stringify(estimateDutation);
 
                 dataLists[i] = {
 
@@ -168,6 +195,7 @@
                     booking_info: data.results[i].booking_info,
                     attribution: data.results[i].attribution,
                     price_tier: data.results[i].price_tier,
+                    duration: estimateDutation
 
                 }
             }

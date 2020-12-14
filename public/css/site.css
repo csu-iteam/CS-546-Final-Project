@@ -47,3 +47,7 @@ footer {
 .recommend-pic, .more-around-div {
 	margin-bottom: 20px;
 }
+
+.location-p {
+	display: inline;
+}
