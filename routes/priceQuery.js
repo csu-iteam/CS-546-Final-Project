@@ -1,31 +1,68 @@
 const express = require("express")
 const axios = require('axios')
 const streamArray = require('stream-json/streamers/StreamArray')
+const Fuse = require('fuse.js')
 const fs = require('fs')
 const router = express.Router()
 const hotelApi = require('../config/hotelApi')
 
 // read Airport JSON
-const airData = []
+let airportData = []
+// function readAirportJson(){
+//    return new Promise(((resolve, reject) => {
+//        const jsonStream = streamArray.withParser()
+//        const jsonPipe = fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
+//        jsonStream
+//            .on('data', ({key, value}) => {
+//                airportData.push({key, value})
+//            })
+//            .on('end', () => {
+//                console.log('json read all done')
+//                resolve(Data)
+//            })
+//    }))
+// }
+
 const jsonStream = streamArray.withParser()
 
 const jsonPipe = fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
 
 jsonStream.on('data', ({key, value}) => {
-    airData.push({key, value})
+    airportData.push({key, value})
 })
 
 jsonStream.on('end', () => {
     console.log('Airport json read all done')
 })
 
+let cityInfo
 let cityTransport = []
 
-function TransportList(data) {
+function getTransportList(data) {
     cityTransport = data.suggestions.find(o => {
         return o.group === 'TRANSPORT_GROUP'
     }).entities
     return cityTransport
+}
+
+function getAirportNameList(data) {
+    return getTransportList(data).filter(o => o.type === 'AIRPORT').map(o => o.name);
+}
+
+function getIATAList(name) {
+    let nameList = getAirportNameList(cityInfo)
+    let iataList
+    //fuse config
+    const options = {
+        keys: ['value.name']
+    }
+    const fuse = new Fuse(airportData, options)
+
+    let result = fuse.search(name)
+
+    iataList = result.map(o => o.item.value.iata)
+    // console.log(result)
+    return iataList
 }
 
 function getCityDestinationIdlList(data) {
@@ -90,6 +127,7 @@ async function queryCity(name) {
         hotelApi.locQ.params = queryParms
         return await axios.request(hotelApi.locQ).then(async function (response) {
             console.log(response.data)
+            cityInfo = response.data
             return response.data
         }).catch(function (error) {
             console.log(error)
@@ -119,8 +157,9 @@ router.get('/meal/:loc', async (req, res) => {
 
 router.get('/airline/:loc', async function (req, res) {
     const locQuery = req.params.loc.trim()
+    await queryCity(locQuery)
     if (locQuery !== null) {
-
+        console.log(getIATAList(locQuery))
     }
 })
 
