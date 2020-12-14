@@ -4,26 +4,51 @@
 <head>
     <meta charset="utf-8">
     <title>Make your Plan!</title>
-    <link rel="stylesheet" href="/public/css.plan.css">
+    <!-- <link rel="stylesheet" href="/public/css/plan.css"> -->
 </head>
 
 <body>
     <h1>Make Your Own Plan</h1>
-    <label for="startDate">when you want to start?</label>
-    <input type="date" id="startDate"/>
-    <label for="startPlace">where you want to start?</label>
-    <input type="text" id="startPlace"/>
-    <div id="">
-
+    <form id="newPlace"></form>
+    <div>
+        <label for="startDate">date to start</label>
+        <input type="date" id="startDate" />
     </div>
-    <form id="newPlace">
+    <div>
+        <label for="startPlace">departure place</label>
+        <input type="text" id="startPlace" />
+    </div>
+    <ol id="nodeList">
 
+    </ol>
+    <button id="addPlace">Add place</button>
+    <button type="submit">Make Plan!</button>
     </form>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script>
+    var placeCount = 0;
+    function removePlace(id) {
+        var target = $(`#li${id}`);
+        target.remove();
+    }
+    (function ($) {
+        var addPlace = $('#addPlace'),
+            nodeList = $('#nodeList');
+        addPlace.on('click', function (event) {
+            event.preventDefault();
+            let newPlace = document.createElement('li');
+            console.log(newPlace);
+            newPlace.innerHTML = `<label for='place${placeCount}'>Place<input type='text' id='place${placeCount}'/></label>
+            <button id='${placeCount}' onclick=removePlace(${placeCount})>remove this place</button>`;
+            //newPlace.attr('id', `div${placeCount}`);
+            newPlace.id = `li${placeCount}`;
+            nodeList.append(newPlace);
+            placeCount++;
+        })
 
+    })(window.jQuery);
 </script>
 
 </html>
