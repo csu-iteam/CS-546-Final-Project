@@ -1,13 +1,16 @@
 //core algorithm
 //unit of time in minutes
+//node add duration attribution
+const axios = require("axios");
 
 let maxWaitTime = 180;//3 hours wait for flight
 let minPrepareTime = 60;//1 hour prepare for flight
 let dailyStartTime = 480;//8:00
 let dailyEndTime = 1320;//22:00
 let dailyMaxEndTime = 1440;//24:00
+let maxFlightSearch = 20;
 
-function findLowestCostPlan(sourceNodeList) {
+async function findLowestCostPlan(sourceNodeList) {
     //sourceNodeList index0=start position index length-1=end postion
     let startPositon = sourceNodeList[0];
     let endPosition = sourceNodeList[length - 1];
@@ -37,7 +40,7 @@ function findLowestCostPlan(sourceNodeList) {
     return allPlansWithCost[planIndex];
 }
 
-function generateArrangement(nodeList, currentPlan, planList) {
+async function generateArrangement(nodeList, currentPlan, planList) {
     if (nodeList.length == 0) {
         planList.add(currentPlan);
         return planList;
@@ -52,7 +55,7 @@ function generateArrangement(nodeList, currentPlan, planList) {
 
 //startNode location_id name startDate coordinates{latitude,longtitude} 
 //return {plan duration endtime type cost}
-function makePlan(nodeList) {
+async function makePlan(nodeList) {
     //startnode
     let day = 1;
     let timePoint = dailyStartTime;
@@ -74,7 +77,7 @@ function makePlan(nodeList) {
         }
         if (isInSameCity(nodeList[i - 1].location_id, nodeList[i].location_id)) {
             //same city
-            let trafficRoute = getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
+            let trafficRoute =await getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
             let duration = Math.ceil(trafficRoute.duration / 60);
             if ((timePoint + duration) > dailyMaxEndTime) {
                 //past acceptable end time
@@ -88,15 +91,39 @@ function makePlan(nodeList) {
                 day: day
             }
             plan.add(trafficNode);
+            let playDuration=node[i].duration;
+            if(timePoint>dailyEndTime||(timePoint+playDuration)>dailyMaxEndTime){
+                day++;
+                timePoint=dailyStartTime;
+                let poiNode={
+                    type:"poi",
+                    poi:nodeList[i],
+                    day:day
+                }
+                timePoint+=playDuration;
+                plan.add(poiNode);
+            }else{
+                let poiNode={
+                    type:"poi",
+                    poi:nodeList[i],
+                    day:day
+                }
+                timePoint+=playDuration;
+                plan.add(poiNode);
+            }
         } else {
             // different city
             // find airport coordinates
-            let startAirport = findAirport(nodeList[i - 1]);
-            let endAirport = findAirport(nodeList[i]);
+            let startIata =await getCityIata(nodeList[i - 1].location_id);
+            let endIata =await getCityIata(nodeList[i].location_id);
+            let startAirport =await findAirport(nodeList[i - 1]);
+            let endAirport =await findAirport(nodeList[i]);
+
             // traffic to airport
-            let trafficRoute = getCityTraffic(nodeList[i - 1].coordinates, startAirport);
+            let trafficRoute =await getCityTraffic(nodeList[i - 1].coordinates, startAirport);
             let duration = Math.ceil(trafficRoute.duration / 60);
-            let flight = getFlight(startAirport, endAirport, timePoint + duration + minPrepareTime);
+            let tempStartDate=startDate;
+            let flight =await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
             //transform flight timetable
             let departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
             let arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
@@ -104,7 +131,8 @@ function makePlan(nodeList) {
             if (arrivalTime > dailyMaxEndTime || arrivalTime < departureTime) {//exceed daliy plan
                 day++;
                 timePoint = dailyStartTime;
-                flight = getFlight(startAirport, endAirport, timePoint + duration + minPrepareTime);
+                tempStartDate=startDate;
+                flight =await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
                 departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
                 arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
                 let trafficNode = {
@@ -136,7 +164,7 @@ function makePlan(nodeList) {
                 timePoint = arrivalTime;
             }
             //traffic from airport to poi
-            let trafficRoute2 = getCityTraffic(endAirport, nodeList[i].coordinates);
+            let trafficRoute2 =await getCityTraffic(endAirport, nodeList[i].coordinates);
             let duration2 = Math.ceil(trafficRoute2.duration / 60);
             if (timePoint >= dailyEndTime) {//exceed daily plan
                 day++;
@@ -169,31 +197,75 @@ function makePlan(nodeList) {
                     timePoint += duration2;
                 }
             }
+            let playDuration=node[i].duration;
+            if(timePoint>dailyEndTime||(timePoint+playDuration)>dailyMaxEndTime){
+                day++;
+                timePoint=dailyStartTime;
+                let poiNode={
+                    type:"poi",
+                    poi:nodeList[i],
+                    day:day
+                }
+                timePoint+=playDuration;
+                plan.add(poiNode);
+            }else{
+                let poiNode={
+                    type:"poi",
+                    poi:nodeList[i],
+                    day:day
+                }
+                timePoint+=playDuration;
+                plan.add(poiNode);
+            }
         }
+
     }
 }
 
 //
-function getFlight(startLocation, endLoction, startTime) {
-    let flight
-
-    return flight;
+async function getFlight(startIata, endIata, startDate, startTime) {
+    let lowestFlight;
+    let latestStartTime = startTime + maxWaitTime;
+    const { data } = await axios.get(`https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${startIata}&destinationLocationCode=${endIata}&departureDate=${startDate.getFullYear()}-${startDate.getMonth()}-${startDate.getDate()}&adults=1&max=${maxFlightSearch}`);
+    let flightList = data.data;
+    for (let i = 0; i < flightList.length; i++) {
+        let dTime = transformFlightTime(flightList[i].itineraries.segments.departure.at);
+        if (dTime >= startTime && dTime <= latestStartTime) {
+            if (!lowestFlight) {
+                lowestFlight = flightList[i];
+            } else if (flightList[i].price.total < lowestFlight.price.total) {
+                lowestFlight = flightList[i];
+            }
+        }
+    }
+    return lowestFlight;
 }
 
-function isInSameCity(startLocation, endLocation) {
-
+async function isInSameCity(startLocation, endLocation) {
+    return (startLocation == endLocation);
 }
 
-//commuting time in the city  
-function getCityTraffic(startCoordinates, endCoordinates) {
-
+//commuting route in the city  
+async function getCityTraffic(startCoordinates, endCoordinates) {
+    const { data } = await axios.get(`http://api.map.baidu.com/direction_abroad/v1/transit?origin=${startCoordinates.latitude.toFixed(6)},${startCoordinates.longitude.toFixed(6)}&destination=${endCoordinates.latitude.toFixed(6)},${endCoordinates.longitude.toFixed(6)}&coord_type=wgs84&ak=up1toaVyKpIE6fXc9dqc4eItjbhICylS`);
+    let routes = data.routes;
+    return routes[0];
 }
 
 // find airport coordinates
-function findAirport(poiNode) {
+async function findAirport(poiNode) {
 
 }
 
-function transformFlightTime(flightTime) {
-    
+async function transformFlightTime(flightTime) {
+    let list = flightTime.split("T");
+    let time = list[1].split(":");
+    return Number(time[0]) * 60 + Number(time[1]);
+}
+
+async function getCityIata(cityName) {
+
+}
+module.exports={
+    findLowestCostPlan
 }
