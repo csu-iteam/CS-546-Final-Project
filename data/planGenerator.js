@@ -3,6 +3,7 @@
 //node add duration attribution
 const axios = require("axios");
 const airpots = require("./airpots");
+const iatas = require('../routes/priceQuery');
 
 let maxWaitTime = 180;//3 hours wait for flight
 let minPrepareTime = 60;//1 hour prepare for flight
@@ -270,7 +271,8 @@ async function transformFlightTime(flightTime) {
 }
 
 async function getCityIata(cityName) {
-
+    let iatalist = await iatas.getIATAList(cityName);
+    return iatalist[0];
 }
 module.exports = {
     findLowestCostPlan

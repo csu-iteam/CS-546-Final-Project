@@ -27,8 +27,8 @@ const jsonStream = streamArray.withParser()
 
 const jsonPipe = fs.createReadStream('./data/airports.json').pipe(jsonStream.input)
 
-jsonStream.on('data', ({key, value}) => {
-    airportData.push({key, value})
+jsonStream.on('data', ({ key, value }) => {
+    airportData.push({ key, value })
 })
 
 jsonStream.on('end', () => {
@@ -76,7 +76,7 @@ function getCityDestinationIdlList(data) {
     for (i of cityList) {
         desIdArray.push(i.destinationId)
     }
-    return {cityList, desIdArray}
+    return { cityList, desIdArray }
 }
 
 async function renderHotelList(data, res) {
@@ -154,7 +154,7 @@ router.get('/meal/:loc', async (req, res) => {
     } else {
         let messErr = 'No location'
         res.render('layouts/error',
-            {errorMes: messErr})
+            { errorMes: messErr })
     }
 })
 
@@ -166,4 +166,4 @@ router.get('/airline/:loc', async function (req, res) {
     }
 })
 
-module.exports = router
+module.exports = { router, getIATAList }
