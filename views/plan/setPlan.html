@@ -9,7 +9,7 @@
 
 <body>
     <h1>Make Your Own Plan</h1>
-    <form id="newPlace"></form>
+    <form id="placeForm"></form>
     <div>
         <label for="startDate">date to start</label>
         <input type="date" id="startDate" />
@@ -18,9 +18,7 @@
         <label for="startPlace">departure place</label>
         <input type="text" id="startPlace" />
     </div>
-    <ol id="nodeList">
-
-    </ol>
+    <ol id="nodeList"></ol>
     <button id="addPlace">Add place</button>
     <button type="submit">Make Plan!</button>
     </form>
@@ -47,6 +45,8 @@
             nodeList.append(newPlace);
             placeCount++;
         })
+        var form=$('#placeForm');
+        
 
     })(window.jQuery);
 </script>
