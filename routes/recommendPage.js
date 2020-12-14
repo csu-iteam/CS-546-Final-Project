@@ -8,7 +8,6 @@ router.get('/', async (req, res) => {
     try {
         let picsData = await getPicsData();
         let picsDataList = queryLists(picsData);
-        console.log(picsDataList)
 
         res.render('travel/recommend', { title: "Travel Consulter", picsData: picsDataList });
     } catch (e) {
@@ -73,8 +72,8 @@ async function getPicsData(locationId) {
 
         ]
 
-        let index = Math.round(tagsLabels.length * Math.random());
-        searchTag = tagsLabels[index];
+        let i = Math.round(tagsLabels.length * Math.random());
+        searchTag = tagsLabels[i];
 
         /*
             cause my network problem, them following code can only run with local json files.
@@ -101,22 +100,28 @@ function queryLists(data) {
 
         let dataLists = [];
         const imagePerPage = 6;
-        const apiDataNumber = data.results.length;
+
+        const maxTime = 6;
+        const minTime = 1;
+
         for (let i = 0; i < imagePerPage; i++) {
 
-            let index = Math.round(apiDataNumber * Math.random());
+            let estimateDutation = 30 * Math.round((maxTime - minTime + 1) * Math.random() + minTime);
+            JSON.stringify(estimateDutation);
+
             dataLists[i] = {
-                
-                name: data.results[index].name,
-                url: data.results[index].images[0],
-                location_id: data.results[index].location_id,
-                snippet: data.results[index].snippet,
-                coordinates: data.results[index].coordinates,
-                score: data.results[index].score,
-                booking_info: data.results[index].booking_info,
-                attribution: data.results[index].attribution,
-                price_tier: data.results[index].price_tier,
-                
+
+                name: data.results[i].name,
+                url: data.results[i].images[0],
+                location_id: data.results[i].location_id,
+                snippet: data.results[i].snippet,
+                coordinates: data.results[i].coordinates,
+                score: data.results[i].score,
+                booking_info: data.results[i].booking_info,
+                attribution: data.results[i].attribution,
+                price_tier: data.results[i].price_tier,
+                duration: estimateDutation
+
             }
         }
         return dataLists
