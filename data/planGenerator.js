@@ -2,6 +2,7 @@
 //unit of time in minutes
 //node add duration attribution
 const axios = require("axios");
+const airpots = require("./airpots");
 
 let maxWaitTime = 180;//3 hours wait for flight
 let minPrepareTime = 60;//1 hour prepare for flight
@@ -77,7 +78,7 @@ async function makePlan(nodeList) {
         }
         if (isInSameCity(nodeList[i - 1].location_id, nodeList[i].location_id)) {
             //same city
-            let trafficRoute =await getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
+            let trafficRoute = await getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
             let duration = Math.ceil(trafficRoute.duration / 60);
             if ((timePoint + duration) > dailyMaxEndTime) {
                 //past acceptable end time
@@ -91,39 +92,39 @@ async function makePlan(nodeList) {
                 day: day
             }
             plan.add(trafficNode);
-            let playDuration=node[i].duration;
-            if(timePoint>dailyEndTime||(timePoint+playDuration)>dailyMaxEndTime){
+            let playDuration = node[i].duration;
+            if (timePoint > dailyEndTime || (timePoint + playDuration) > dailyMaxEndTime) {
                 day++;
-                timePoint=dailyStartTime;
-                let poiNode={
-                    type:"poi",
-                    poi:nodeList[i],
-                    day:day
+                timePoint = dailyStartTime;
+                let poiNode = {
+                    type: "poi",
+                    poi: nodeList[i],
+                    day: day
                 }
-                timePoint+=playDuration;
+                timePoint += playDuration;
                 plan.add(poiNode);
-            }else{
-                let poiNode={
-                    type:"poi",
-                    poi:nodeList[i],
-                    day:day
+            } else {
+                let poiNode = {
+                    type: "poi",
+                    poi: nodeList[i],
+                    day: day
                 }
-                timePoint+=playDuration;
+                timePoint += playDuration;
                 plan.add(poiNode);
             }
         } else {
             // different city
             // find airport coordinates
-            let startIata =await getCityIata(nodeList[i - 1].location_id);
-            let endIata =await getCityIata(nodeList[i].location_id);
-            let startAirport =await findAirport(nodeList[i - 1]);
-            let endAirport =await findAirport(nodeList[i]);
+            let startIata = await getCityIata(nodeList[i - 1].location_id);
+            let endIata = await getCityIata(nodeList[i].location_id);
+            let startAirport = await findAirport(nodeList[i - 1]);
+            let endAirport = await findAirport(nodeList[i]);
 
             // traffic to airport
-            let trafficRoute =await getCityTraffic(nodeList[i - 1].coordinates, startAirport);
+            let trafficRoute = await getCityTraffic(nodeList[i - 1].coordinates, startAirport);
             let duration = Math.ceil(trafficRoute.duration / 60);
-            let tempStartDate=startDate;
-            let flight =await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
+            let tempStartDate = startDate;
+            let flight = await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
             //transform flight timetable
             let departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
             let arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
@@ -131,8 +132,8 @@ async function makePlan(nodeList) {
             if (arrivalTime > dailyMaxEndTime || arrivalTime < departureTime) {//exceed daliy plan
                 day++;
                 timePoint = dailyStartTime;
-                tempStartDate=startDate;
-                flight =await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
+                tempStartDate = startDate;
+                flight = await getFlight(startIata, endIata, tempStartDate.setDate(tempStartDate.getDate() + day), timePoint + duration + minPrepareTime);
                 departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
                 arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
                 let trafficNode = {
@@ -164,7 +165,7 @@ async function makePlan(nodeList) {
                 timePoint = arrivalTime;
             }
             //traffic from airport to poi
-            let trafficRoute2 =await getCityTraffic(endAirport, nodeList[i].coordinates);
+            let trafficRoute2 = await getCityTraffic(endAirport, nodeList[i].coordinates);
             let duration2 = Math.ceil(trafficRoute2.duration / 60);
             if (timePoint >= dailyEndTime) {//exceed daily plan
                 day++;
@@ -197,24 +198,24 @@ async function makePlan(nodeList) {
                     timePoint += duration2;
                 }
             }
-            let playDuration=node[i].duration;
-            if(timePoint>dailyEndTime||(timePoint+playDuration)>dailyMaxEndTime){
+            let playDuration = node[i].duration;
+            if (timePoint > dailyEndTime || (timePoint + playDuration) > dailyMaxEndTime) {
                 day++;
-                timePoint=dailyStartTime;
-                let poiNode={
-                    type:"poi",
-                    poi:nodeList[i],
-                    day:day
+                timePoint = dailyStartTime;
+                let poiNode = {
+                    type: "poi",
+                    poi: nodeList[i],
+                    day: day
                 }
-                timePoint+=playDuration;
+                timePoint += playDuration;
                 plan.add(poiNode);
-            }else{
-                let poiNode={
-                    type:"poi",
-                    poi:nodeList[i],
-                    day:day
+            } else {
+                let poiNode = {
+                    type: "poi",
+                    poi: nodeList[i],
+                    day: day
                 }
-                timePoint+=playDuration;
+                timePoint += playDuration;
                 plan.add(poiNode);
             }
         }
@@ -253,8 +254,13 @@ async function getCityTraffic(startCoordinates, endCoordinates) {
 }
 
 // find airport coordinates
-async function findAirport(poiNode) {
-
+async function findAirport(node) {
+    let iata = await getCityIata(node.location_id);
+    let location = airpots.airports.get(iata);
+    return {
+        latitude: location[0],
+        longitude: location[1]
+    }
 }
 
 async function transformFlightTime(flightTime) {
@@ -266,6 +272,6 @@ async function transformFlightTime(flightTime) {
 async function getCityIata(cityName) {
 
 }
-module.exports={
+module.exports = {
     findLowestCostPlan
 }
