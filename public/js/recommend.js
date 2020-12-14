@@ -2,7 +2,6 @@
     var recommendPicsDivOrigin = $('#recommendPics-div-origin');
     var recommendPicsDivMore = $('#recommendPics-div-more');
     var moreButton = $('#more-button');
-    var moreAround = $('.more-around');
 
     /*
         If the user don't like the places on this page, click this button to get another group of pages.
@@ -96,7 +95,7 @@
 
                     newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384px" height="216px" class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
-                    newDiv[i].append(`<p>Duration: ${targetPic.duration}</p>`);
+                    newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                     newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
                     newDiv[i].append(`<button class="more-around">See more around this place</button>`);
@@ -105,6 +104,55 @@
             } else {
                 recommendPicsDivMore.append(`<p>Sorry, please try again</p>`)
             }
+            
+            /*
+                This is about moreAround button, text is "See more around this place". 
+                To generate a group of places which in the same location as their father.
+                This CAN be invoke by the dynamic generated buttons!!!
+            */
+            $('.more-around').each(function () {
+                $(this).on('click', function (event) {
+                    event.preventDefault();
+                    console.log($(this).children().text())
+                    const location_id = $(this).prev().prev().text();
+                    console.log(location_id)
+                    var requestConfig = {
+                        method: 'GET',
+                        url: `https://www.triposo.com/api/20201111/poi.json?location_id=${location_id}&account=T9TV2POT&token=2wve45tezxoq0kvv3dpd4odygaeb50rq`
+                    };
+
+                    $.ajax(requestConfig).then(function (responseMessage) {
+
+                        var picData = $(responseMessage);
+                        if (picData) {
+                            recommendPicsDivOrigin.hide();
+                            recommendPicsDivMore.empty();
+                            recommendPicsDivMore.show();
+                        }
+
+                        var dataLists = queryLists(picData[0], 10);
+                        if (dataLists) {
+
+                            for (let i = 0; i < dataLists.length; i++) {
+                                let targetPic = dataLists[i];
+
+                                if (targetPic.url) {
+
+                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                                    recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
+                                    recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
+                                    recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
+                                    recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+
+                                }
+                            }
+                        }
+
+                    })
+                    $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
+                    moreButton.text("Not here");  //For better readbility, change the "More" button text on this page.
+                })
+            })
         })
         $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
         moreButton.text("More"); // In case the button text was "Not here" 
@@ -114,14 +162,14 @@
     /*
         This is about moreAround button, text is "See more around this place". 
         To generate a group of places which in the same location as their father.
+        This WONT work for the dynamic generated buttons, but the original buttons work.
     */
-    moreAround.each(function () {
-
+    $('.more-around').each(function () {
         $(this).on('click', function (event) {
-
             event.preventDefault();
-
+            console.log($(this).children().text())
             const location_id = $(this).prev().prev().text();
+            console.log(location_id)
             var requestConfig = {
                 method: 'GET',
                 url: `https://www.triposo.com/api/20201111/poi.json?location_id=${location_id}&account=T9TV2POT&token=2wve45tezxoq0kvv3dpd4odygaeb50rq`
@@ -142,11 +190,15 @@
                     for (let i = 0; i < dataLists.length; i++) {
                         let targetPic = dataLists[i];
 
-                        recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
-                        recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
-                        recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration}</p>`);
-                        recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
-                        recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+                        if (targetPic.url) {
+
+                            recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384px" height="216px" class="image">`);
+                            recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
+                            recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
+                            recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
+                            recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+
+                        }
                     }
                 }
 
