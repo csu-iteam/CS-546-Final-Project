@@ -31,6 +31,7 @@ async function updateUser(id, updated) {
 	const data = ObjectId(id);
 	const user = await users();
 	let obj = {};
+	let condition = false;
 	if (updated.lastUserName)
 		obj.lastUserName = updatedlastUserName;
 	if (updated.firstUserName)
@@ -49,7 +50,12 @@ async function updateUser(id, updated) {
 			const result3 = await user.updateOne({ _id: data }, { $push: { logsId: { $each: [i] } } });
 		}
 	}
-	const result = await user.updateOne({ _id: data }, { $set: obj });
+	for (var i in obj) {
+		condition = true;
+	}
+	if (condition) {
+		const result = await user.updateOne({ _id: data }, { $set: obj });
+	}
 	const result1 = await user.findOne({ _id: data });
 	result1._id = result1._id.toString();
 	return result1;
