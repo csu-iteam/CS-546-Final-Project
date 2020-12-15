@@ -51,3 +51,8 @@ footer {
 .location-p {
 	display: inline;
 }
+
+.image {
+	width: "384px";
+	height: "216px";
+}

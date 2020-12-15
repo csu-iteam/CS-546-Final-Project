@@ -1,5 +1,5 @@
 const user = require('./users');
-// const review = require('./reviews');
+const review = require('./reviews');
 const log = require('./logs');
 // const comment = require('./comments');
 const plan = require('./plans');
@@ -10,7 +10,7 @@ const cityQuery = require('./cityQuery')
 
 module.exports = {
     users: user,
-    // reviews = review,
+    reviews: review,
     logs: log,
     // comments = comment,
     plans: plan,
