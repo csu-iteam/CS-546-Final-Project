@@ -78,7 +78,7 @@ async function getPicsData(locationId) {
         /*
             cause my network problem, them following code can only run with local json files.
         */
-        const data = fs.readFileSync('rPicApiData.json', 'utf-8');
+        const data = fs.readFileSync('data/rPicApiData.json', 'utf-8');
         const parsedData = JSON.parse(data);
         return parsedData
 
