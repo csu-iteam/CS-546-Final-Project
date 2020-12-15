@@ -4,13 +4,6 @@ const router = express.Router()
 const hotelApi = require('../config/hotelApi')
 const citydata = require('../data')
 
-async function amadeusGetToken() {
-    let token = await axios.request(hotelApi.amadeusToken).then(async function (response) {
-        return response.data.access_token
-    })
-    return token
-}
-
 async function renderHotelList(data, res) {
     let results = citydata.cityQuery.getCityDestinationIdlList(data)
 
@@ -82,16 +75,24 @@ router.get('/airline/:loc', async function (req, res) {
 })
 
 router.get('/apiTest', async function (req, res) {
-    let token = await amadeusGetToken()
-    console.log(token)
+    // let token = await amadeusGetToken()
+    // console.log(token)
+    //
+    // let config = {
+    //     headers: {Authorization: `Bearer ${token}`}
+    // }
 
-    let config = {
-        headers: {Authorization: `Bearer ${token}`}
+    let queryParams = {
+        originLocationCode: 'SYD',
+        destinationLocationCode: 'BKK',
+        departureDate: '2021-02-01',
+        adults: 1,
     }
-    await axios.get('https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=SYD&destinationLocationCode=BKK&departureDate=2021-02-01&adults=1&nonStop=false&max=250',
-        config).then(async (response) => {
-        console.log(response.data)
-    })
+    citydata.cityQuery.queryAirTicket(queryParams)
+    // let queryUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${queryParams.originLocationCode}&destinationLocationCode=${queryParams.destinationLocationCode}&departureDate=${queryParams.departureDate}&adults=${queryParams.adults}&nonStop=false&max=250`
+    // await axios.get(queryUrl, config).then(async (response) => {
+    //     console.log(response.data)
+    // })
 })
 
 module.exports = router
