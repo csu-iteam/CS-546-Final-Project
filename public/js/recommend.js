@@ -99,6 +99,7 @@
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                     newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
                     newDiv[i].append(`<button class="more-around">See more around this place</button>`);
+                    newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                 }
             } else {
@@ -141,6 +142,7 @@
                                     recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                                     recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                                     recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+                                    recommendPicsDivMore.append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                                 }
                             }
@@ -193,6 +195,7 @@
                             recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
                             recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                             recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+                            recommendPicsDivMore.append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                         }
                     }
