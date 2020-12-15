@@ -7,6 +7,8 @@ const user = data.users;
 const plan = data.plans;
 const log = data.logs;
 
+let globaltitle;
+
 router.get('/', async (req, res) => {
 	if (req.session.username) {
 		await res.redirect('/login/personal');
@@ -106,7 +108,8 @@ router.post('/database/logsUpdate', async (req, res) => {
 	let temp = req.body.reading + data.reading;
 	change = { reading: temp };
 	const userData = await log.updateLog(id, change);
-	await res.redirect('/login/personal/plans');
+	globaltitle = data.feel;
+	await res.json({});
 });
 
 router.get('/personal', async (req, res) => {
@@ -220,10 +223,8 @@ router.get('/logout', async (req, res) => {
 	await res.redirect('/login');
 });
 
-router.post('/personal/getlogs', async (req, res) => {
-	const data = req.body.description;
-	console.log(data);
-	await res.render('form/getlogs', { description: data });
+router.get('/personal/getlogs', async (req, res) => {
+	await res.render('form/getlogs', { description: globaltitle });
 });
 
 module.exports = router;

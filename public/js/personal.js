@@ -34,11 +34,13 @@ function mainLogs() {
             }
             thelogs.append($("<dd class=" + i._id + ">" + temp + "</dd>"));
             thelogs.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            thelogs.append($("<dt><a class=loghref id=" + "loghref1" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
+            thelogs.append($("<dt><a class='loghref' id=" + "loghref1" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             thelogs.append($("<dt class=" + i._id + ">" + i.feel + "<br></dt>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
             thelogs.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
+            thelogs.append($("<div class=" + i._id + "><br></div>"));
+            planList.append($("<button class='review' id=" + "mainlog" + i._id + ">review</button>"));
             thelogs.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
             thelogs.append($("<div class=" + i._id + "><br><br></div>"));
         }
@@ -120,10 +122,10 @@ function getLog() {
             }
             logList.append($("<dd class=" + i._id + ">" + temp + "</dd>"));
             logList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            logList.append($("<dt><a class=loghref id=" + "loghref" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
+            logList.append($("<dt><a class='loghref' id=" + "loghref" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             //logList.append($("<form id='submitanother' method='post' action='/login/personal/getlogs'><input type='hidden' name='description' value=" + i.feel + "/>"));
             //logList.append($("<a href='http://localhost:3000/login/personal/getlogs' οnclick='document.getElementById('submitanother').submit();' class='loghref' id=" + "loghref" + i._id + ">" + i.title + "<br></a></form>"));
-            logList.append($("<dt class=" + i._id + ">" + i.feel + "<br></dt>"));
+            logList.append($("<dt id=" + "tlog" + i._id + "class=" + i._id + ">" + i.feel + "<br></dt>"));
             logList.append($("<div class=" + i._id + "><br></div>"));
             logList.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
             logList.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
@@ -138,6 +140,7 @@ function getLog() {
         //console.log(logId);
             var logreading = {
                 method: 'POST',
+                //url: '/login/database/logsUpdate',
                 url: '/login/database/logsUpdate',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -148,7 +151,8 @@ function getLog() {
         
             $.ajax(logreading).then(function (responseMessage) {
                 var newElement = $(responseMessage);
-                $(location).attr('href', 'http://localhost:3000/login/personal/plans');
+                //$(location).attr('href', 'http://localhost:3000/login/personal/plans');
+                $(location).attr('href', 'http://localhost:3000/login/personal/getlogs');
             });
         });
     });
@@ -171,6 +175,7 @@ function getPlan() {
             planList.append($("<button class='make-log' id=" + "log" + i._id + ">Make your log</button>"));
             planList.append($("<div id=" + "logtitle" + i._id + "><label>Make a title of this log：</label><input id=" + "loginput" + i._id + " type='text' name='log-title' /></div>"));
             planList.append($("<div id=" + "logfeel" + i._id + "><label>What is your thought of this trip：</label><input id=" + "loginput1" + i._id + " type='text' name='log-feel' /></div>"));
+            //planList.append($("<div id=" + "logfeel" + i._id + "><label>What is your thought of this trip：</label><textarea id=" + "loginput1" + i._id + "name='log-feel' cols='30' rows='3'></textarea></div>"));
             planList.append($("<button class='logsubmit' id=" + "logsubmit" + i._id + ">submit</button>"));
             planList.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
             $('#logtitle' + i._id).hide();
