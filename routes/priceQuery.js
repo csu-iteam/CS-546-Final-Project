@@ -88,8 +88,16 @@ router.get('/apiTest', async function (req, res) {
     let config = {
         headers: {Authorization: `Bearer ${token}`}
     }
-    await axios.get('https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=SYD&destinationLocationCode=BKK&departureDate=2021-02-01&adults=1&nonStop=false&max=250',
-        config).then(async (response) => {
+
+    let queryParams = {
+        originLocationCode: 'SYD',
+        destinationLocationCode: 'BKK',
+        departureDate: '2021-02-01',
+        adults: 1,
+    }
+
+    let queryUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${queryParams.originLocationCode}&destinationLocationCode=${queryParams.destinationLocationCode}&departureDate=${queryParams.departureDate}&adults=${queryParams.adults}&nonStop=false&max=250`
+    await axios.get(queryUrl, config).then(async (response) => {
         console.log(response.data)
     })
 })
