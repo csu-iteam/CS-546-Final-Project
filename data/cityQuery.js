@@ -97,9 +97,68 @@ async function getCityAirportIATA(name) {
     return getIATAList(name)
 }
 
+function combineQueryUrl(obj) {
+    let requiredUrl = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${obj.originLocationCode}&destinationLocationCode=${obj.destinationLocationCode}&departureDate=${obj.departureDate}&adults=${obj.adults}`
+    if (obj.hasOwnProperty('returnData')) {
+        requiredUrl += `&returnData=${obj.returnData}`
+    }
+    if (obj.hasOwnProperty('childrenQuery')) {
+        requiredUrl += `&children=${obj.childrenQuery}`
+    }
+    if (obj.hasOwnProperty('infants')) {
+        requiredUrl += `&infants=${obj.infants}`
+    }
+    if (obj.hasOwnProperty('travelClass')) {
+        requiredUrl += `&travelClass=${obj.travelClass}`
+    }
+    if (obj.hasOwnProperty('includedAirlineCodes')) {
+        requiredUrl += `&includedAirlineCodes=${obj.includedAirlineCodes}`
+        if (obj.hasOwnProperty('excludedAirlineCodes'))
+            delete obj.excludedAirlineCodes
+    }
+    if (obj.hasOwnProperty('excludedAirlineCodes')) {
+        requiredUrl += `&excludedAirlineCodes=${obj.excludedAirlineCodes}`
+        if (obj.hasOwnProperty('includedAirlineCodes'))
+            delete obj.includedAirlineCodes
+    }
+    if (obj.hasOwnProperty('nonStop')) {
+        requiredUrl += `&nonStop=${obj.nonStop}`
+    }
+    if (obj.hasOwnProperty('currencyCode')) {
+        requiredUrl += `&currencyCode=${obj.currencyCode}`
+    }
+    if (obj.hasOwnProperty('maxPrice')) {
+        requiredUrl += `&maxPrice=${obj.maxPrice}`
+    }
+    if (obj.hasOwnProperty('max')) {
+        requiredUrl += `&max=${obj.max}`
+    }
+    return requiredUrl
+}
+
+
+async function amadeusGetToken() {
+    return await axios.request(hotelApi.amadeusToken).then(async function (response) {
+        return response.data.access_token
+    })
+}
+
+async function queryAirTicket(paramsObj) {
+    let queryUrl = combineQueryUrl(paramsObj)
+
+    let config = {
+        headers: {Authorization: `Bearer ${await amadeusGetToken()}`}
+    }
+    return await axios.get(queryUrl, config).then(async (response) => {
+        console.log(response.data)
+        return response.data
+    })
+}
+
 module.exports = {
     queryCity,
     getIATAList,
     getCityAirportIATA,
-    getCityDestinationIdlList
+    getCityDestinationIdlList,
+    queryAirTicket
 }
