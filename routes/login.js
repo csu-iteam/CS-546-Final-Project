@@ -16,6 +16,10 @@ router.get('/', async (req, res) => {
 	}
 });
 
+router.get('/logs', async (req, res) => {
+		await res.render('layouts/log', {});
+});
+
 router.get('/status', async (req, res) => {
 	if (req.session.username) {
 		const result = {};
@@ -36,7 +40,16 @@ router.post('/makelog', async (req, res) => {
 	const logtitle = info.logtitle;
 	const logfeel = info.logfeel;
 	const planId = info.id;
-	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0);
+	let addition = {};
+	const array = [];
+	const plan_location = await plan.getById(planId);
+//console.log(plan_location);
+	for (let i of plan_location.nodes) {
+		array.push(i.position);
+	}
+	addition.username = req.session.username;
+	addition.plansLocation = array;
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0, addition);
 	const result1 = {};
 	result1.status = true;
 	await res.json(result1);
@@ -78,6 +91,12 @@ router.get('/database/logs', async (req, res) => {
 	}
 	//const userData = await log.getAllLogs();
 	//await res.json(userData);
+});
+
+router.get('/database/mainlogs', async (req, res) => {
+	const userData = await log.getAllLogs();
+	//console.log(userData);
+	await res.json(userData);
 });
 
 router.post('/database/logsUpdate', async (req, res) => {
@@ -199,6 +218,12 @@ router.get('/logout', async (req, res) => {
 	await req.session.destroy();
 	//await res.clearCookie('');
 	await res.redirect('/login');
+});
+
+router.post('/personal/getlogs', async (req, res) => {
+	const data = req.body.description;
+	console.log(data);
+	await res.render('form/getlogs', { description: data });
 });
 
 module.exports = router;
