@@ -6313,5 +6313,7 @@ const airports = new Map([
     ["ZZO", [50.666668, 142.75]],
     ["ZZU", [-11.442778, 34.01278]]
   ]);
-  
+  module.exports={
+    airports:airports
+  }
   // export default airports;
