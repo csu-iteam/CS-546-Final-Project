@@ -9,44 +9,245 @@
 
 <body>
     <h1>Make Your Own Plan</h1>
-    <form id="placeForm"></form>
-    <div>
-        <label for="startDate">date to start</label>
-        <input type="date" id="startDate" />
-    </div>
-    <div>
+    <form id="placeForm">
+        <div>
+            <label for="startDate">date to start</label>
+            <input type="date" id="startDate" />
+        </div>
+        <!-- <div>
         <label for="startPlace">departure place</label>
         <input type="text" id="startPlace" />
-    </div>
-    <ol id="nodeList"></ol>
-    <button id="addPlace">Add place</button>
-    <button type="submit">Make Plan!</button>
+    </div> -->
+        <div id="planList">
+            <h3>Plan List</h3>
+            <label>The first place in your plan will be where you start rather than a poi</label>
+            <ol id="nodeList"></ol>
+        </div>
+        <div id="searchBox">
+            <label for="searchTerm">Search Place: </label>
+            <input type="text" id="searchTerm" />
+            <button id="searchPlace">Search</button>
+            <!-- <button id="addPlace">Add place</button> -->
+        </div>
+        <div id="resultBox">
+            <h3>Search Result</h3>
+            <ul id="resultList">
+
+            </ul>
+            <div id="errorBox"></div>
+        </div>
+
+
+        <button type="submit">Make Plan!</button>
     </form>
+    <div id="scheme">
+
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
     integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script>
-    var placeCount = 0;
-    function removePlace(id) {
-        var target = $(`#li${id}`);
-        target.remove();
-    }
+    var placeId = 0;
+
+    //jQuery.support.cors = true;
     (function ($) {
         var addPlace = $('#addPlace'),
-            nodeList = $('#nodeList');
-        addPlace.on('click', function (event) {
+            nodeList = $('#nodeList'),
+            searchPlace = $('#searchPlace'),
+            searchTerm = $('#searchTerm'),
+            errorBox = $('#errorBox'),
+            planList = [],
+            currentSearchList = [],
+            resultList = $('#resultList'),
+            placeForm = $('#placeForm'),
+            startDate = $('#startDate'),
+            scheme=$('#scheme');
+        errorBox.hide();
+
+        // addPlace.on('click', function (event) {
+        //     event.preventDefault();
+        //     let newPlace = document.createElement('li');
+        //     console.log(newPlace);
+        //     newPlace.innerHTML = `<label for='place${placeCount}'>Place<input type='text' id='place${placeCount}'/></label>
+        //     <button id='${placeCount}' onclick=removePlace(${placeCount})>remove this place</button>`;
+        //     //newPlace.attr('id', `div${placeCount}`);
+        //     newPlace.id = `li${placeCount}`;
+        //     nodeList.append(newPlace);
+        //     placeCount++;
+        // })
+
+        searchPlace.on('click', function (event) {
             event.preventDefault();
-            let newPlace = document.createElement('li');
-            console.log(newPlace);
-            newPlace.innerHTML = `<label for='place${placeCount}'>Place<input type='text' id='place${placeCount}'/></label>
-            <button id='${placeCount}' onclick=removePlace(${placeCount})>remove this place</button>`;
-            //newPlace.attr('id', `div${placeCount}`);
-            newPlace.id = `li${placeCount}`;
-            nodeList.append(newPlace);
-            placeCount++;
+            var sTerms = searchTerm.val();
+            if (sTerms.trim() == "") {
+                resultList.empty();
+                errorBox.html("<label>please input search term!</label>");
+                errorBox.show();
+            } else {
+                errorBox.hide();
+                resultList.empty();
+                currentSearchList = [];
+                var requestSearchPlace = {
+                    method: 'GET',
+                    url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${sTerms}&inputtype=textquery&fields=photos,formatted_address,name,geometry&key=AIzaSyDkFqsopNObdSVwPslxnZEFBOG6AVXeVgg`
+                }
+                $.ajax(requestSearchPlace).then(function (responseSearchPlace) {
+                    // responseSearchPlace = {
+                    //     "candidates": [
+                    //         {
+                    //             "formatted_address": "2684 Lacy St, Los Angeles, CA 90031, United States",
+                    //             "geometry": {
+                    //                 "location": {
+                    //                     "lat": 34.0833839,
+                    //                     "lng": -118.2180313
+                    //                 },
+                    //                 "viewport": {
+                    //                     "northeast": {
+                    //                         "lat": 34.08481272989273,
+                    //                         "lng": -118.2167674701073
+                    //                     },
+                    //                     "southwest": {
+                    //                         "lat": 34.08211307010728,
+                    //                         "lng": -118.2194671298927
+                    //                     }
+                    //                 }
+                    //             },
+                    //             "name": "Yellow LA"
+                    //         }
+                    //     ],
+                    //     "status": "OK"
+                    // }
+                    currentSearchList = responseSearchPlace.candidates;
+                    var searchId = 0;
+                    for (let i of currentSearchList) {
+                        let li = document.createElement('li');
+                        li.innerHTML = `<label>${i.name}</label>
+                        <button id="b${searchId}">add to plan</button>`;
+                        //onclick=addPlace(${searchId})
+                        li.id = `sr${searchId}`;
+                        resultList.append(li);
+                        $(`#b${searchId}`).on('click', function (event) {
+                            event.preventDefault();
+                            let place = currentSearchList[this.id.split('b')[1]];
+                            let name = place.name;
+                            let latitude = place.geometry.location.lat;
+                            let longitude = place.geometry.location.lng;
+                            let address = place.formatted_address.split(",");
+                            let location_id = address[address.length - 3];
+                            let duration = (parseInt(6 * Math.random()) + 1) * 30;
+                            var node = {
+                                id: placeId,
+                                name: name,
+                                location_id: location_id,
+                                duration: duration,
+                                coordinates: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                }
+                            }
+                            planList.push(node);
+                            let li2 = document.createElement('li');
+                            li2.innerHTML = `<label>${name}</label>
+                        <button id='${placeId}' >remove this place</button>`;
+                            li2.id = `place${placeId}`;
+                            nodeList.append(li2);
+                            $(`#${placeId}`).on('click', function (event) {
+                                event.preventDefault();
+                                var target = $(`#place${this.id}`);
+                                target.remove();
+                                for (let i = 0; i < planList.length; i++) {
+                                    if (this.id == planList[i].id) {
+                                        planList.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            })
+                            placeId++;
+                            resultList.empty();
+                        });
+                        searchId++;
+                    }
+                })
+            }
         })
-        var form=$('#placeForm');
-        
+
+        placeForm.submit(function (event) {
+            event.preventDefault();
+            let startDate = startDate.val();
+            if (startDate == "") {
+                errorBox.html("you must set a start date");
+                errorBox.show();
+            } else if (planList.length < 2) {
+                errorBox.html("you must have at least two place node");
+                errorBox.show();
+            } else {
+                errorBox.hide();
+                let sd =startDate.split("-");
+                let date=new Date();
+                date.setFullYear(sd[0]);
+                date.setMonth(sd[1]);
+                date.setDate(sd[2]);
+                let sn=planList[0];
+                sn.startDate=date;
+                planList.splice(0,1);
+                planList.splice(0,0,sn);
+                var requestMakePlan = {
+                    method: 'POST',
+                    data:planList,
+                    url:'/generate_plan'
+                }
+                $ajax(requestMakePlan).then(function(result){
+                    scheme.empty();
+                    let plan=result.plan;
+                    for(i of plan){
+                        let newDiv=document.createElement("div");
+                        newDiv.html(i);
+                        scheme.append(newDiv);
+                    }
+                })
+            }
+        })
+
+        // function addPlace(searchId) {
+        //     let place = currentSearchList[searchId];
+        //     console.log("x")
+        //     let name = place.name;
+        //     let latitude = place.geometry.location.lat;
+        //     let longitude = place.geometry.location.lng;
+        //     let address = place.formatted_address.split(",");
+        //     let location_id = address[address.length - 3];
+        //     let duration = (parseInt(6 * Math.random()) + 1) * 30;
+        //     var node = {
+        //         id: placeId,
+        //         name: name,
+        //         location_id: location_id,
+        //         duration: duration,
+        //         coordinates: {
+        //             latitude: latitude,
+        //             longitude: longitude
+        //         }
+        //     }
+        //     planList.push(node);
+        //     //planList.add(node);
+        //     let li = document.createElement('li');
+        //     li.innerHTML = `<label>${name}</label>
+        //      <button id='${placeId}' onclick=removePlace(${placeId})>remove this place</button>`;
+        //     li.id = `place${placeId}`;
+        //     nodeList.append(li);
+        //     placeId++;
+        //     resultList.empty();
+        // }
+
+        // function removePlace(id) {
+        //     var target = $(`#place${id}`);
+        //     target.remove();
+        //     for (let i = 0; i < planList.length; i++) {
+        //         if (id == planList[i].id) {
+        //             planList.splice(i, 1);
+        //             break;
+        //         }
+        //     }
+        // }
 
     })(window.jQuery);
 </script>
