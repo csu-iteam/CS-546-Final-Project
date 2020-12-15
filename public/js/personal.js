@@ -1,4 +1,4 @@
-var planList = $("#planList");
+var planList = $("#plan-List");
 var planItem = $("#planItem");
 var login_button = $("#login-button");
 var logout_button = $("#logout-button");
@@ -40,7 +40,7 @@ function mainLogs() {
             thelogs.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
-            planList.append($("<button class='review' id=" + "mainlog" + i._id + ">review</button>"));
+            thelogs.append($("<button class='review' id=" + "mainlog" + i._id + ">review</button>"));
             thelogs.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
             thelogs.append($("<div class=" + i._id + "><br><br></div>"));
         }
