@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/todo', async (req, res) => {
+    res.json(req.body.thisPlaceData);
+})
 
 async function getPicsData(locationId) {
 
