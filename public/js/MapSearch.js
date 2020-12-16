@@ -120,7 +120,7 @@ function onPlaceChanged() {
 function search() {
     const search = {
         bounds: map.getBounds(),
-        types: ["lodging"],
+        types: ["restaurant", "food", "bakery", "bar", "cafe"],
     };
     places.nearbySearch(search, (results, status, pagination) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
