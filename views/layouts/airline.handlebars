@@ -1,0 +1,28 @@
+<link rel="stylesheet" href="/public/css/loading.css">
+<main>
+    <h1>Select your airline</h1>
+    <form id="airline-pick" name="airlineParam" method="post">
+        <label for="originLoc">Type your origin location</label>
+        <input id="originLoc" name="originLocationCode" type="text">
+
+        <label for="destination">Type your destination location</label>
+        <input id="destination" name="destinationLocationCode" type="text">
+
+        <label for="departureDate">Type your departureu Date</label>
+        <input id="departureDate" name="departureDate" type="date">
+
+        <label for="adults">Type your Adults</label>
+        <input id="adults" name="adults" type="number">
+
+        <input type="submit" class="btn" value="Submit">
+    </form>
+</main>
+<div id="flightShow">
+    <div id="loadingAni" class="container">
+        <h1> Loading </h1>
+    </div>
+    <ul id="ticketList"></ul>
+</div>
+<script src="tota11y.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="/public/js/flightShow.js"></script>

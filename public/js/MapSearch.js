@@ -67,6 +67,10 @@ const countries = {
         center: {lat: 54.8, lng: -4.6},
         zoom: 5,
     },
+    cn: {
+        center: {lat: 34.9, lng: 103},
+        zoom: 3
+    }
 };
 
 function initMap() {
@@ -116,7 +120,7 @@ function onPlaceChanged() {
 function search() {
     const search = {
         bounds: map.getBounds(),
-        types: ["lodging"],
+        types: ["restaurant", "food", "bakery", "bar", "cafe"],
     };
     places.nearbySearch(search, (results, status, pagination) => {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
