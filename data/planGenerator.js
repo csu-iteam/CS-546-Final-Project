@@ -300,65 +300,63 @@ async function getPoi(searchTerm) {
     //let result=await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchTerm}&inputtype=textquery&fields=photos,formatted_address,name,plus_code,geometry&key=AIzaSyDkFqsopNObdSVwPslxnZEFBOG6AVXeVgg`);
     
     let result = {
-        "candidates": [
-            {
-                "formatted_address": "179 Shaftesbury Ave, West End, London WC2H 8JR, United Kingdom",
-                "geometry": {
-                    "location": {
-                        "lat": 51.5151226,
-                        "lng": -0.127327
+        "candidates" : [
+           {
+              "formatted_address" : "4 Jingshan Front St, Dongcheng, Beijing, China, 100009",
+              "geometry" : {
+                 "location" : {
+                    "lat" : 39.9163447,
+                    "lng" : 116.3971546
+                 },
+                 "viewport" : {
+                    "northeast" : {
+                       "lat" : 39.91769452989272,
+                       "lng" : 116.3985044298927
                     },
-                    "viewport": {
-                        "northeast": {
-                            "lat": 51.51643612989272,
-                            "lng": -0.1258604701072778
-                        },
-                        "southwest": {
-                            "lat": 51.51373647010728,
-                            "lng": -0.1285601298927222
-                        }
+                    "southwest" : {
+                       "lat" : 39.91499487010728,
+                       "lng" : 116.3958047701073
                     }
-                },
-                "name": "Forbidden Planet London Megastore",
-                "photos": [
-                    {
-                        "height": 1152,
-                        "html_attributions": [
-                            "\u003ca href=\"https://maps.google.com/maps/contrib/104930906938168950776\"\u003eForbidden Planet London Megastore\u003c/a\u003e"
-                        ],
-                        "photo_reference": "ATtYBwLoJVHQi1vjHJwDPto_sIJENJ-_0_Vyka1O70b0aEbWMrk0gVIsUOzNPgBFrXuuIXWAJXexBOJeYLOk2H7JNlViVSdD_wCh58JXWdMq2Aj-AczB75pT2WzJ1Ui_XM80uSSaqg8qp_1ggVi98h6S5iyfEqgE_c6CZMStiSufQm84b2y9",
-                        "width": 2048
-                    }
-                ]
-            }
+                 }
+              },
+              "name" : "The Palace Museum",
+              "plus_code" : {
+                 "compound_code" : "W98W+GV Dongcheng, Beijing, China",
+                 "global_code" : "8PFRW98W+GV"
+              }
+           }
         ],
-        "status": "OK"
-    }
+        "status" : "OK"
+     };
     let result2 = {
-        "candidates": [
-            {
-                "formatted_address": "2684 Lacy St, Los Angeles, CA 90031, United States",
-                "geometry": {
-                    "location": {
-                        "lat": 34.0833839,
-                        "lng": -118.2180313
+        "candidates" : [
+           {
+              "formatted_address" : "2684 Lacy St, Los Angeles, CA 90031, United States",
+              "geometry" : {
+                 "location" : {
+                    "lat" : 34.0833839,
+                    "lng" : -118.2180313
+                 },
+                 "viewport" : {
+                    "northeast" : {
+                       "lat" : 34.08481272989273,
+                       "lng" : -118.2167674701073
                     },
-                    "viewport": {
-                        "northeast": {
-                            "lat": 34.08481272989273,
-                            "lng": -118.2167674701073
-                        },
-                        "southwest": {
-                            "lat": 34.08211307010728,
-                            "lng": -118.2194671298927
-                        }
+                    "southwest" : {
+                       "lat" : 34.08211307010728,
+                       "lng" : -118.2194671298927
                     }
-                },
-                "name": "Yellow LA"
-            }
+                 }
+              },
+              "name" : "Yellow LA",
+              "plus_code" : {
+                 "compound_code" : "3QMJ+9Q Los Angeles, California",
+                 "global_code" : "85633QMJ+9Q"
+              }
+           }
         ],
-        "status": "OK"
-    }
+        "status" : "OK"
+     };
 
     if (i == 1) {
         return result2
