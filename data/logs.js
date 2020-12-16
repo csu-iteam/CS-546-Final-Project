@@ -2,7 +2,7 @@ const mongoCollections = require('../config/mongoCollections');
 const logs = mongoCollections.logs;
 let { ObjectId } = require('mongodb');
 
-async function insertLogs(userId, title, planId, feel, reviews, date, like, reading) {
+async function insertLogs(userId, title, planId, feel, reviews, date, like, reading, addition) {
     const log = await logs();
     const newInsert = {
         userId: userId,
@@ -12,7 +12,8 @@ async function insertLogs(userId, title, planId, feel, reviews, date, like, read
         reviews: reviews,
         date: date,
         like: like,
-        reading: reading
+		reading: reading,
+		addition: addition
     };
     const result = await log.insertOne(newInsert);
     if (result.insertedCount === 0) {

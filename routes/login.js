@@ -6,6 +6,11 @@ const data = require('../data');
 const user = data.users;
 const plan = data.plans;
 const log = data.logs;
+const review = data.reviews;
+
+let globaltitle;
+let globalfeel;
+let globalreviews;
 
 router.get('/', async (req, res) => {
 	if (req.session.username) {
@@ -14,6 +19,10 @@ router.get('/', async (req, res) => {
 	else {
 		await res.render('form/login', { errorMessage: null });
 	}
+});
+
+router.get('/logs', async (req, res) => {
+		await res.render('layouts/log', {});
 });
 
 router.get('/status', async (req, res) => {
@@ -36,7 +45,37 @@ router.post('/makelog', async (req, res) => {
 	const logtitle = info.logtitle;
 	const logfeel = info.logfeel;
 	const planId = info.id;
-	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0);
+	let addition = {};
+	const array = [];
+	const plan_location = await plan.getById(planId);
+//console.log(plan_location);
+	for (let i of plan_location.nodes) {
+		array.push(i.position);
+	}
+	addition.username = req.session.username;
+	addition.plansLocation = array;
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0, addition);
+	const result1 = {};
+	result1.status = true;
+	await res.json(result1);
+});
+
+router.post('/makereview', async (req, res) => {
+	const info = req.body;
+	const userInfo = await user.getByUsername(req.session.username);
+	const userId = userInfo._id;
+	const logReview = info.logReview;
+	const logreviewId = info.id;
+// 	let addition = {};
+// 	const array = [];
+// 	const plan_location = await plan.getById(planId);
+// //console.log(plan_location);
+// 	for (let i of plan_location.nodes) {
+// 		array.push(i.position);
+// 	}
+// 	addition.username = req.session.username;
+// 	addition.plansLocation = array;
+	const result = await review.insertReviews(userId, logreviewId, "10/31/2020", logReview, []);
 	const result1 = {};
 	result1.status = true;
 	await res.json(result1);
@@ -80,6 +119,24 @@ router.get('/database/logs', async (req, res) => {
 	//await res.json(userData);
 });
 
+router.get('/database/reviews', async (req, res) => {
+	if (req.session.username) {
+		const data = await review.getAllReviews();
+		for (let i of data) {
+			const userData = await user.getById(i.userId);
+			const name = userData.username;
+			i.username = name;
+		}
+		await res.json(data);
+	}
+});
+
+router.get('/database/mainlogs', async (req, res) => {
+	const userData = await log.getAllLogs();
+	//console.log(userData);
+	await res.json(userData);
+});
+
 router.post('/database/logsUpdate', async (req, res) => {
 	const id = req.body.logId;
 	let change = {};
@@ -87,7 +144,10 @@ router.post('/database/logsUpdate', async (req, res) => {
 	let temp = req.body.reading + data.reading;
 	change = { reading: temp };
 	const userData = await log.updateLog(id, change);
-	await res.redirect('/login/personal/plans');
+	globaltitle = data.title;
+	globalfeel = data.feel;
+	globalreviews = await review.getAllReviews();
+	await res.json({});
 });
 
 router.get('/personal', async (req, res) => {
@@ -199,6 +259,10 @@ router.get('/logout', async (req, res) => {
 	await req.session.destroy();
 	//await res.clearCookie('');
 	await res.redirect('/login');
+});
+
+router.get('/personal/getlogs', async (req, res) => {
+	await res.render('form/getlogs', { title: globaltitle, feel: globalfeel });
 });
 
 module.exports = router;

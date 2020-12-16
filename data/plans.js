@@ -17,8 +17,9 @@ async function insertPlans(userId, nodes) {
 }
 
 async function getById(id) {
-    const plan = await plans();
-    const result = await plan.findOne({ _id: id });
+	const plan = await plans();
+	const data = ObjectId(id);
+    const result = await plan.findOne({ _id: data });
     return result;
 }
 

@@ -12,6 +12,20 @@ h1 {
 	color: blue;
 }
 
+#getlogsTitle {
+	text-align: center;
+	color: blue;
+}
+
+#inspiration {
+	color: blue;
+}
+
+#getlogsFeel {
+	text-align: center;
+	color: blue;
+}
+
 #search-plans label {
 	text-align: center;
 }
@@ -24,7 +38,7 @@ h1 {
 	text-align: center;
 }
 
-#planList {
+#plan-List {
 	text-align: center;
 	padding-left: 50px;
 	padding-right: 50px;
@@ -40,13 +54,15 @@ footer {
 	font-family: Times;
 }
 
-.more-around {
-	margin-bottom: 10px;
+.more-around, .go-here {
+	margin-bottom: 30px;
+	margin-right: 20px;
+	font-size: 20px;
 }
 
-.recommend-pic, .more-around-div {
+/* .recommend-pic, .more-around-div {
 	margin-bottom: 20px;
-}
+} */
 
 .location-p {
 	display: inline;
@@ -55,4 +71,5 @@ footer {
 .image {
 	width: "384px";
 	height: "216px";
+	display: block;
 }

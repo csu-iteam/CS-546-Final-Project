@@ -15,6 +15,9 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/todo', async (req, res) => {
+    res.json(req.body.thisPlaceData);
+})
 
 async function getPicsData(locationId) {
 
@@ -78,7 +81,7 @@ async function getPicsData(locationId) {
         /*
             cause my network problem, them following code can only run with local json files.
         */
-        const data = fs.readFileSync('rPicApiData.json', 'utf-8');
+        const data = fs.readFileSync('data/rPicApiData.json', 'utf-8');
         const parsedData = JSON.parse(data);
         return parsedData
 

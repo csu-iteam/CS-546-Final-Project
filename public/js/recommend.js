@@ -2,6 +2,60 @@
     var recommendPicsDivOrigin = $('#recommendPics-div-origin');
     var recommendPicsDivMore = $('#recommendPics-div-more');
     var moreButton = $('#more-button');
+    var goHere = $('.go-here');
+    var dataToMakePlan = 0;
+
+    function bindEventsToTodoItem(todoItem) {
+        todoItem.find('.finishItem').on('click', function (event) {
+            event.preventDefault();
+            var currentLink = $(this);
+            var currentId = currentLink.data('id');
+
+            console.log(currentLink)
+            console.log(currentId)
+
+            var requestConfig = {
+                method: 'POST',
+                url: '/api/todo/complete/' + currentId
+            };
+
+            $.ajax(requestConfig).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+                bindEventsToTodoItem(newElement);
+                todoItem.replaceWith(newElement);
+            });
+        });
+    }
+
+    // todoArea.children().each(function (index, element) {
+    //     bindEventsToTodoItem($(element));
+    // });
+
+    goHere.on('click', function (event) {
+        event.preventDefault();
+
+        var thisPlaceData = {
+            name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
+            duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
+            location: $(this).prev().prev().prev().text(),
+            coordinates: $(this).prev().prev().prev().prev().prev().children().text()
+        }
+        var requestConfig = {
+            method: 'POST',
+            url: '/recommend/todo',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                thisPlaceData: thisPlaceData,
+            })
+        };
+
+        $.ajax(requestConfig).then(function (responseMessage) {
+            dataToMakePlan = responseMessage;
+            console.log(dataToMakePlan);
+            // recommendPicsDivMore.html(responseMessage.message);
+        })
+    })
+    console.log(dataToMakePlan);
 
     /*
         If the user don't like the places on this page, click this button to get another group of pages.
@@ -96,9 +150,13 @@
                     newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384" height="216" class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
+                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                    newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
+                    newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                     newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
                     newDiv[i].append(`<button class="more-around">See more around this place</button>`);
+                    newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                 }
             } else {
@@ -129,18 +187,31 @@
                         }
 
                         var dataLists = queryLists(picData[0], 10);
+                        var newDiv = []
                         if (dataLists) {
 
                             for (let i = 0; i < dataLists.length; i++) {
                                 let targetPic = dataLists[i];
 
+                                recommendPicsDivMore.append(`<div class="more-around-div"></div>`);
+
+                                if (i == 0) {
+                                    newDiv[i] = recommendPicsDivMore.children('div');
+                                } else {
+                                    newDiv[i] = newDiv[i - 1].next();
+                                }
+
                                 if (targetPic.url) {
 
-                                    recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
-                                    recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
-                                    recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                                    recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
-                                    recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+                                    newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
+                                    newDiv[i].append(`<p>${targetPic.name}</p>`);
+                                    newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
+                                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                                    newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
+                                    newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
+                                    newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
+                                    newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
+                                    newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                                 }
                             }
@@ -181,23 +252,35 @@
                 }
 
                 var dataLists = queryLists(picData[0], 10);
+                var newDiv = []
                 if (dataLists) {
 
                     for (let i = 0; i < dataLists.length; i++) {
                         let targetPic = dataLists[i];
 
+                        recommendPicsDivMore.append(`<div class="more-around-div"></div>`);
+
+                        if (i == 0) {
+                            newDiv[i] = recommendPicsDivMore.children('div');
+                        } else {
+                            newDiv[i] = newDiv[i - 1].next();
+                        }
+
                         if (targetPic.url) {
 
-                            recommendPicsDivMore.append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
-                            recommendPicsDivMore.append(`<p>${targetPic.name}</p>`);
-                            recommendPicsDivMore.append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                            recommendPicsDivMore.append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
-                            recommendPicsDivMore.append(`<p>Description: ${targetPic.snippet}</p>`);
+                            newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
+                            newDiv[i].append(`<p>${targetPic.name}</p>`);
+                            newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
+                            newDiv[i].append(`<ul>Coordinates: </ul>`);
+                            newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
+                            newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
+                            newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
+                            newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
+                            newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
 
                         }
                     }
                 }
-
             })
             $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
             moreButton.text("Not here");  //For better readbility, change the "More" button text on this page.
