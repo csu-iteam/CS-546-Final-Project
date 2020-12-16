@@ -91,6 +91,13 @@ async function getByEmail(email) {
 	return data;
 }
 
+async function getById(id) {
+	const user = await users();
+	const data = ObjectId(id);
+    const result = await user.findOne({ _id: data });
+    return result;
+}
+
 async function deleteById(id) {
 	if (!id) throw 'The id has not been provided.';
 	if ((typeof(id) !== 'string') || (id.length === 0))
@@ -116,7 +123,8 @@ module.exports = {
     getByLastName,
     getByFirstName,
     getByUsername,
-    getByEmail,
+	getByEmail,
+	getById,
     updateUser,
     deleteById,
     removeAll
