@@ -74,6 +74,21 @@ router.get('/airline/:loc', async function (req, res) {
     }
 })
 
+router.get('/airline', async function (req, res) {
+    res.render('layouts/airline')
+})
+
+router.post('/airline', async function (req, res) {
+    const locQuery = req.body
+    let oriCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.originLocationCode))[0]
+    let destCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.destinationLocationCode))[0]
+    locQuery.originLocationCode = oriCity
+    locQuery.destinationLocationCode = destCity
+
+    let resu = await citydata.cityQuery.queryAirTicket(locQuery)
+    console.log(resu)
+})
+
 router.get('/apiTest', async function (req, res) {
     // let token = await amadeusGetToken()
     // console.log(token)
