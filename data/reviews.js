@@ -21,9 +21,12 @@ async function insertReviews(userId, logId, date, content, replies) {
 
 async function getById(id) {
     const review = await reviews();
-    const data = ObjectId(id);
-    const result = await review.findOne({ _id: data });
-    return result;
+	const result = await review.find({ logId: id });
+	let result1 = await result.toArray();
+	for (let i of result1) {
+		i._id = i._id.toString();
+	}
+	return result1;
 }
 
 async function getAllReviews() {

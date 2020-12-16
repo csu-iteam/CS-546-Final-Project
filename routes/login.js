@@ -61,24 +61,31 @@ router.post('/makelog', async (req, res) => {
 });
 
 router.post('/makereview', async (req, res) => {
-	const info = req.body;
-	const userInfo = await user.getByUsername(req.session.username);
-	const userId = userInfo._id;
-	const logReview = info.logReview;
-	const logreviewId = info.id;
-// 	let addition = {};
-// 	const array = [];
-// 	const plan_location = await plan.getById(planId);
-// //console.log(plan_location);
-// 	for (let i of plan_location.nodes) {
-// 		array.push(i.position);
-// 	}
-// 	addition.username = req.session.username;
-// 	addition.plansLocation = array;
-	const result = await review.insertReviews(userId, logreviewId, "10/31/2020", logReview, []);
-	const result1 = {};
-	result1.status = true;
-	await res.json(result1);
+	if (req.session.username) {
+		const info = req.body;
+		const userInfo = await user.getByUsername(req.session.username);
+		const userId = userInfo._id;
+		const logReview = info.logReview;
+		const logreviewId = info.id;
+	// 	let addition = {};
+	// 	const array = [];
+	// 	const plan_location = await plan.getById(planId);
+	// //console.log(plan_location);
+	// 	for (let i of plan_location.nodes) {
+	// 		array.push(i.position);
+	// 	}
+	// 	addition.username = req.session.username;
+	// 	addition.plansLocation = array;
+		let myDate = new Date();
+		const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+		const result = await review.insertReviews(userId, logreviewId, date, logReview, []);
+		const result1 = {};
+		result1.status = true;
+		await res.json(result1);
+	}
+	else {
+		await res.json({ status: false });
+	}
 });
 
 router.get('/database/plans', async (req, res) => {
@@ -119,9 +126,9 @@ router.get('/database/logs', async (req, res) => {
 	//await res.json(userData);
 });
 
-router.get('/database/reviews', async (req, res) => {
+router.post('/database/reviews', async (req, res) => {
 	if (req.session.username) {
-		const data = await review.getAllReviews();
+		const data = await review.getById(req.body.logId);
 		for (let i of data) {
 			const userData = await user.getById(i.userId);
 			const name = userData.username;
@@ -138,6 +145,14 @@ router.get('/database/mainlogs', async (req, res) => {
 });
 
 router.post('/database/logsUpdate', async (req, res) => {
+	//if (req.session.username) {
+		const data1 = await review.getById(req.body.logId);
+		for (let i of data1) {
+			const userData1 = await user.getById(i.userId);
+			const name = userData1.username;
+			i.username = name;
+		}
+	//}
 	const id = req.body.logId;
 	let change = {};
 	const data = await log.getById(id);
@@ -146,7 +161,7 @@ router.post('/database/logsUpdate', async (req, res) => {
 	const userData = await log.updateLog(id, change);
 	globaltitle = data.title;
 	globalfeel = data.feel;
-	globalreviews = await review.getAllReviews();
+	globalreviews = data1;
 	await res.json({});
 });
 
@@ -262,7 +277,7 @@ router.get('/logout', async (req, res) => {
 });
 
 router.get('/personal/getlogs', async (req, res) => {
-	await res.render('form/getlogs', { title: globaltitle, feel: globalfeel });
+	await res.render('form/getlogs', { title: globaltitle, feel: globalfeel, reviews: globalreviews });
 });
 
 module.exports = router;

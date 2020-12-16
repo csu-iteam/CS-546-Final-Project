@@ -42,7 +42,7 @@ function mainLogs() {
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
             thelogs.append($("<button class='make-review' id=" + "mainlog" + i._id + ">review</button>"));
-            thelogs.append($("<div id=" + "logreview" + i._id + "><label>Type your thinking：</label><input id=" + "logreviewinput" + i._id + " type='text' name='log-review' /></div>"));
+            thelogs.append($("<div id=" + "logreview" + i._id + "><label for=" + "logreviewinput" + i._id + ">Type your thinking：</label><input id=" + "logreviewinput" + i._id + " type='text' name='log-review' /></div>"));
             thelogs.append($("<button class='logreviewsubmit' id=" + "logreviewsubmit" + i._id + ">submit</button>"));
             thelogs.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
             thelogs.append($("<div class=" + i._id + "><br><br></div>"));
@@ -79,7 +79,12 @@ function mainLogs() {
         
             $.ajax(makelogreview).then(function (responseMessage) {
                 var newElement = $(responseMessage);
-                if (newElement[0].status === true) {
+                console.log(newElement)
+                if (newElement[0].status === false) {
+                    $("#" + logreviewsubmit).append($("<div>You have to login first!</div>"));
+                }
+                //if (newElement[0].status === true) {
+                else {
                     $('#' + logReview).hide();
                     $('#' + logreviewsubmit).hide();
                     $("#" + logreviewinput).empty();
@@ -183,6 +188,7 @@ function getLog() {
         $(".loghref").click(function (event) {
             event.preventDefault();
             var logId = $(this).attr('id').substring(7);
+            
         //console.log(logId);
             var logreading = {
                 method: 'POST',
@@ -200,7 +206,9 @@ function getLog() {
                 //$(location).attr('href', 'http://localhost:3000/login/personal/plans');
                 $(location).attr('href', 'http://localhost:3000/login/personal/getlogs');
             });
+            //getReviews(logId);
         });
+        
     });
 }
 
@@ -300,25 +308,29 @@ function getPlan() {
     });
 }
 
-function getReviews() {
-    var getreview = {
-        method: 'GET',
-        url: '/login/database/reviews',
-        contentType: 'application/json'
-    };
+// function getReviews(logId) {
+//     console.log('11111111111111111')
+//     var getreview = {
+//         method: 'POST',
+//         url: '/login/database/reviews',
+//         contentType: 'application/json',
+//         data: JSON.stringify({
+//             logId: logId
+//         })
+//     };
 
-    $.ajax(getreview).then(function (responseMessage) {
-        var newElement = $(responseMessage);
-        logList.append($("<dl>"));
-        for (let i of newElement) {
-            reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            reviewList.append($("<dt id=" + "reviewlist" + i._id + "class=" + i._id + ">" + i.username + ": " + i.content + "<br></dt>"));
-            reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            reviewList.append($("<div class=" + i._id + "><br><br></div>"));
-        }
-        logList.append($("</dl>"));
-    });
-}
+//     $.ajax(getreview).then(function (responseMessage) {
+//         var newElement = $(responseMessage);
+//         logList.append($("<dl>"));
+//         for (let i of newElement) {
+//             reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
+//             reviewList.append($("<dt id=" + "reviewlist" + i._id + "class=" + i._id + ">" + i.username + ": " + i.content + "<br></dt>"));
+//             reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
+//             reviewList.append($("<div class=" + i._id + "><br><br></div>"));
+//         }
+//         logList.append($("</dl>"));
+//     });
+// }
 
 $("#logout-button").click(function (event) {
     event.preventDefault();
@@ -337,4 +349,3 @@ checkLogStatus();
 getPlan();
 getLog();
 mainLogs();
-getReviews();
