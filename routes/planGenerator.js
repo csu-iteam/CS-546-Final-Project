@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const planGenerator = data.planGenerator;
 
-router.get('/make_plan',async(req,res)=>{
+router.get('/make_plan', async (req, res) => {
     // res.getHeaders('Access-Control-Allow-Origin:*');
     // res.addHeader('Access-Control-Allow-Method:POST,GET');
     //  res.setHeader('Access-Control-Allow-Origin','*');
@@ -15,20 +15,20 @@ router.get('/make_plan',async(req,res)=>{
 router.post('/generate_plan', async (req, res) => {
     try {
         //console.log(req.body);
-        let sourceNodeList =JSON.parse(req.body.data);
-        let plan =await planGenerator.findLowestCostPlan(sourceNodeList);
-        res.json({plan:plan});
+        let sourceNodeList = JSON.parse(req.body.data);
+        let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
+        res.json({ plan: plan });
     } catch (e) {
         console.log(e);
         res.status(500).json({ error: "service faild" });
     }
 })
 
-router.get('/getPlace/:searchTerm',async(req,res)=>{
-    try{
-        let result=await planGenerator.getPoi(req.params.searchTerm);
+router.get('/getPlace/:searchTerm', async (req, res) => {
+    try {
+        let result = await planGenerator.getPoi(req.params.searchTerm);
         res.json(result);
-    }catch(e){
+    } catch (e) {
         console.log(e);
         res.status(500);
     }
@@ -42,4 +42,4 @@ router.post('/addPlaceFromRecommend', async (req, res) => {
     console.log(dataRecievedByRecommend)
 })
 
-module.exports=router;
+module.exports = router;

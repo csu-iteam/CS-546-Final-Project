@@ -13,7 +13,7 @@
             var thisPlaceData = {
                 name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
                 duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
-                location: $(this).prev().prev().prev().text(),
+                location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
                 coordinates: $(this).prev().prev().prev().prev().prev().children().text()
             }
             var requestConfig = {
@@ -152,7 +152,7 @@
                     var thisPlaceData = {
                         name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
                         duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
-                        location: $(this).prev().prev().prev().text(),
+                        location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
                         coordinates: $(this).prev().prev().prev().prev().prev().children().text()
                     }
                     var requestConfig = {
@@ -236,7 +236,7 @@
                                 var thisPlaceData = {
                                     name: $(this).prev().prev().prev().prev().prev().prev().text(),
                                     duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
-                                    location: $(this).prev().prev().text(),
+                                    location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
                                     coordinates: $(this).prev().prev().prev().prev().children().text()
                                 }
                                 var requestConfig = {
@@ -332,7 +332,7 @@
                         var thisPlaceData = {
                             name: $(this).prev().prev().prev().prev().prev().prev().text(),
                             duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
-                            location: $(this).prev().prev().text(),
+                            location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
                             coordinates: $(this).prev().prev().prev().prev().children().text()
                         }
                         var requestConfig = {
