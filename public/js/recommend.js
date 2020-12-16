@@ -14,27 +14,81 @@
                 return alert('You have already added this place!');
             }
 
-            var thisPlaceData = {
-                name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
-                duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
-                location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
-                coordinates: $(this).prev().prev().prev().prev().prev().children().text()
+            // var thisPlaceData = {
+            //     name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
+            //     duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
+            //     location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
+            //     coordinates: $(this).prev().prev().prev().prev().prev().children().text()
+            // }
+            var thisName = $(this).prev().prev().prev().prev().prev().prev().prev().text();
+
+            var requestSearchPlace = {
+                method: 'GET',
+                url: `/plan/getPlace/${thisName}`
             }
-            var requestConfig = {
-                method: 'POST',
-                url: '/plan/addPlaceFromRecommend',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    thisPlaceData: thisPlaceData,
+
+            $.ajax(requestSearchPlace)
+                .then(function (responseSearchPlace) {
+                    // responseSearchPlace = {
+                    //     "candidates" : [
+                    //         {
+                    //             "formatted_address": "4 Jingshan Front St, Dongcheng, Beijing, China, 100009",
+                    //             "geometry": {
+                    //                 "location": {
+                    //                     "lat": 39.9163447,
+                    //                     "lng": 116.3971546
+                    //                 },
+                    //                 "viewport": {
+                    //                     "northeast": {
+                    //                         "lat": 39.91769452989272,
+                    //                         "lng": 116.3985044298927
+                    //                     },
+                    //                     "southwest": {
+                    //                         "lat": 39.91499487010728,
+                    //                         "lng": 116.3958047701073
+                    //                     }
+                    //                 }
+                    //             },
+                    //             "name": "The Palace Museum",
+                    //             "plus_code": {
+                    //                 "compound_code": "W98W+GV Dongcheng, Beijing, China",
+                    //                 "global_code": "8PFRW98W+GV"
+                    //             }
+                    //         }
+                    //     ],
+                    //         "status" : "OK"
+                    // };
+                    let place = responseSearchPlace.candidates[0];
+                    let name = place.name;
+                    let latitude = place.geometry.location.lat;
+                    let longitude = place.geometry.location.lng;
+                    let splitedArray = place.plus_code.compound_code.split(',');
+                    let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                    let duration = (parseInt(6 * Math.random()) + 1) * 30;
+
+                    var node = {
+                        name: name,
+                        location_id: location_id.trim(),
+                        duration: duration,
+                        coordinates: {
+                            latitude: latitude,
+                            longitude: longitude
+                        }
+                    }
+                    var requestConfig = {
+                        method: 'POST',
+                        url: '/plan/addPlaceFromRecommend',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            thisPlaceData: node,
+                        })
+                    };
+                    $.ajax(requestConfig).then(function (responseMessage) {
+                        dataToMakePlan = responseMessage;
+                        console.log(dataToMakePlan);
+                        // recommendPicsDivMore.html(responseMessage.message);
+                    })
                 })
-            };
-
-            $.ajax(requestConfig).then(function (responseMessage) {
-                dataToMakePlan = responseMessage;
-                console.log(dataToMakePlan);
-                // recommendPicsDivMore.html(responseMessage.message);
-            })
-
             $(this).text('Added to your plan');
         })
     })
@@ -157,26 +211,52 @@
                         return alert('You have already added this place!');
                     }
 
-                    var thisPlaceData = {
-                        name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
-                        duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
-                        location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
-                        coordinates: $(this).prev().prev().prev().prev().prev().children().text()
+                    // var thisPlaceData = {
+                    //     name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
+                    //     duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
+                    //     location: $(this).prev().prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
+                    //     coordinates: $(this).prev().prev().prev().prev().prev().children().text()
+                    // }
+                    var thisName = $(this).prev().prev().prev().prev().prev().prev().prev().text();
+
+                    var requestSearchPlace = {
+                        method: 'GET',
+                        url: `/plan/getPlace/${thisName}`
                     }
-                    var requestConfig = {
-                        method: 'POST',
-                        url: '/plan/addPlaceFromRecommend',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            thisPlaceData: thisPlaceData,
+
+                    $.ajax(requestSearchPlace).then(function (responseSearchPlace) {
+
+                        let place = responseSearchPlace.candidates[0];
+                        let name = place.name;
+                        let latitude = place.geometry.location.lat;
+                        let longitude = place.geometry.location.lng;
+                        let splitedArray = place.plus_code.compound_code.split(',');
+                        let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                        let duration = (parseInt(6 * Math.random()) + 1) * 30;
+
+                        var node = {
+                            name: name,
+                            location_id: location_id.trim(),
+                            duration: duration,
+                            coordinates: {
+                                latitude: latitude,
+                                longitude: longitude
+                            }
+                        }
+                        var requestConfig = {
+                            method: 'POST',
+                            url: '/plan/addPlaceFromRecommend',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                thisPlaceData: node,
+                            })
+                        };
+                        $.ajax(requestConfig).then(function (responseMessage) {
+                            dataToMakePlan = responseMessage;
+                            console.log(dataToMakePlan);
+                            // recommendPicsDivMore.html(responseMessage.message);
                         })
-                    };
-
-                    $.ajax(requestConfig).then(function (responseMessage) {
-                        dataToMakePlan = responseMessage;
-                        console.log(dataToMakePlan);
                     })
-
                     $(this).text('Added to your plan');
                 })
             })
@@ -245,30 +325,54 @@
                                     return alert('You have already added this place!');
                                 }
 
-                                var thisPlaceData = {
-                                    name: $(this).prev().prev().prev().prev().prev().prev().text(),
-                                    duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
-                                    location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
-                                    coordinates: $(this).prev().prev().prev().prev().children().text()
+                                // var thisPlaceData = {
+                                //     name: $(this).prev().prev().prev().prev().prev().prev().text(),
+                                //     duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
+                                //     location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
+                                //     coordinates: $(this).prev().prev().prev().prev().children().text()
+                                // }
+                                var thisName = $(this).prev().prev().prev().prev().prev().prev().text();
+                                var requestSearchPlace = {
+                                    method: 'GET',
+                                    url: `/plan/getPlace/${thisName}`
                                 }
-                                var requestConfig = {
-                                    method: 'POST',
-                                    url: '/plan/addPlaceFromRecommend',
-                                    contentType: 'application/json',
-                                    data: JSON.stringify({
-                                        thisPlaceData: thisPlaceData,
+
+                                $.ajax(requestSearchPlace).then(function (responseSearchPlace) {
+
+                                    let place = responseSearchPlace.candidates[0];
+                                    let name = place.name;
+                                    let latitude = place.geometry.location.lat;
+                                    let longitude = place.geometry.location.lng;
+                                    let splitedArray = place.plus_code.compound_code.split(',');
+                                    let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                                    let duration = (parseInt(6 * Math.random()) + 1) * 30;
+
+                                    var node = {
+                                        name: name,
+                                        location_id: location_id.trim(),
+                                        duration: duration,
+                                        coordinates: {
+                                            latitude: latitude,
+                                            longitude: longitude
+                                        }
+                                    }
+                                    var requestConfig = {
+                                        method: 'POST',
+                                        url: '/plan/addPlaceFromRecommend',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify({
+                                            thisPlaceData: node,
+                                        })
+                                    };
+                                    $.ajax(requestConfig).then(function (responseMessage) {
+                                        dataToMakePlan = responseMessage;
+                                        console.log(dataToMakePlan);
+                                        // recommendPicsDivMore.html(responseMessage.message);
                                     })
-                                };
-
-                                $.ajax(requestConfig).then(function (responseMessage) {
-                                    dataToMakePlan = responseMessage;
-                                    console.log(dataToMakePlan);
                                 })
-
                                 $(this).text('Added to your plan');
                             })
                         })
-
                     })
 
                     $('body,html').animate({ scrollTop: 0 }, 1000); // Back to top
@@ -345,26 +449,51 @@
                             return alert('You have already added this place!');
                         }
 
-                        var thisPlaceData = {
-                            name: $(this).prev().prev().prev().prev().prev().prev().text(),
-                            duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
-                            location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
-                            coordinates: $(this).prev().prev().prev().prev().children().text()
+                        // var thisPlaceData = {
+                        //     name: $(this).prev().prev().prev().prev().prev().prev().text(),
+                        //     duration: $(this).prev().prev().prev().prev().prev().text().split(': ')[1],
+                        //     location: $(this).prev().prev().text().replace('wv__', '').replaceAll('_', ' '),
+                        //     coordinates: $(this).prev().prev().prev().prev().children().text()
+                        // }
+                        var thisName = $(this).prev().prev().prev().prev().prev().prev().text();
+                        var requestSearchPlace = {
+                            method: 'GET',
+                            url: `/plan/getPlace/${thisName}`
                         }
-                        var requestConfig = {
-                            method: 'POST',
-                            url: '/plan/addPlaceFromRecommend',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                thisPlaceData: thisPlaceData,
+
+                        $.ajax(requestSearchPlace).then(function (responseSearchPlace) {
+
+                            let place = responseSearchPlace.candidates[0];
+                            let name = place.name;
+                            let latitude = place.geometry.location.lat;
+                            let longitude = place.geometry.location.lng;
+                            let splitedArray = place.plus_code.compound_code.split(',');
+                            let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                            let duration = (parseInt(6 * Math.random()) + 1) * 30;
+
+                            var node = {
+                                name: name,
+                                location_id: location_id.trim(),
+                                duration: duration,
+                                coordinates: {
+                                    latitude: latitude,
+                                    longitude: longitude
+                                }
+                            }
+                            var requestConfig = {
+                                method: 'POST',
+                                url: '/plan/addPlaceFromRecommend',
+                                contentType: 'application/json',
+                                data: JSON.stringify({
+                                    thisPlaceData: node,
+                                })
+                            };
+                            $.ajax(requestConfig).then(function (responseMessage) {
+                                dataToMakePlan = responseMessage;
+                                console.log(dataToMakePlan);
+                                // recommendPicsDivMore.html(responseMessage.message);
                             })
-                        };
-
-                        $.ajax(requestConfig).then(function (responseMessage) {
-                            dataToMakePlan = responseMessage;
-                            console.log(dataToMakePlan);
                         })
-
                         $(this).text('Added to your plan');
                     })
                 })
