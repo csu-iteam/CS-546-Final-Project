@@ -11,7 +11,7 @@ async function insertReviews(userId, logId, date, content, replies) {
         content: content,
         replies: replies
     };
-    const result = await log.insertOne(newInsert);
+    const result = await review.insertOne(newInsert);
     if (result.insertedCount === 0) {
         console.log('There is nothing inserted.');
     }

@@ -12,6 +12,20 @@ h1 {
 	color: blue;
 }
 
+#getlogsTitle {
+	text-align: center;
+	color: blue;
+}
+
+#inspiration {
+	color: blue;
+}
+
+#getlogsFeel {
+	text-align: center;
+	color: blue;
+}
+
 #search-plans label {
 	text-align: center;
 }
@@ -24,7 +38,7 @@ h1 {
 	text-align: center;
 }
 
-#planList {
+#plan-List {
 	text-align: center;
 	padding-left: 50px;
 	padding-right: 50px;
