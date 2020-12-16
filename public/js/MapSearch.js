@@ -67,6 +67,10 @@ const countries = {
         center: {lat: 54.8, lng: -4.6},
         zoom: 5,
     },
+    cn: {
+        center: {lat: 34.9, lng: 103},
+        zoom: 3
+    }
 };
 
 function initMap() {

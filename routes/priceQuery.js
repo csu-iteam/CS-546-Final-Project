@@ -80,13 +80,14 @@ router.get('/airline', async function (req, res) {
 
 router.post('/airline', async function (req, res) {
     const locQuery = req.body
-    let oriCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.originLocationCode))[0]
-    let destCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.destinationLocationCode))[0]
-    locQuery.originLocationCode = oriCity
-    locQuery.destinationLocationCode = destCity
+    // let oriCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.originLocationCode))[0]
+    // let destCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.destinationLocationCode))[0]
+    // locQuery.originLocationCode = oriCity
+    // locQuery.destinationLocationCode = destCity
 
     let resu = await citydata.cityQuery.queryAirTicket(locQuery)
     console.log(resu)
+    res.json(resu)
 })
 
 router.get('/apiTest', async function (req, res) {
