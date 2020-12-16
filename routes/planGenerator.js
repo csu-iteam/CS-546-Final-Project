@@ -34,9 +34,12 @@ router.get('/getPlace/:searchTerm',async(req,res)=>{
     }
 })
 
+let dataRecievedByRecommend = [];
 router.post('/addPlaceFromRecommend', async (req, res) => {
     let theData = req.body.thisPlaceData;
     res.json(theData);
+    dataRecievedByRecommend.push(theData);
+    console.log(dataRecievedByRecommend)
 })
 
 module.exports=router;

@@ -4,9 +4,10 @@ const log = require('./logs');
 // const comment = require('./comments');
 const plan = require('./plans');
 // const reply = require('./replies');
-const planGenerator = require('./planGenerator')
+const planGenerator = require('./planGenerator');
 // const airport IATA
-const cityQuery = require('./cityQuery')
+const cityQuery = require('./cityQuery');
+
 
 module.exports = {
     users: user,
