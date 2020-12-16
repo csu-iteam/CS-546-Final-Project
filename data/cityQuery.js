@@ -52,7 +52,7 @@ async function queryCity(name) {
     if (name !== null) {
         hotelApi.locQ.params = queryParms
         return await axios.request(hotelApi.locQ).then(async function (response) {
-            console.log(response.data)
+            //console.log(response.data)
             cityInfo = response.data
             return response.data
         }).catch(function (error) {
@@ -150,7 +150,7 @@ async function queryAirTicket(paramsObj) {
         headers: {Authorization: `Bearer ${await amadeusGetToken()}`}
     }
     return await axios.get(queryUrl, config).then(async (response) => {
-        console.log(response.data)
+        //console.log(response.data)
         return response.data
     })
 }

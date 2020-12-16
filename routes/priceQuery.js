@@ -37,7 +37,7 @@ async function queryHotelList(data) {
         queryParms.destinationId = i
         hotelApi.hotQ.params = queryParms
         hotelList.push(await axios.request(hotelApi.hotQ).then(function (response) {
-            console.log(response.data.data.body.searchResults.results)
+            //console.log(response.data.data.body.searchResults.results)
             return response.data.data.body.searchResults.results
         }).catch(function (error) {
             console.log(error)
@@ -70,7 +70,7 @@ router.get('/airline/:loc', async function (req, res) {
     const locQuery = req.params.loc.trim()
     await citydata.cityQuery.queryCity(locQuery)
     if (locQuery !== null) {
-        console.log(await citydata.cityQuery.getIATAList(locQuery))
+        //console.log(await citydata.cityQuery.getIATAList(locQuery))
     }
 })
 
