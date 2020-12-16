@@ -3,10 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const xss = require('xss');
 const data = require('../data');
+const { replies } = require('../config/mongoCollections');
 const user = data.users;
 const plan = data.plans;
 const log = data.logs;
 const review = data.reviews;
+const reply = data.replies;
 
 let globaltitle;
 let globalfeel;
@@ -163,6 +165,32 @@ router.post('/database/logsUpdate', async (req, res) => {
 	globalfeel = data.feel;
 	globalreviews = data1;
 	await res.json({});
+});
+
+router.post('/database/replies', async (req, res) => {
+	//if (req.session.username) {
+		const data = await reply.getByReviewId(req.body.reviewId);
+		for (let i of data) {
+			const userData = await user.getById(i.userId);
+			const name = userData.username;
+			i.username = name;
+		}
+		await res.json(data);
+	//}
+});
+
+router.post('/database/writereplies', async (req, res) => {
+	if (req.session.username) {
+		const userData = await user.getByUsername(req.session.username);
+		const data = await review.getByReviewId(req.body.reviewId);
+		let myDate = new Date();
+		const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+		const result = await reply.insertReplies(userData._id.toString(), req.body.reviewId, '', req.body.replyinput, date);
+		await res.json(result);
+	}
+	else {
+		await res.json({ status: false });
+	}
 });
 
 router.get('/personal', async (req, res) => {

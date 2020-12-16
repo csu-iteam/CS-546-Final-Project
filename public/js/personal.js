@@ -6,7 +6,6 @@ var logList = $("#logList");
 var thelogs = $("#logMainList");
 var reviewList = $("#reviewList");
 
-
 planItem.hide();
 logout_button.hide();
 $("#loginInfo").append('<div>You have logged in the account.</div>');
@@ -308,29 +307,57 @@ function getPlan() {
     });
 }
 
-// function getReviews(logId) {
-//     console.log('11111111111111111')
-//     var getreview = {
-//         method: 'POST',
-//         url: '/login/database/reviews',
-//         contentType: 'application/json',
-//         data: JSON.stringify({
-//             logId: logId
-//         })
-//     };
+function getReply() {
+    $(".replyList2").click(function (event) {
+        event.preventDefault();
+        var reviewIdss = $(this).attr('id').substring(10);
+        var replyinput = "replyinput" + $(this).attr('id').substring(10);
+        var putreply = {
+            method: 'POST',
+            url: '/login/database/writereplies',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                reviewId: reviewIdss,
+                replyinput: $("#" + replyinput).val()
+            })
+        };
 
-//     $.ajax(getreview).then(function (responseMessage) {
-//         var newElement = $(responseMessage);
-//         logList.append($("<dl>"));
-//         for (let i of newElement) {
-//             reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-//             reviewList.append($("<dt id=" + "reviewlist" + i._id + "class=" + i._id + ">" + i.username + ": " + i.content + "<br></dt>"));
-//             reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-//             reviewList.append($("<div class=" + i._id + "><br><br></div>"));
-//         }
-//         logList.append($("</dl>"));
-//     });
-// }
+        $.ajax(putreply).then(function (responseMessage) {
+            var newElement = $(responseMessage);
+            if (newElement[0].status === false) {
+                $("#replyList2" + reviewIdss).append($("<div>You have to login first!</div>"));
+            }
+            $("#" + replyinput).empty();
+        });
+    });
+
+    $(".replyList1").click(function (event) {
+        event.preventDefault();
+        var reviewIds = $(this).attr('id').substring(10);
+        var getreply = {
+            method: 'POST',
+            url: '/login/database/replies',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                reviewId: reviewIds
+            })
+        };
+        var replyListId = "replyList" + reviewIds;
+        var replyList = $("#" + replyListId);
+
+        $.ajax(getreply).then(function (responseMessage) {
+            var newElement = $(responseMessage);
+            replyList.empty();
+            replyList.append($("<dl>"));
+            for (let i of newElement) {
+                replyList.append($("<div class=" + i._id + ">" + i.username + ": " + i.content + "</div>"));
+                replyList.append($("<div class=" + i._id + ">Created: " + i.date + "</div>"));
+                replyList.append($("<div class=" + i._id + "><br></div>"));
+            }
+            replyList.append($("</dl>"));
+        });
+    });
+}
 
 $("#logout-button").click(function (event) {
     event.preventDefault();
@@ -349,3 +376,4 @@ checkLogStatus();
 getPlan();
 getLog();
 mainLogs();
+getReply();
