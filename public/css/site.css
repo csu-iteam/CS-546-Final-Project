@@ -12,6 +12,20 @@ h1 {
 	color: blue;
 }
 
+#getlogsTitle {
+	text-align: center;
+	color: blue;
+}
+
+#inspiration {
+	color: blue;
+}
+
+#getlogsFeel {
+	text-align: center;
+	color: blue;
+}
+
 #search-plans label {
 	text-align: center;
 }
