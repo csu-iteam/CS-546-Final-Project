@@ -37,7 +37,8 @@ function mainLogs() {
             thelogs.append($("<dt><a class='loghref1' id=" + "loghref1" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             thelogs.append($("<dt class=" + i._id + ">" + i.feel + "<br></dt>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
-            thelogs.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
+            thelogs.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "</dt>"));
+            thelogs.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
             thelogs.append($("<button class='make-review' id=" + "mainlog" + i._id + ">review</button>"));
@@ -177,8 +178,10 @@ function getLog() {
             //logList.append($("<a href='http://localhost:3000/login/personal/getlogs' οnclick='document.getElementById('submitanother').submit();' class='loghref' id=" + "loghref" + i._id + ">" + i.title + "<br></a></form>"));
             logList.append($("<dt id=" + "tlog" + i._id + "class=" + i._id + ">" + i.feel + "<br></dt>"));
             logList.append($("<div class=" + i._id + "><br></div>"));
-            logList.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
+            logList.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "<br></dt>"));
+            logList.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             logList.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
+            logList.append($("<dd class=" + i._id + ">Like: " + i.like + "</dd>"));
             logList.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
             logList.append($("<div class=" + i._id + "><br><br></div>"));
         }

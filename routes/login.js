@@ -56,7 +56,9 @@ router.post('/makelog', async (req, res) => {
 	}
 	addition.username = req.session.username;
 	addition.plansLocation = array;
-	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0, addition);
+	let myDate = new Date();
+	const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', date, 0, 0, addition);
 	const result1 = {};
 	result1.status = true;
 	await res.json(result1);
