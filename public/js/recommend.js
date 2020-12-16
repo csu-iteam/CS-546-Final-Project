@@ -10,6 +10,10 @@
         $(this).on('click', function (event) {
             event.preventDefault();
 
+            if ($(this).text() == 'Added to your plan') {
+                return alert('You have already added this place!');
+            }
+
             var thisPlaceData = {
                 name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
                 duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
@@ -149,6 +153,10 @@
                 $(this).on('click', function (event) {
                     event.preventDefault();
 
+                    if ($(this).text() == 'Added to your plan') {
+                        return alert('You have already added this place!');
+                    }
+
                     var thisPlaceData = {
                         name: $(this).prev().prev().prev().prev().prev().prev().prev().text(),
                         duration: $(this).prev().prev().prev().prev().prev().prev().text().split(': ')[1],
@@ -232,6 +240,10 @@
                         $('.go-here').each(function () {
                             $(this).on('click', function (event) {
                                 event.preventDefault();
+
+                                if ($(this).text() == 'Added to your plan') {
+                                    return alert('You have already added this place!');
+                                }
 
                                 var thisPlaceData = {
                                     name: $(this).prev().prev().prev().prev().prev().prev().text(),
@@ -328,6 +340,10 @@
                 $('.go-here').each(function () {
                     $(this).on('click', function (event) {
                         event.preventDefault();
+
+                        if ($(this).text() == 'Added to your plan') {
+                            return alert('You have already added this place!');
+                        }
 
                         var thisPlaceData = {
                             name: $(this).prev().prev().prev().prev().prev().prev().text(),
