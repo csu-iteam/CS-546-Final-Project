@@ -48,14 +48,16 @@ router.post('/makelog', async (req, res) => {
 	const logfeel = xss(info.logfeel);
 	const planId = xss(info.id);
 	let addition = {};
-	const array = [];
+	//let array = [];
 	const plan_location = await plan.getById(planId);
+	//console.log(plan_location);
+	//array = plan_location.nodes;
 //console.log(plan_location);
-	for (let i of plan_location.nodes) {
-		array.push(i.position);
-	}
+	//for (let i of plan_location.nodes) {
+		//array.push(i.position);
+	//}
 	addition.username = req.session.username;
-	addition.plansLocation = array;
+	addition.plansLocation = plan_location.nodes;
 	let myDate = new Date();
 	const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
 	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', date, 0, 0, addition);
@@ -68,8 +70,7 @@ router.post('/insertplans', async (req, res) => {
 	if (xss(req.session.username)) {
 		const info = req.body;
 		const userInfo = await user.getByUsername(xss(req.session.username));
-		const planList = xss(info.planList);
-		planList = JSON.parse(planList);
+		const planList = info.planList;
 		const result = await plan.insertPlans(userInfo._id.toString(), planList);
 		await res.json({});
 	}
@@ -207,15 +208,17 @@ router.post('/database/logsUpdate', async (req, res) => {
 	const id = xss(req.body.logId);
 	let change = {};
 	const data = await log.getById(id);
-	let temp = xss(req.body.reading) + data.reading;
-	let temp1 = xss(req.body.like) + data.like;
-	if (xss(req.session.username)) {
+	let temp = req.body.reading + data.reading;
+	let temp1 = req.body.like + data.like;
+	if (req.session.username) {
 		change = { reading: temp, like: temp1 };
 		const userData = await log.updateLog(id, change);
-		const users = await user.getByUsername(xss(req.session.username));
-		let arrayLiked = [];
-		arrayLiked.push(id);
-		const userData1 = await user.updateUser(users._id.toString(), { logsId: arrayLiked });
+		if (req.body.like) {
+			const users = await user.getByUsername(xss(req.session.username));
+			let arrayLiked = [];
+			arrayLiked.push(id);
+			const userData1 = await user.updateUser(users._id.toString(), { logsId: arrayLiked });
+		}
 		globaltitle = data.title;
 		globalfeel = data.feel;
 		globalreviews = data1;

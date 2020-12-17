@@ -1,24 +1,24 @@
 <main>
-    <div style="display:inline">{{username}}'s personal account</div>
-    <div style="display:inline">
-        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/account'" name="account-modify" id="button_account">Personal Account</button>
+    <div id="user1">{{username}}'s personal account</div>
+    <div>
+        <button class="btn btn-outline-primary" type="submit" onclick="location.href='http://localhost:3000/login/personal/account'" name="account-modify" id="button_account">Personal Account</button>
     </div>
     <p></p>
-    <div>
+    <div style="text-align:center">
         <label for="logs"></label>
-        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/logs'" name="user-logs" id="button_logs">Logs</button>
+        <button class="btn btn-outline-primary" type="submit" onclick="location.href='http://localhost:3000/login/personal/logs'" name="user-logs" id="button_logs">Logs</button>
     </div>
-    <div>
+    <div style="text-align:center">
         <label for="plans"></label>
-        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/plans'" name="user-plans" id="button_plans">Plans</button>
+        <button class="btn btn-outline-primary" type="submit" onclick="location.href='http://localhost:3000/login/personal/plans'" name="user-plans" id="button_plans">Plans</button>
     </div>
-    <div>
-        <label for="comments"></label>
-        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/comments'" name="user-comments" id="button_comments">Comments</button>
+    <div style="text-align:center">
+        <label for="reviews"></label>
+        <button class="btn btn-outline-primary" type="submit" onclick="location.href='http://localhost:3000/login/personal/reviews'" name="user-comments" id="button_comments">Reviews</button>
     </div>
-    <div>
-        <label for="replies"></label>
-        <button type="submit" onclick="location.href='http://localhost:3000/login/personal/replies'" name="user-replies" id="button_replies">Replies</button>
+    <div style="text-align:center">
+        <label for="liked logs"></label>
+        <button class="btn btn-outline-primary" type="submit" onclick="location.href='http://localhost:3000/login/personal/likedlogs'" name="user-replies" id="button_replies">Likedlogs</button>
     </div>
     {{#if status}}
         <ul id="loginInfo">Logging successful!</ul>
