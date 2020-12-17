@@ -8,25 +8,26 @@
 </head>
 
 <body>
-    <h1>Make Your Own Plan</h1>
-    <form id="placeForm">
+<h1 class="mx-3">Make Your Own Plan</h1>
+<form id="placeForm" class="mx-3">
+    <div class="form-group">
         <div>
             <label for="startDate">date to start</label>
-            <input type="date" id="startDate" />
+            <input class="form-control w-25 mb-3" type="date" id="startDate"/>
         </div>
         <!-- <div>
         <label for="startPlace">departure place</label>
         <input type="text" id="startPlace" />
     </div> -->
         <div id="planList">
-            <h3>Plan List</h3>
+            <h3 class="mb-3">Plan List</h3>
             <label>The first place in your plan will be where you start rather than a poi</label>
             <ol id="nodeList"></ol>
         </div>
         <div id="searchBox">
             <label for="searchTerm">Search Place: </label>
-            <input type="text" id="searchTerm" />
-            <button id="searchPlace">Search</button>
+            <input class="form-control w-25 mb-3" type="text" id="searchTerm"/>
+            <button id="searchPlace" class="btn btn-outline-primary mb-3">Search</button>
             <!-- <button id="addPlace">Add place</button> -->
         </div>
         <div id="resultBox">
@@ -38,30 +39,31 @@
         </div>
 
 
-        <button type="submit">Make Plan!</button>
-    </form>
-    <div id="scheme">
-
+        <button type="submit" class="btn btn-outline-primary">Make Plan!</button>
     </div>
+</form>
+<div id="scheme">
+
+</div>
 </body>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
-    integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 <script>
     var placeId = 0;
 
     //jQuery.support.cors = true;
     (function ($) {
         var addPlace = $('#addPlace'),
-            nodeList = $('#nodeList'),
-            searchPlace = $('#searchPlace'),
-            searchTerm = $('#searchTerm'),
-            errorBox = $('#errorBox'),
-            planList = [],
-            //currentSearchList = [],
-            resultList = $('#resultList'),
-            placeForm = $('#placeForm'),
-            dDate = $('#startDate'),
-            scheme = $('#scheme');
+                nodeList = $('#nodeList'),
+                searchPlace = $('#searchPlace'),
+                searchTerm = $('#searchTerm'),
+                errorBox = $('#errorBox'),
+                planList = [],
+                //currentSearchList = [],
+                resultList = $('#resultList'),
+                placeForm = $('#placeForm'),
+                dDate = $('#startDate'),
+                scheme = $('#scheme');
         errorBox.hide();
 
         // addPlace.on('click', function (event) {
@@ -218,7 +220,7 @@
                 console.log(planList);
                 var requestMakePlan = {
                     method: 'POST',
-                    data: { data: JSON.stringify(planList) },
+                    data: {data: JSON.stringify(planList)},
                     url: '/plan/generate_plan'
                 }
                 $.ajax(requestMakePlan).then(function (result) {
