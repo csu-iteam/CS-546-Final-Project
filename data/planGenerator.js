@@ -35,7 +35,7 @@ async function findLowestCostPlan(sourceNodeList) {
         let mPlan = await makePlan(tempPlan);
         //console.log(mPlan);
         if (mPlan.type == "faild") {
-
+            continue;
         } else {
             allPlansWithCost.push(mPlan);
         }
