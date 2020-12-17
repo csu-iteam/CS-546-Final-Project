@@ -287,6 +287,7 @@ function getPlan() {
             //planList.append($("<div id=" + "logfeel" + i._id + "><label>What is your thought of this trip：</label><textarea id=" + "loginput1" + i._id + "name='log-feel' cols='30' rows='3'></textarea></div>"));
             planList.append($("<button class='logsubmit' id=" + "logsubmit" + i._id + ">submit</button>"));
             planList.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
+            planList.append($("<div id="+ "space" + i._id + "><br><br></div>"));
             $('#logtitle' + i._id).hide();
             $('#logfeel' + i._id).hide();
             $('#logsubmit' + i._id).hide();
@@ -331,6 +332,7 @@ function getPlan() {
                     $('#' + logTitle).hide();
                     $('#' + logFeel).hide();
                     $('#' + logsubmit).hide();
+                    $('#space' + planId).hide();
                     $("#" + loginput).empty();
                     $("#" + loginput1).empty();
                     $("#log" + planId).text('Finished');
