@@ -5,33 +5,54 @@
     <meta charset="utf-8">
     <title>Travel System</title>
     <link rel="stylesheet" href="/public/css/site.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
 <body>
-    <div id="login-button" style="display:inline">
-        <button onclick="location.href='http://localhost:3000/login'" type="button" id="login">Login</button>
-    </div>
-    <div id="logout-button" style="display:inline">
-        <button onclick="location.href='http://localhost:3000/login/logout'" type="button" id="logout">Logout</button>
-    </div>
-    <div id="personalmainpage" style="display:inline">
-        <button onclick="location.href='http://localhost:3000/login/personal'" type="button" id="personalpage">Personal
-            Main Page</button>
-    </div>
-    <div id="websitemainpage" style="display:inline">
-        <button onclick="location.href='http://localhost:3000/recommend'" type="button" id="websitepage">Website Main
-            Page</button>
-    </div>
-    <div id="websitelogpage" style="display:inline">
-        <button onclick="location.href='http://localhost:3000/login/logs'" type="button" id="websitelogpage">Find Interesting Logs</button>
-    </div>
+<header>
+    <nav class="nav">
+        <div id="login-button" style="display:inline">
+            <button class="btn" onclick="location.href='http://localhost:3000/login'" type="button" id="login">Login
+            </button>
+        </div>
+        <div id="logout-button" style="display:inline">
+            <button class="btn" onclick="location.href='http://localhost:3000/login/logout'" type="button" id="logout">
+                Logout
+            </button>
+        </div>
+        <div id="personalmainpage" style="display:inline">
+            <button class="btn" onclick="location.href='http://localhost:3000/login/personal'" type="button"
+                    id="personalpage">
+                Personal
+                Main Page
+            </button>
+        </div>
+        <div id="websitemainpage" style="display:inline">
+            <button class="btn" onclick="location.href='http://localhost:3000/recommend'" type="button"
+                    id="websitepage">Website
+                Main
+                Page
+            </button>
+        </div>
+        <div id="websitelogpage" style="display:inline">
+            <button class="btn" onclick="location.href='http://localhost:3000/login/logs'" type="button"
+                    id="websitelogpage">Find
+                Interesting Logs
+            </button>
+        </div>
+    </nav>
+</header>
 
 {{{body}}}
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    <script src="/public/js/personal.js"></script>
-    <script src="/public/js/recommend.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+<script src="/public/js/personal.js"></script>
+<script src="/public/js/recommend.js"></script>
 
 </body>
 

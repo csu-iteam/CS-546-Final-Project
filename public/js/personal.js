@@ -6,7 +6,6 @@ var logList = $("#logList");
 var thelogs = $("#logMainList");
 var reviewList = $("#reviewList");
 
-
 planItem.hide();
 logout_button.hide();
 $("#loginInfo").append('<div>You have logged in the account.</div>');
@@ -38,13 +37,15 @@ function mainLogs() {
             thelogs.append($("<dt><a class='loghref1' id=" + "loghref1" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             thelogs.append($("<dt class=" + i._id + ">" + i.feel + "<br></dt>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
-            thelogs.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
+            thelogs.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "</dt>"));
+            thelogs.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
+            thelogs.append($("<dd class=" + i._id + ">Like: " + i.like + "</dd>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
             thelogs.append($("<button class='make-review' id=" + "mainlog" + i._id + ">review</button>"));
-            thelogs.append($("<div id=" + "logreview" + i._id + "><label>Type your thinking：</label><input id=" + "logreviewinput" + i._id + " type='text' name='log-review' /></div>"));
+            thelogs.append($("<div id=" + "logreview" + i._id + "><label for=" + "logreviewinput" + i._id + ">Type your thinking：</label><input id=" + "logreviewinput" + i._id + " type='text' name='log-review' /></div>"));
             thelogs.append($("<button class='logreviewsubmit' id=" + "logreviewsubmit" + i._id + ">submit</button>"));
-            thelogs.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
+            thelogs.append($("<button class='logreviewliked' id=" + "logreviewliked" + i._id + ">Like it? Save it!</button>"));
             thelogs.append($("<div class=" + i._id + "><br><br></div>"));
             $('#logreview' + i._id).hide();
             $('#logreviewsubmit' + i._id).hide();
@@ -79,10 +80,39 @@ function mainLogs() {
         
             $.ajax(makelogreview).then(function (responseMessage) {
                 var newElement = $(responseMessage);
-                if (newElement[0].status === true) {
+                if (newElement[0].status === false) {
+                    $("#" + logreviewsubmit).append($("<div>You have to login first!</div>"));
+                }
+                //if (newElement[0].status === true) {
+                else {
                     $('#' + logReview).hide();
                     $('#' + logreviewsubmit).hide();
                     $("#" + logreviewinput).empty();
+                    $("#mainlog" + logreviewId).text("reviewed");
+                }
+            });
+        });
+
+        $(".logreviewliked").click(function (event) {
+            event.preventDefault();
+            var logId = $(this).attr('id').substring(14);
+            var logliked1 = {
+                method: 'POST',
+                url: '/login/database/logsUpdate',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    logId: logId,
+                    like: 1
+                })
+            };
+
+            $.ajax(logliked1).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+                if (newElement[0].status === false) {
+                    $("#logreviewliked" + logId).append($("<div>You have to login first!</div>"));
+                }
+                else {
+                    $("#logreviewliked" + logId).text("saved!");
                 }
             });
         });
@@ -171,11 +201,13 @@ function getLog() {
             logList.append($("<dt><a class='loghref' id=" + "loghref" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             //logList.append($("<form id='submitanother' method='post' action='/login/personal/getlogs'><input type='hidden' name='description' value=" + i.feel + "/>"));
             //logList.append($("<a href='http://localhost:3000/login/personal/getlogs' οnclick='document.getElementById('submitanother').submit();' class='loghref' id=" + "loghref" + i._id + ">" + i.title + "<br></a></form>"));
-            logList.append($("<dt id=" + "tlog" + i._id + "class=" + i._id + ">" + i.feel + "<br></dt>"));
+            logList.append($("<dt id=" + "tlog" + i._id + " class=" + i._id + ">" + i.feel + "<br></dt>"));
             logList.append($("<div class=" + i._id + "><br></div>"));
-            logList.append($("<dt class=" + i._id + ">" + i.addition.username + "<br></dt>"));
+            logList.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "<br></dt>"));
+            logList.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             logList.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
-            logList.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
+            logList.append($("<dd class=" + i._id + ">Like: " + i.like + "</dd>"));
+            logList.append($("<button class='close-sign1' id=" + i._id + ">&times</button>"));
             logList.append($("<div class=" + i._id + "><br><br></div>"));
         }
         logList.append($("</dl>"));
@@ -183,6 +215,7 @@ function getLog() {
         $(".loghref").click(function (event) {
             event.preventDefault();
             var logId = $(this).attr('id').substring(7);
+            
         //console.log(logId);
             var logreading = {
                 method: 'POST',
@@ -200,7 +233,30 @@ function getLog() {
                 //$(location).attr('href', 'http://localhost:3000/login/personal/plans');
                 $(location).attr('href', 'http://localhost:3000/login/personal/getlogs');
             });
+            //getReviews(logId);
         });
+
+        $(".close-sign1").click(function (event) {
+            event.preventDefault();
+            var item = $(this).attr('id');
+            $('.' + item).hide();
+            $('#tlog' + item).hide();
+            $('#' + item).hide();
+            $('.loghref').hide();
+            var logdelete = {
+                method: 'POST',
+                url: '/login/database/logsdelete',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: item
+                })
+            };
+
+            $.ajax(logdelete).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+            });
+        });
+        
     });
 }
 
@@ -270,6 +326,7 @@ function getPlan() {
                     $('#' + logsubmit).hide();
                     $("#" + loginput).empty();
                     $("#" + loginput1).empty();
+                    $("#log" + planId).text('Finished');
                 }
             });
         });
@@ -300,23 +357,55 @@ function getPlan() {
     });
 }
 
-function getReviews() {
-    var getreview = {
-        method: 'GET',
-        url: '/login/database/reviews',
-        contentType: 'application/json'
-    };
+function getReply() {
+    $(".replyList2").click(function (event) {
+        event.preventDefault();
+        var reviewIdss = $(this).attr('id').substring(10);
+        var replyinput = "replyinput" + $(this).attr('id').substring(10);
+        var putreply = {
+            method: 'POST',
+            url: '/login/database/writereplies',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                reviewId: reviewIdss,
+                replyinput: $("#" + replyinput).val()
+            })
+        };
 
-    $.ajax(getreview).then(function (responseMessage) {
-        var newElement = $(responseMessage);
-        logList.append($("<dl>"));
-        for (let i of newElement) {
-            reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            reviewList.append($("<dt id=" + "reviewlist" + i._id + "class=" + i._id + ">" + i.username + ": " + i.content + "<br></dt>"));
-            reviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
-            reviewList.append($("<div class=" + i._id + "><br><br></div>"));
-        }
-        logList.append($("</dl>"));
+        $.ajax(putreply).then(function (responseMessage) {
+            var newElement = $(responseMessage);
+            if (newElement[0].status === false) {
+                $("#replyList2" + reviewIdss).append($("<div>You have to login first!</div>"));
+            }
+            $("#" + replyinput).empty();
+        });
+    });
+
+    $(".replyList1").click(function (event) {
+        event.preventDefault();
+        var reviewIds = $(this).attr('id').substring(10);
+        var getreply = {
+            method: 'POST',
+            url: '/login/database/replies',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                reviewId: reviewIds
+            })
+        };
+        var replyListId = "replyList" + reviewIds;
+        var replyList = $("#" + replyListId);
+
+        $.ajax(getreply).then(function (responseMessage) {
+            var newElement = $(responseMessage);
+            replyList.empty();
+            replyList.append($("<dl>"));
+            for (let i of newElement) {
+                replyList.append($("<div class=" + i._id + ">" + i.username + ": " + i.content + "</div>"));
+                replyList.append($("<div class=" + i._id + ">Created: " + i.date + "</div>"));
+                replyList.append($("<div class=" + i._id + "><br></div>"));
+            }
+            replyList.append($("</dl>"));
+        });
     });
 }
 
@@ -337,4 +426,4 @@ checkLogStatus();
 getPlan();
 getLog();
 mainLogs();
-getReviews();
+getReply();

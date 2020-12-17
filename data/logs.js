@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const logs = mongoCollections.logs;
+const users = require('./users');
 let { ObjectId } = require('mongodb');
 
 async function insertLogs(userId, title, planId, feel, reviews, date, like, reading, addition) {
@@ -96,7 +97,7 @@ async function deleteById(id) {
 	const data = ObjectId(id);
 	const log = await logs();
 	const result = await log.deleteOne({ _id: data });
-	if (result.deleteCount === 0) throw 'The plan does not exist.';
+	if (result.deleteCount === 0) throw 'The log does not exist.';
 	if (result.deletedCount === 1)
 		return true;
 	else

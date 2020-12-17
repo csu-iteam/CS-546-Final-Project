@@ -3,10 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const xss = require('xss');
 const data = require('../data');
+const { replies } = require('../config/mongoCollections');
 const user = data.users;
 const plan = data.plans;
 const log = data.logs;
 const review = data.reviews;
+const reply = data.replies;
 
 let globaltitle;
 let globalfeel;
@@ -54,31 +56,40 @@ router.post('/makelog', async (req, res) => {
 	}
 	addition.username = req.session.username;
 	addition.plansLocation = array;
-	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', "10/31/2020", 0, 0, addition);
+	let myDate = new Date();
+	const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+	const result = await log.insertLogs(userId, logtitle, planId, logfeel, '', date, 0, 0, addition);
 	const result1 = {};
 	result1.status = true;
 	await res.json(result1);
 });
 
 router.post('/makereview', async (req, res) => {
-	const info = req.body;
-	const userInfo = await user.getByUsername(req.session.username);
-	const userId = userInfo._id;
-	const logReview = info.logReview;
-	const logreviewId = info.id;
-// 	let addition = {};
-// 	const array = [];
-// 	const plan_location = await plan.getById(planId);
-// //console.log(plan_location);
-// 	for (let i of plan_location.nodes) {
-// 		array.push(i.position);
-// 	}
-// 	addition.username = req.session.username;
-// 	addition.plansLocation = array;
-	const result = await review.insertReviews(userId, logreviewId, "10/31/2020", logReview, []);
-	const result1 = {};
-	result1.status = true;
-	await res.json(result1);
+	if (req.session.username) {
+		const info = req.body;
+		const userInfo = await user.getByUsername(req.session.username);
+		const userId = userInfo._id;
+		const logReview = info.logReview;
+		const logreviewId = info.id;
+	// 	let addition = {};
+	// 	const array = [];
+	// 	const plan_location = await plan.getById(planId);
+	// //console.log(plan_location);
+	// 	for (let i of plan_location.nodes) {
+	// 		array.push(i.position);
+	// 	}
+	// 	addition.username = req.session.username;
+	// 	addition.plansLocation = array;
+		let myDate = new Date();
+		const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+		const result = await review.insertReviews(userId, logreviewId, date, logReview, []);
+		const result1 = {};
+		result1.status = true;
+		await res.json(result1);
+	}
+	else {
+		await res.json({ status: false });
+	}
 });
 
 router.get('/database/plans', async (req, res) => {
@@ -109,6 +120,12 @@ router.post('/database/plansdelete', async (req, res) => {
 	await res.redirect('/login/personal/plans');
 });
 
+router.post('/database/logsdelete', async (req, res) => {
+	const id = req.body.id;
+	const userData = await log.deleteById(id);
+	await res.redirect('/login/personal/logs');
+});
+
 router.get('/database/logs', async (req, res) => {
 	if (req.session.username) {
 		const userData = await user.getByUsername(req.session.username);
@@ -119,9 +136,9 @@ router.get('/database/logs', async (req, res) => {
 	//await res.json(userData);
 });
 
-router.get('/database/reviews', async (req, res) => {
+router.post('/database/reviews', async (req, res) => {
 	if (req.session.username) {
-		const data = await review.getAllReviews();
+		const data = await review.getById(req.body.logId);
 		for (let i of data) {
 			const userData = await user.getById(i.userId);
 			const name = userData.username;
@@ -138,16 +155,65 @@ router.get('/database/mainlogs', async (req, res) => {
 });
 
 router.post('/database/logsUpdate', async (req, res) => {
+	//if (req.session.username) {
+	const data1 = await review.getById(req.body.logId);
+	for (let i of data1) {
+		const userData1 = await user.getById(i.userId);
+		const name = userData1.username;
+		i.username = name;
+	}
+	//}
 	const id = req.body.logId;
 	let change = {};
 	const data = await log.getById(id);
 	let temp = req.body.reading + data.reading;
-	change = { reading: temp };
-	const userData = await log.updateLog(id, change);
-	globaltitle = data.title;
-	globalfeel = data.feel;
-	globalreviews = await review.getAllReviews();
-	await res.json({});
+	let temp1 = req.body.like + data.like;
+	if (req.session.username) {
+		change = { reading: temp, like: temp1 };
+		const userData = await log.updateLog(id, change);
+		const users = await user.getByUsername(req.session.username);
+		let arrayLiked = [];
+		arrayLiked.push(id);
+		const userData1 = await user.updateUser(users._id.toString(), { logsId: arrayLiked });
+		globaltitle = data.title;
+		globalfeel = data.feel;
+		globalreviews = data1;
+		await res.json({ status: true });
+	}
+	else {
+		change = { reading: temp };
+		const userData = await log.updateLog(id, change);
+		globaltitle = data.title;
+		globalfeel = data.feel;
+		globalreviews = data1;
+		await res.json({ status: false });
+	}
+});
+
+router.post('/database/replies', async (req, res) => {
+	//if (req.session.username) {
+		const data = await reply.getByReviewId(req.body.reviewId);
+		for (let i of data) {
+			const userData = await user.getById(i.userId);
+			const name = userData.username;
+			i.username = name;
+		}
+		await res.json(data);
+	//}
+});
+
+router.post('/database/writereplies', async (req, res) => {
+	if (req.session.username) {
+		const userData = await user.getByUsername(req.session.username);
+		const data = await review.getByReviewId(req.body.reviewId);
+		let myDate = new Date();
+		const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
+		const result = await reply.insertReplies(userData._id.toString(), req.body.reviewId, '', req.body.replyinput, date);
+		await res.json(result);
+	}
+	else {
+		await res.json({ status: false });
+	}
 });
 
 router.get('/personal', async (req, res) => {
@@ -262,7 +328,7 @@ router.get('/logout', async (req, res) => {
 });
 
 router.get('/personal/getlogs', async (req, res) => {
-	await res.render('form/getlogs', { title: globaltitle, feel: globalfeel });
+	await res.render('form/getlogs', { title: globaltitle, feel: globalfeel, reviews: globalreviews });
 });
 
 module.exports = router;

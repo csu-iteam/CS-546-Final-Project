@@ -1,4 +1,4 @@
-.container {
+.loadContain {
     display: -webkit-box;
     display: flex;
     -webkit-box-orient: vertical;
@@ -13,7 +13,7 @@
     text-align: center;
 }
 
-.container h1 {
+.loadContain h1 {
     color: #2ec4b6;
 }
 

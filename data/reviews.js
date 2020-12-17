@@ -19,11 +19,21 @@ async function insertReviews(userId, logId, date, content, replies) {
     return id.toString();
 }
 
-async function getById(id) {
-    const review = await reviews();
-    const data = ObjectId(id);
+async function getByReviewId(id) {
+	const review = await reviews();
+	const data = ObjectId(id);
     const result = await review.findOne({ _id: data });
     return result;
+}
+
+async function getById(id) {
+    const review = await reviews();
+	const result = await review.find({ logId: id });
+	let result1 = await result.toArray();
+	for (let i of result1) {
+		i._id = i._id.toString();
+	}
+	return result1;
 }
 
 async function getAllReviews() {
@@ -70,7 +80,7 @@ async function deleteById(id) {
 	const data = ObjectId(id);
 	const review = await reviews();
 	const result = await review.deleteOne({ _id: data });
-	if (result.deleteCount === 0) throw 'The plan does not exist.';
+	if (result.deleteCount === 0) throw 'The review does not exist.';
 	if (result.deletedCount === 1)
 		return true;
 	else
@@ -82,5 +92,6 @@ module.exports = {
     getById,
     getAllReviews,
     updateReview,
-    deleteById
+	deleteById,
+	getByReviewId
 }
