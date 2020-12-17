@@ -1,10 +1,3 @@
-// This example uses the autocomplete feature of the Google Places API.
-// It allows the user to find all hotels in a given place, within a given
-// country. It then displays markers for all the hotels returned,
-// with on-click details for each hotel.
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE&libraries=places">
 let map;
 let places;
 let infoWindow;
@@ -100,6 +93,12 @@ function initMap() {
     document
         .getElementById("country")
         .addEventListener("change", setAutocompleteCountry);
+
+    google.maps.event.addListenerOnce(map, 'idle', function () {
+        // do something only the first time the map is loaded
+        $('a').parent().html('<p>Empty</p>')
+        console.log("Finished")
+    });
 }
 
 // When the user selects a city, get the place details for the city and
@@ -143,6 +142,7 @@ function search() {
                 markers[i].placeResult = results[i];
                 google.maps.event.addListener(markers[i], "click", showInfoWindow);
                 setTimeout(dropMarker(i), i * 100);
+                $('.placeIcon').attr('alt', "Place Icon")
                 addResult(results[i], i);
             }
         }

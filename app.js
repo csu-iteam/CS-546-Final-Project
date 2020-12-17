@@ -4,10 +4,12 @@ const configRoutes = require('./routes')
 const exphbs = require('express-handlebars')
 const cookie = require('cookie-parser')
 const session = require('express-session')
+const expressSanitizer = require('express-sanitizer')
 const staticpage = express.static(__dirname + '/public')
 
 app.use(cookie())
 app.use(express.json())
+app.use(expressSanitizer())
 app.use('/public', staticpage)
 
 // CORS support settings
@@ -29,9 +31,9 @@ const handlebarsInstance = exphbs.create({
     defaultLayout: 'main',
     helpers: {
         asJSON: (obj, spacing) => {
-        if (typeof spacing === 'number')
-            return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
-        return new Handlebars.SafeString(JSON.stringify(obj));
+            if (typeof spacing === 'number')
+                return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
+            return new Handlebars.SafeString(JSON.stringify(obj));
         }
     }
 });
@@ -39,6 +41,11 @@ const handlebarsInstance = exphbs.create({
 app.use(express.urlencoded({extended: true}))
 app.engine('handlebars', exphbs({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
+
+app.get('/', function (req, res, next) {
+    req = req.sanitize(req.body)
+    next()
+})
 
 configRoutes(app)
 

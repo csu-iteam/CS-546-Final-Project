@@ -1,18 +1,22 @@
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs4Mz7MR151AM8yNWpad7IWWdDxSrq-as&callback=initMap&libraries=places"
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs4Mz7MR151AM8yNWpad7IWWdDxSrq-as&map_ids=27e84ad7986a2e02&callback=initMap&libraries=places"
         defer></script>
 <link rel="stylesheet" href="/public/css/map.css">
-<div id="mapResult">
-    <h1>Find nearby Restaurant</h1>
-    <div class="hotel-search">
-        <div id="findhotels">Find hotels in:</div>
-
-        <div id="locationField">
-            <input id="autocomplete" placeholder="Enter a city" type="text"/>
+<div class="container allRes">
+    <div id="mapResult" class="allRes2 row">
+        <div class="row">
+            <h1>Find nearby Restaurant</h1>
         </div>
+        <div class="hotel-search container row">
+            <div id="findhotels" class="container">Find hotels in:</div>
 
-        <div id="controls">
-            <select id="country">
+            <div id="locationField">
+                <label for="autocomplete"></label>
+                <input id="autocomplete" placeholder="Enter a city" type="text"/>
+            </div>
+
+            <div id="controls">
+                <label for="country"></label><select id="country">
                 <option value="all">All</option>
                 <option value="au">Australia</option>
                 <option value="br">Brazil</option>
@@ -29,41 +33,42 @@
                 <option value="uk">United Kingdom</option>
                 <option value="cn">China</option>
             </select>
+            </div>
         </div>
-    </div>
 
-    <div id="map"></div>
+        <div id="map" class="gmnoprint allRes"></div>
 
-    <div id="listing">
-        <table id="resultsTable">
-            <tbody id="results"></tbody>
-        </table>
-    </div>
-
-    <div style="display: none">
-        <div id="info-content">
-            <table>
-                <tr id="iw-url-row" class="iw_table_row">
-                    <td id="iw-icon" class="iw_table_icon"></td>
-                    <td id="iw-url"></td>
-                </tr>
-                <tr id="iw-address-row" class="iw_table_row">
-                    <td class="iw_attribute_name">Address:</td>
-                    <td id="iw-address"></td>
-                </tr>
-                <tr id="iw-phone-row" class="iw_table_row">
-                    <td class="iw_attribute_name">Telephone:</td>
-                    <td id="iw-phone"></td>
-                </tr>
-                <tr id="iw-rating-row" class="iw_table_row">
-                    <td class="iw_attribute_name">Rating:</td>
-                    <td id="iw-rating"></td>
-                </tr>
-                <tr id="iw-website-row" class="iw_table_row">
-                    <td class="iw_attribute_name">Website:</td>
-                    <td id="iw-website"></td>
-                </tr>
+        <div id="listing" class="allRes">
+            <table id="resultsTable">
+                <tbody id="results"></tbody>
             </table>
+        </div>
+
+        <div style="display: none">
+            <div id="info-content">
+                <table>
+                    <tr id="iw-url-row" class="iw_table_row">
+                        <td id="iw-icon" class="iw_table_icon"></td>
+                        <td id="iw-url"></td>
+                    </tr>
+                    <tr id="iw-address-row" class="iw_table_row">
+                        <td class="iw_attribute_name">Address:</td>
+                        <td id="iw-address"></td>
+                    </tr>
+                    <tr id="iw-phone-row" class="iw_table_row">
+                        <td class="iw_attribute_name">Telephone:</td>
+                        <td id="iw-phone"></td>
+                    </tr>
+                    <tr id="iw-rating-row" class="iw_table_row">
+                        <td class="iw_attribute_name">Rating:</td>
+                        <td id="iw-rating"></td>
+                    </tr>
+                    <tr id="iw-website-row" class="iw_table_row">
+                        <td class="iw_attribute_name">Website:</td>
+                        <td id="iw-website"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
