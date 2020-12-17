@@ -25,6 +25,7 @@ async function findLowestCostPlan(sourceNodeList) {
     //sourceNodeList.splice(sourceNodeList.length - 1, 1);
     //console.log("generate arrangement");
     let allPlans = generateArrangement(sourceNodeList, [], []);
+    console.log(allPlans);
     //console.log(allPlans);
     let allPlansWithCost = [];
     for (let i = 0; i < allPlans.length; i++) {
@@ -52,16 +53,16 @@ async function findLowestCostPlan(sourceNodeList) {
     return allPlansWithCost[planIndex];
 }
 
-function generateArrangement(nodeList, currentPlan, planList) {
+function generateArrangement(nodeList, currentPlan) {
     if (nodeList.length == 0) {
-        planList.push(currentPlan);
-        return planList;
+        return currentPlan;
     } else {
         for (let i = 0; i < nodeList.length; i++) {
             currentPlan.push(nodeList[i]);
             let temp = nodeList;
-            temp.splice(i, 1)
-            planList.concat(generateArrangement(temp, currentPlan, planList));
+            temp.splice(i, 1);
+            let newPlan=generateArrangement(temp, currentPlan, planList)
+            
         }
         return planList;
     }
@@ -288,9 +289,9 @@ async function getFlight(startIata, endIata, startDate, startTime) {
     let flightList = data.data;
     for (let i = 0; i < flightList.length; i++) {
         let dTime = transformFlightTime(flightList[i].itineraries[0].segments[0].departure.at);
-        console.log(dTime + "x");
-        console.log(startTime + "y");
-        console.log(latestStartTime + "z");
+        //console.log(dTime + "x");
+        //console.log(startTime + "y");
+        //console.log(latestStartTime + "z");
         if (dTime >= startTime) {
             if (!lowestFlight) {
                 lowestFlight = flightList[i];

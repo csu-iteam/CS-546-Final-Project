@@ -19,10 +19,10 @@ router.post('/generate_plan', async (req, res) => {
         let sourceNodeList = JSON.parse(req.body.data);
         let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
 
-        res.json({ plan: planDataList });
+        //res.json({ plan: planDataList });
         // planDataList = plan;
         res.render('plan/planDetail', { plan: planDataList })
-        console.log(planDataList);
+        //console.log(planDataList);
     } catch (e) {
         console.log(e);
         res.status(500).json({ error: "service faild" });
