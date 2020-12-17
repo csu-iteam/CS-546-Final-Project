@@ -208,11 +208,12 @@
                 $.ajax(requestMakePlan).then(function (result) {
                     scheme.empty();
                     let plan = result.plan;
-                    for (i of plan) {
-                        let newDiv = document.createElement("div");
-                        newDiv.html(i);
-                        scheme.append(newDiv);
-                    }
+                    //for (i of plan) {
+                    //    let newDiv = document.createElement("div");
+                   //     newDiv.html(i);
+                    //    scheme.append(newDiv);
+                   // }
+                   scheme.html(JSON.stringify(result));
                 })
             }
         })

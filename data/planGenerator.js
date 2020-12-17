@@ -17,13 +17,13 @@ Date.prototype.clone = function () {
 }
 
 async function findLowestCostPlan(sourceNodeList) {
-    console.log("findlowest")
+    //console.log("findlowest")
     //sourceNodeList index0=start position index length-1=end postion
     let startPositon = sourceNodeList[0];
     let endPosition = sourceNodeList[sourceNodeList.length - 1];
     sourceNodeList.splice(0, 1);
     //sourceNodeList.splice(sourceNodeList.length - 1, 1);
-    console.log("generate arrangement");
+    //console.log("generate arrangement");
     let allPlans = generateArrangement(sourceNodeList, [], []);
     //console.log(allPlans);
     let allPlansWithCost = [];
@@ -40,13 +40,15 @@ async function findLowestCostPlan(sourceNodeList) {
         }
     }
     let lowestCost = allPlansWithCost[0].cost;
-    let planIndex = -1;
+    let planIndex = 0;
     for (let i = 0; i < allPlansWithCost.length; i++) {
         if (allPlansWithCost[i].cost <= lowestCost) {
             lowestCost = allPlansWithCost[i].cost;
             planIndex = i;
         }
     }
+    console.log(allPlansWithCost[planIndex]);
+    //console.log(allPlansWithCos)
     return allPlansWithCost[planIndex];
 }
 
@@ -69,7 +71,7 @@ function generateArrangement(nodeList, currentPlan, planList) {
 //return {plan duration endtime type cost}
 async function makePlan(nodeList) {
     //startnode
-    console.log("makeplan");
+    //console.log("makeplan");
     let day = 0;
     let cost = 0;
     let timePoint = dailyStartTime;
@@ -94,7 +96,7 @@ async function makePlan(nodeList) {
         if (isInSameCity(nodeList[i - 1].location_id, nodeList[i].location_id)) {
             //same city
             let trafficRoute = await getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
-            let duration = Math.ceil(trafficRoute.legs.duration.value / 60);
+            let duration = Math.ceil(trafficRoute.legs[0].duration.value / 60);
             if ((timePoint + duration) > dailyMaxEndTime) {
                 //past acceptable end time
                 day++;
@@ -107,7 +109,7 @@ async function makePlan(nodeList) {
                 day: day
             }
             plan.push(trafficNode);
-            let playDuration = node[i].duration;
+            let playDuration = nodeList[i].duration;
             if (timePoint > dailyEndTime || (timePoint + playDuration) > dailyMaxEndTime) {
                 day++;
                 timePoint = dailyStartTime;
@@ -150,7 +152,7 @@ async function makePlan(nodeList) {
             let tempStartDate = startDate.clone();
             //console.log(new Date(startDate));
             tempStartDate.setDate(tempStartDate.getDate() + day);
-
+            console.log(startIata + "|" + endIata + "|" + tempStartDate + "|" + (timePoint + duration + minPrepareTime));
             let flight = await getFlight(startIata, endIata, tempStartDate, timePoint + duration + minPrepareTime);
             //transform flight timetable
             //let departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
@@ -165,13 +167,13 @@ async function makePlan(nodeList) {
             }
             console.log(flight);
             let departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
-            let flightDuration= convertPTToM(flight.itineraries[0].duration);
-            let arrivalTime=departureTime+flightDuration;
-            let pastDays=parseInt(arrivalTime/1440);
-            timePoint=arrivalTime%1440;
-            day+=pastDays;
-            console.log("days"+day);
-            console.log("tp"+timePoint);
+            let flightDuration = convertPTToM(flight.itineraries[0].duration);
+            let arrivalTime = departureTime + flightDuration;
+            let pastDays = parseInt(arrivalTime / 1440);
+            timePoint = arrivalTime % 1440;
+            
+            console.log("days" + day);
+            console.log("tp" + timePoint);
             //arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
             let trafficNode = {
                 type: "traffic",
@@ -184,6 +186,7 @@ async function makePlan(nodeList) {
                 flight: flight,
                 day: day
             }
+            day += pastDays;
             cost += parseFloat(flight.price.total);
             plan.push(flightNode);
             //timePoint = arrivalTime;
@@ -205,7 +208,7 @@ async function makePlan(nodeList) {
             // }
             //traffic from airport to poi
             let trafficRoute2 = await getCityTraffic(endAirport, nodeList[i].coordinates);
-            let duration2 = Math.ceil(trafficRoute2.legs.duration.value / 60);
+            let duration2 = Math.ceil(trafficRoute2.legs[0].duration.value / 60);
             if (timePoint >= dailyEndTime) {//exceed daily plan
                 day++;
                 timePoint = dailyStartTime;
@@ -237,7 +240,7 @@ async function makePlan(nodeList) {
                     timePoint += duration2;
                 }
             }
-            let playDuration = node[i].duration;
+            let playDuration = nodeList[i].duration;
             if (timePoint > dailyEndTime || (timePoint + playDuration) > dailyMaxEndTime) {
                 day++;
                 timePoint = dailyStartTime;
@@ -282,11 +285,13 @@ async function getFlight(startIata, endIata, startDate, startTime) {
         max: 20
     }
     let data = await iatas.queryAirTicket(paramsObj);
-    //console.log(data);
     let flightList = data.data;
     for (let i = 0; i < flightList.length; i++) {
         let dTime = transformFlightTime(flightList[i].itineraries[0].segments[0].departure.at);
-        if (dTime >= startTime && dTime <= latestStartTime) {
+        console.log(dTime+"x");
+        console.log(startTime+"y");
+        console.log(latestStartTime+"z");
+        if (dTime >= startTime) {
             if (!lowestFlight) {
                 lowestFlight = flightList[i];
             } else if (flightList[i].price.total < lowestFlight.price.total) {
@@ -682,7 +687,7 @@ async function findAirport(iata) {
     }
 }
 
-async function transformFlightTime(flightTime) {
+function transformFlightTime(flightTime) {
     let list = flightTime.split("T");
     let time = list[1].split(":");
     return Number(time[0]) * 60 + Number(time[1]);
