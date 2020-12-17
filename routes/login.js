@@ -150,23 +150,38 @@ router.get('/database/mainlogs', async (req, res) => {
 
 router.post('/database/logsUpdate', async (req, res) => {
 	//if (req.session.username) {
-		const data1 = await review.getById(req.body.logId);
-		for (let i of data1) {
-			const userData1 = await user.getById(i.userId);
-			const name = userData1.username;
-			i.username = name;
-		}
+	const data1 = await review.getById(req.body.logId);
+	for (let i of data1) {
+		const userData1 = await user.getById(i.userId);
+		const name = userData1.username;
+		i.username = name;
+	}
 	//}
 	const id = req.body.logId;
 	let change = {};
 	const data = await log.getById(id);
 	let temp = req.body.reading + data.reading;
-	change = { reading: temp };
-	const userData = await log.updateLog(id, change);
-	globaltitle = data.title;
-	globalfeel = data.feel;
-	globalreviews = data1;
-	await res.json({});
+	let temp1 = req.body.like + data.like;
+	if (req.session.username) {
+		change = { reading: temp, like: temp1 };
+		const userData = await log.updateLog(id, change);
+		const users = await user.getByUsername(req.session.username);
+		let arrayLiked = [];
+		arrayLiked.push(id);
+		const userData1 = await user.updateUser(users._id.toString(), { logsId: arrayLiked });
+		globaltitle = data.title;
+		globalfeel = data.feel;
+		globalreviews = data1;
+		await res.json({ status: true });
+	}
+	else {
+		change = { reading: temp };
+		const userData = await log.updateLog(id, change);
+		globaltitle = data.title;
+		globalfeel = data.feel;
+		globalreviews = data1;
+		await res.json({ status: false });
+	}
 });
 
 router.post('/database/replies', async (req, res) => {

@@ -40,11 +40,12 @@ function mainLogs() {
             thelogs.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "</dt>"));
             thelogs.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             thelogs.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
+            thelogs.append($("<dd class=" + i._id + ">Like: " + i.like + "</dd>"));
             thelogs.append($("<div class=" + i._id + "><br></div>"));
             thelogs.append($("<button class='make-review' id=" + "mainlog" + i._id + ">review</button>"));
             thelogs.append($("<div id=" + "logreview" + i._id + "><label for=" + "logreviewinput" + i._id + ">Type your thinking：</label><input id=" + "logreviewinput" + i._id + " type='text' name='log-review' /></div>"));
             thelogs.append($("<button class='logreviewsubmit' id=" + "logreviewsubmit" + i._id + ">submit</button>"));
-            thelogs.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
+            thelogs.append($("<button class='logreviewliked' id=" + "logreviewliked" + i._id + ">Like it? Save it!</button>"));
             thelogs.append($("<div class=" + i._id + "><br><br></div>"));
             $('#logreview' + i._id).hide();
             $('#logreviewsubmit' + i._id).hide();
@@ -88,6 +89,31 @@ function mainLogs() {
                     $('#' + logReview).hide();
                     $('#' + logreviewsubmit).hide();
                     $("#" + logreviewinput).empty();
+                    $("#mainlog" + logreviewId).text("reviewed");
+                }
+            });
+        });
+
+        $(".logreviewliked").click(function (event) {
+            event.preventDefault();
+            var logId = $(this).attr('id').substring(14);
+            var logliked1 = {
+                method: 'POST',
+                url: '/login/database/logsUpdate',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    logId: logId,
+                    like: 1
+                })
+            };
+
+            $.ajax(logliked1).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+                if (newElement[0].status === false) {
+                    $("#logreviewliked" + logId).append($("<div>You have to login first!</div>"));
+                }
+                else {
+                    $("#logreviewliked" + logId).text("saved!");
                 }
             });
         });
@@ -280,6 +306,7 @@ function getPlan() {
                     $('#' + logsubmit).hide();
                     $("#" + loginput).empty();
                     $("#" + loginput1).empty();
+                    $("#log" + planId).text('Finished');
                 }
             });
         });
