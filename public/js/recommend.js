@@ -574,7 +574,7 @@
                     for (let i_u of currentSearchList_u) {
                         let li_u = document.createElement('li');
                         li_u.innerHTML = `<label>${i_u.name}</label>
-                                <button id="b${searchId_u}">set start point</button>`;
+                                <button id="b${searchId_u}" class="btn btn-outline-primary">set start point</button>`;
                                 li_u.id = `sr${searchId_u}`;
                         searchResult_u.append(li_u);
                         $(`#b${searchId_u}`).on('click', function (event) {
