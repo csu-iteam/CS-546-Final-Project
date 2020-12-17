@@ -25,7 +25,9 @@ async function findLowestCostPlan(sourceNodeList) {
     //sourceNodeList.splice(sourceNodeList.length - 1, 1);
     //console.log("generate arrangement");
     let allPlans = generateArrangement(sourceNodeList, [], []);
-    console.log(allPlans);
+    console.log(allPlans[0]);
+    console.log(allPlans[1]);
+
     //console.log(allPlans);
     let allPlansWithCost = [];
     for (let i = 0; i < allPlans.length; i++) {
@@ -53,16 +55,17 @@ async function findLowestCostPlan(sourceNodeList) {
     return allPlansWithCost[planIndex];
 }
 
-function generateArrangement(nodeList, currentPlan) {
+function generateArrangement(nodeList, currentPlan, planList) {
     if (nodeList.length == 0) {
-        return currentPlan;
+        planList.push(currentPlan.concat());
+        return planList;
     } else {
         for (let i = 0; i < nodeList.length; i++) {
             currentPlan.push(nodeList[i]);
-            let temp = nodeList;
-            temp.splice(i, 1);
-            let newPlan=generateArrangement(temp, currentPlan, planList)
-            
+            let temp=nodeList.splice(i, 1);
+            planList=(generateArrangement(nodeList, currentPlan, planList));
+            nodeList.splice(i, 0,temp[0]);
+            currentPlan.splice(currentPlan.length-1,1);
         }
         return planList;
     }
