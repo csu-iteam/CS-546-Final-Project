@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const planGenerator = data.planGenerator;
+let planDataList;
 
 router.get('/make_plan', async (req, res) => {
     // res.getHeaders('Access-Control-Allow-Origin:*');
@@ -9,7 +10,7 @@ router.get('/make_plan', async (req, res) => {
     //  res.setHeader('Access-Control-Allow-Origin','*');
     //  res.setHeader('Access-Control-Allow-Method','GET');
     //console.log(res);
-    res.render('plan/setplan');
+    res.render('plan/setPlan');
 })
 
 router.post('/generate_plan', async (req, res) => {
@@ -17,12 +18,22 @@ router.post('/generate_plan', async (req, res) => {
         //console.log(req.body);
         let sourceNodeList = JSON.parse(req.body.data);
         let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
-        res.json({plan:plan});
+        res.json({ plan: plan });
+        planDataList = plan;
+        res.render('plan/planDetail', { plan: plan });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ error: "service faild" });
+        res.status(500).json({ error: "service failed" });
     }
 })
+
+router.get('/show_plan', async (req, res) => {
+    try {   
+        res.render('plan/planDetail', { plan: planDataList });
+    } catch (e) {
+        res.status(500).json({ error: "service failed" });
+    }
+})  
 
 router.get('/getPlace/:searchTerm', async (req, res) => {
     try {

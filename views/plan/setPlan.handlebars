@@ -218,7 +218,7 @@
                 console.log(planList);
                 var requestMakePlan = {
                     method: 'POST',
-                    data: {data: JSON.stringify(planList)},
+                    data: { data: JSON.stringify(planList) },
                     url: '/plan/generate_plan'
                 }
                 $.ajax(requestMakePlan).then(function (result) {
