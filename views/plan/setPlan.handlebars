@@ -3,7 +3,7 @@
     <form id="placeForm">
         <div>
             <label for="startDate">date to start</label>
-            <input class="form-control w-25 mb-3" type="date" id="startDate"/>
+            <input class="form-control w-25 mb-3" type="date" id="startDate" />
         </div>
         <!-- <div>
         <label for="startPlace">departure place</label>
@@ -16,7 +16,7 @@
         </div>
         <div id="searchBox">
             <label for="searchTerm">Search Place: </label>
-            <input class="form-control w-25 mb-3" type="text" id="searchTerm"/>
+            <input class="form-control w-25 mb-3" type="text" id="searchTerm" />
             <button id="searchPlace" class="btn btn-outline-primary mb-3">Search</button>
             <!-- <button id="addPlace">Add place</button> -->
         </div>
@@ -28,8 +28,11 @@
             <div id="errorBox"></div>
         </div>
 
+    </form>
+    <button type="submit" class="btn btn-outline-primary">Make Plan!</button>
 
-        <button type="submit" class="btn btn-outline-primary">Make Plan!</button>
+    <div id="scheme">
+
     </div>
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"
@@ -215,6 +218,8 @@
                     }
                     $.ajax(requestMakePlan).then(function (result) {
                         scheme.empty();
+                        scheme.append('<p>123123<p>')
+
                         let plan = result.plan;
                         //for (i of plan) {
                         //    let newDiv = document.createElement("div");
