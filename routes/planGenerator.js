@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const planGenerator = data.planGenerator;
-let planDataList;
 
 router.get('/make_plan', async (req, res) => {
     // res.getHeaders('Access-Control-Allow-Origin:*');
@@ -19,27 +18,9 @@ router.post('/generate_plan', async (req, res) => {
         let sourceNodeList = JSON.parse(req.body.data);
         let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
 
-        //res.json({ plan: planDataList });
-        planDataList = plan;
-        // res.render('plan/planDetail', { plan: planDataList })
-        // console.log(planDataList);
+        res.json({ plan: plan });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ error: "service faild" });
-    }
-})
-
-router.get('/show_plan', async (req, res) => {
-    try {
-        if (dataRecievedByRecommend) {
-            planDataList = dataRecievedByRecommend;
-        }
-        if (planDataList) {
-            planDataList = planDataList;
-        }
-        console.log(planDataList)
-        res.render('plan/planDetail', { plan: planDataList });
-    } catch (e) {
         res.status(500).json({ error: "service faild" });
     }
 })
@@ -53,13 +34,5 @@ router.get('/getPlace/:searchTerm', async (req, res) => {
         res.status(500);
     }
 })
-
-// var dataRecievedByRecommend = [];
-// router.post('/addPlaceFromRecommend', async (req, res) => {
-//     let theData = req.body.thisPlaceData;
-//     res.json(theData);
-//     dataRecievedByRecommend.push(theData);
-//     // console.log(dataRecievedByRecommend)
-// })
 
 module.exports = router;
