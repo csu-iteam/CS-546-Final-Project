@@ -573,15 +573,17 @@
                     var searchId_u = 0;
                     for (let i_u of currentSearchList_u) {
                         let li_u = document.createElement('li');
-                        li.innerHTML = `<label>${i_u.name}</label>
+                        li_u.innerHTML = `<label>${i_u.name}</label>
                                 <button id="b${searchId_u}">set start point</button>`;
-                        li.id = `sr${search_u}`;
-                        searchResult_u.append(li);
-                        $(`#sr${search_u}`).on('click', function (event) {
+                                li_u.id = `sr${searchId_u}`;
+                        searchResult_u.append(li_u);
+                        $(`#b${searchId_u}`).on('click', function (event) {
                             event.preventDefault();
                             startPlace_u.empty();
-                            let place_u = currentSearchList[this.id.split('sr')[1]];
+                            let place_u = currentSearchList_u[this.id.split('b')[1]];
+                            console.log(currentSearchList_u);
                             let name_u = place_u.name;
+                            startPlace_u.html(name_u);
                             let latitude_u = place_u.geometry.location.lat;
                             let longitude_u = place_u.geometry.location.lng;
                             let splitedArray_u = place_u.plus_code.compound_code.split(',');
@@ -589,13 +591,14 @@
                             let location_id_u = cityArray_u[1];
                             startNode_u = {
                                 name: name_u,
-                                location_id: location_id,
+                                location_id: location_id_u,
                                 coordinates: {
                                     latitude: latitude_u,
                                     longitude: longitude_u
                                 }
                             }
                         })
+                        searchId_u++;
                     }
                 }
             })
