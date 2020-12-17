@@ -123,7 +123,7 @@
                             for (let i of currentSearchList) {
                                 let li = document.createElement('li');
                                 li.innerHTML = `<label>${i.name}</label>
-                                    <button id="b${searchId}">add to plan</button>`;
+                                    <button id="b${searchId}" class="btn btn-outline-primary mb-3">add to plan</button>`;
                                 //onclick=addPlace(${searchId})
                                 li.id = `sr${searchId}`;
                                 resultList.append(li);
@@ -163,7 +163,7 @@
                                         planList.push(node);
                                         let li2 = document.createElement('li');
                                         li2.innerHTML = `<label>${name}</label>
-                                    <button id='${placeId}' >remove this place</button>`;
+                                    <button id='${placeId}' class="btn btn-outline-primary mb-3">remove this place</button>`;
                                         li2.id = `place${placeId}`;
                                         nodeList.append(li2);
                                         $(`#${placeId}`).on('click', function (event) {
@@ -217,10 +217,12 @@
                         url: '/plan/generate_plan'
                     }
                     $.ajax(requestMakePlan).then(function (result) {
-                        scheme.empty();
-                        scheme.append('<p>123123<p>')
+                        //scheme.empty();
+                        var plan = result.plan;
 
-                        let plan = result.plan;
+                        $('#scheme').append($('<p>test</p>'));
+                        //let newDiv = document.createElement("div")
+                        //newDiv.html(`${plan}`);
                         //for (i of plan) {
                         //    let newDiv = document.createElement("div");
                         //     newDiv.html(i);
@@ -228,6 +230,7 @@
                         // }
                         scheme.html(JSON.stringify(result));
                     })
+                    scheme.append(`<p>123</p>`)
                 }
             })
 
