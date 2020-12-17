@@ -2,7 +2,17 @@
     var recommendPicsDivOrigin = $('#recommendPics-div-origin');
     var recommendPicsDivMore = $('#recommendPics-div-more');
     var moreButton = $('#more-button');
-
+    var planList_u = [];
+    var startDate_u = $('#startDate_u');
+    var startNode_u;
+    var errorBox_u = $('#errorBox_u');
+    errorBox_u.hide();
+    var search_u = $('#search_u');
+    var searchTerm_u = $('#searchTerm_u');
+    var searchResult_u = $('#searchResult_u');
+    var startPlace_u = $('#startPlace_u');
+    var makePlan_u = $('#makePlan_u');
+    var placeListU = $('#placeList_u');
     /*
         Like here button, for the original page
     */
@@ -63,7 +73,11 @@
                     let latitude = place.geometry.location.lat;
                     let longitude = place.geometry.location.lng;
                     let splitedArray = place.plus_code.compound_code.split(',');
-                    let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
+                    let location_id = "";
+                    for (let i = 1; i < thisArray.length; i++) {
+                        location_id = location_id + ' ' + thisArray[i];
+                    }
                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
                     var node = {
@@ -75,19 +89,23 @@
                             longitude: longitude
                         }
                     }
-                    var requestConfig = {
-                        method: 'POST',
-                        url: '/plan/addPlaceFromRecommend',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            thisPlaceData: node,
-                        })
-                    };
-                    $.ajax(requestConfig).then(function (responseMessage) {
-                        dataToMakePlan = responseMessage;
-                        console.log(dataToMakePlan);
-                        // recommendPicsDivMore.html(responseMessage.message);
-                    })
+
+                    placeListU.append(`<li>${node.name}</li>`);
+                    planList_u.push(node);
+                    console.log(planList_u);
+                    // var requestConfig = {
+                    //     method: 'POST',
+                    //     url: '/plan/addPlaceFromRecommend',
+                    //     contentType: 'application/json',
+                    //     data: JSON.stringify({
+                    //         thisPlaceData: node,
+                    //     })
+                    // };
+                    // $.ajax(requestConfig).then(function (responseMessage) {
+                    //     dataToMakePlan = responseMessage;
+                    //     console.log(dataToMakePlan);
+                    //     // recommendPicsDivMore.html(responseMessage.message);
+                    // })
                 })
             $(this).text('Added to your plan');
         })
@@ -231,7 +249,11 @@
                         let latitude = place.geometry.location.lat;
                         let longitude = place.geometry.location.lng;
                         let splitedArray = place.plus_code.compound_code.split(',');
-                        let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                        let thisArray = splitedArray[splitedArray.length - 2].split(' ');
+                        let location_id = "";
+                        for (let i = 1; i < thisArray.length; i++) {
+                            location_id = location_id + ' ' + thisArray[i];
+                        }
                         let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
                         var node = {
@@ -243,19 +265,9 @@
                                 longitude: longitude
                             }
                         }
-                        var requestConfig = {
-                            method: 'POST',
-                            url: '/plan/addPlaceFromRecommend',
-                            contentType: 'application/json',
-                            data: JSON.stringify({
-                                thisPlaceData: node,
-                            })
-                        };
-                        $.ajax(requestConfig).then(function (responseMessage) {
-                            dataToMakePlan = responseMessage;
-                            console.log(dataToMakePlan);
-                            // recommendPicsDivMore.html(responseMessage.message);
-                        })
+                        placeListU.append(`<li>${node.name}</li>`);
+                        planList_u.push(node);
+                        console.log(planList_u);
                     })
                     $(this).text('Added to your plan');
                 })
@@ -344,7 +356,11 @@
                                     let latitude = place.geometry.location.lat;
                                     let longitude = place.geometry.location.lng;
                                     let splitedArray = place.plus_code.compound_code.split(',');
-                                    let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
+                                    let location_id = "";
+                                    for (let i = 1; i < thisArray.length; i++) {
+                                        location_id = location_id + ' ' + thisArray[i];
+                                    }
                                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
                                     var node = {
@@ -356,19 +372,9 @@
                                             longitude: longitude
                                         }
                                     }
-                                    var requestConfig = {
-                                        method: 'POST',
-                                        url: '/plan/addPlaceFromRecommend',
-                                        contentType: 'application/json',
-                                        data: JSON.stringify({
-                                            thisPlaceData: node,
-                                        })
-                                    };
-                                    $.ajax(requestConfig).then(function (responseMessage) {
-                                        dataToMakePlan = responseMessage;
-                                        console.log(dataToMakePlan);
-                                        // recommendPicsDivMore.html(responseMessage.message);
-                                    })
+                                    placeListU.append(`<li>${node.name}</li>`);
+                                    planList_u.push(node);
+                                    console.log(planList_u);
                                 })
                                 $(this).text('Added to your plan');
                             })
@@ -468,7 +474,11 @@
                             let latitude = place.geometry.location.lat;
                             let longitude = place.geometry.location.lng;
                             let splitedArray = place.plus_code.compound_code.split(',');
-                            let location_id = splitedArray[splitedArray.length - 2].split(' ')[1];
+                            let thisArray = splitedArray[splitedArray.length - 2].split(' ');
+                            let location_id = "";
+                            for (let i = 1; i < thisArray.length; i++) {
+                                location_id = location_id + ' ' + thisArray[i];
+                            }
                             let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
                             var node = {
@@ -480,19 +490,9 @@
                                     longitude: longitude
                                 }
                             }
-                            var requestConfig = {
-                                method: 'POST',
-                                url: '/plan/addPlaceFromRecommend',
-                                contentType: 'application/json',
-                                data: JSON.stringify({
-                                    thisPlaceData: node,
-                                })
-                            };
-                            $.ajax(requestConfig).then(function (responseMessage) {
-                                dataToMakePlan = responseMessage;
-                                console.log(dataToMakePlan);
-                                // recommendPicsDivMore.html(responseMessage.message);
-                            })
+                            placeListU.append(`<li>${node.name}</li>`);
+                            planList_u.push(node);
+                            console.log(planList_u);
                         })
                         $(this).text('Added to your plan');
                     })
@@ -549,4 +549,84 @@
         }
         return dataLists
     }
+
+    search_u.on('click', function (event) {
+        event.preventDefault();
+        let searchTerm_u_val = searchTerm_u.val();
+        if (searchTerm_u_val.trim() == "") {
+            errorBox_u.html("please enter searchTerm");
+            errorBox_u.show();
+        } else {
+            errorBox_u.hide();
+            searchResult_u.empty();
+            var requestsearchPlace_u = {
+                method: 'GET',
+                url: `/plan/getPlace/${searchTerm_u_val}`
+            }
+            $.ajax(requestsearchPlace_u).then(function (resultPlace_u) {
+                let currentSearchList_u = resultPlace_u.candidates;
+                if (currentSearchList_u.length == 0) {
+                    errorBox_u.html("place not found");
+                    errorBox_u.show();
+                } else {
+                    errorBox_u.hide();
+                    var searchId_u = 0;
+                    for (let i_u of currentSearchList_u) {
+                        let li_u = document.createElement('li');
+                        li.innerHTML = `<label>${i_u.name}</label>
+                                <button id="b${searchId_u}">set start point</button>`;
+                        li.id = `sr${search_u}`;
+                        searchResult_u.append(li);
+                        $(`#sr${search_u}`).on('click', function (event) {
+                            event.preventDefault();
+                            startPlace_u.empty();
+                            let place_u = currentSearchList[this.id.split('sr')[1]];
+                            let name_u = place_u.name;
+                            let latitude_u = place_u.geometry.location.lat;
+                            let longitude_u = place_u.geometry.location.lng;
+                            let splitedArray_u = place_u.plus_code.compound_code.split(',');
+                            let cityArray_u = splitedArray_u[splitedArray_u.length - 2].split(" ");
+                            let location_id_u = cityArray_u[1];
+                            startNode_u = {
+                                name: name_u,
+                                location_id: location_id,
+                                coordinates: {
+                                    latitude: latitude_u,
+                                    longitude: longitude_u
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    })
+    makePlan_u.on('click', function (event) {
+        event.preventDefault();
+        let date_u = startDate_u.val();
+        if (!startNode_u) {
+            errorBox_u.html("please set your start place");
+            errorBox_u.show();
+        } else if (date_u == "") {
+            errorBox_u.html("please set your start date");
+            errorBox_u.show();
+        } else {
+            errorBox_u.hide();
+            let sd_u = date_u.split("-");
+            let date_u = new Date();
+            date_u.setFullYear(sd_u[0]);
+            let month_u = parseInt(sd_u[1]);
+            month_u--;
+            date_u.setMonth(month_u);
+            date_u.setDate(sd_u[2]);
+            startNode_u.startDate = date_u;
+            planList_u.splice(0, 0, startDate_u);
+            var requestMakePlan_u = {
+                method: 'POST',
+                data: { data: JSON.stringify(planList_u) },
+                url: '/plan/generate_plan'
+            }
+            $.ajax(requestMakePlan_u);
+        }
+    })
 })(window.jQuery);
