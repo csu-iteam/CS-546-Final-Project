@@ -1,4 +1,27 @@
 <main class="mx-3 mb-3">
+    <div id="planlist_u">
+        <div>
+            <label for="startDate_u">choose your start date:</label>
+            <input id="startDate_u" class="form-control w-25 mb-3" type="date" />
+        </div>
+        <div>
+            <label for="searchTerm_u"></label>
+            <input id="searchTerm_u" class="form-control w-25 mb-3" type="text" />
+            <button id="search_u" class="btn btn-outline-primary">search</button>
+        </div>
+        <div id="errorBox_u"></div>
+        <ul id="searchResult_u">
+
+        </ul>
+        <h3>Plan List</h3>
+        <div id="startPlace_u">
+
+        </div>
+        <ol id="placeList_u">
+
+        </ol>
+        <button id="makePlan_u" class="btn btn-outline-primary">make plan!</button>
+    </div>
     <h1>Have no idea about where to go?</h1>
     <h2>Recommend places</h2>
     <h3>(We suggest do not add more than 3 places at one time)</h3>
@@ -20,128 +43,7 @@
         </div>
         {{/each}}
     </div>
-    <div id="recommendPics-div-more" hidden></div>
-    <button id="more-button">More</button>
-</main>
 
-<div id="planlist_u">
-    <div>
-        <label for="startDate_u">choose your start date:</label>
-        <input id="startDate_u" type="date" />
-    </div>
-    <div>
-        <label for="searchTerm_u"></label>
-        <input id="searchTerm_u" type="text" />
-        <button id="search_u">search</button>
-    </div>
-    <div id="errorBox_u"></div>
-    <ul id="searchResult_u">
-
-    </ul>
-    <h3>Plan List</h3>
-    <div id="startPlace_u">
-
-    </div>
-    <ol id="placeList_u">
-
-    </ol>
-    <button id="makePlan_u">make plan!</button>
-</div>
-
-<script>
-    (function ($) {
-        var planList_u = [];
-        var startDate_u = $('#startDate_u');
-        var startNode_u;
-        var errorBox_u = $('#errorBox_u');
-        errorBox_u.hide();
-        var search_u = $('#search_u');
-        var searchTerm_u = $('#searchTerm_u');
-        var searchResult_u = $('#searchResult_u');
-        var startPlace_u = $('#startPlace_u');
-        var makePlan_u = $('#makePlan_u');
-        search_u.on('click', function (event) {
-            event.preventDefault();
-            let searchTerm_u_val = searchTerm_u.val();
-            if (searchTerm_u_val.trim() == "") {
-                errorBox_u.html("please enter searchTerm");
-                errorBox_u.show();
-            } else {
-                errorBox_u.hide();
-                searchResult_u.empty();
-                var requestsearchPlace_u = {
-                    method: 'GET',
-                    url: `/plan/getPlace/${searchTerm_u_val}`
-                }
-                $.ajax(requestsearchPlace_u).then(function (resultPlace_u) {
-                    let currentSearchList_u = resultPlace_u.candidates;
-                    if (currentSearchList_u.length == 0) {
-                        errorBox_u.html("place not found");
-                        errorBox_u.show();
-                    } else {
-                        errorBox_u.hide();
-                        var searchId_u = 0;
-                        for (let i_u of currentSearchList_u) {
-                            let li_u = document.createElement('li');
-                            li.innerHTML = `<label>${i_u.name}</label>
-                                    <button id="b${searchId_u}">set start point</button>`;
-                            li.id = `sr${search_u}`;
-                            searchResult_u.append(li);
-                            $(`#sr${search_u}`).on('click', function (event) {
-                                event.preventDefault();
-                                startPlace_u.empty();
-                                let place_u = currentSearchList[this.id.split('sr')[1]];
-                                let name_u = place_u.name;
-                                let latitude_u = place_u.geometry.location.lat;
-                                let longitude_u = place_u.geometry.location.lng;
-                                let splitedArray_u = place_u.plus_code.compound_code.split(',');
-                                let cityArray_u = splitedArray_u[splitedArray_u.length - 2].split(" ");
-                                let location_id_u = cityArray_u[1];
-                                startNode_u = {
-                                    name: name_u,
-                                    location_id: location_id,
-                                    coordinates: {
-                                        latitude: latitude_u,
-                                        longitude: longitude_u
-                                    }
-                                }
-                            })
-                        }
-                    }
-                })
-            }
-        })
-        makePlan_u.on('click', function (event) {
-            event.preventDefault();
-            let date_u = startDate_u.val();
-            if (!startNode_u) {
-                errorBox_u.html("please set your start place");
-                errorBox_u.show();
-            } else if (date_u == "") {
-                errorBox_u.html("please set your start date");
-                errorBox_u.show();
-            } else {
-                errorBox_u.hide();
-                let sd_u = date_u.split("-");
-                let date_u = new Date();
-                date_u.setFullYear(sd_u[0]);
-                let month_u = parseInt(sd_u[1]);
-                month_u--;
-                date_u.setMonth(month_u);
-                date_u.setDate(sd_u[2]);
-                startNode_u.startDate = date_u;
-                planList_u.splice(0, 0, startDate_u);
-                var requestMakePlan_u = {
-                    method: 'POST',
-                    data: { data: JSON.stringify(planList_u) },
-                    url: '/plan/generate_plan'
-                }
-                $.ajax(requestMakePlan_u);
-            }
-        })
-
-    })(window.jQuery);
-</script>
     <div id="recommendPics-div-more"></div>
     <button id="more-button" class="btn btn-outline-primary">More</button>
 </main>
