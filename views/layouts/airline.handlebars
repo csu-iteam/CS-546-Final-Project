@@ -3,24 +3,30 @@
     <main>
         <h1>Select your airline</h1>
         <form id="airline-pick" name="airlineParam" method="post">
-            <div>
+            <div class="form-group w-50">
                 <div class="row">
                     <div class="col">
                         <label for="originLoc">Type your origin location</label>
-                        <input id="originLoc" name="originLocationCode" type="text">
+                        <input class="form-control mb-3" id="originLoc" name="originLocationCode" type="text">
                     </div>
 
                     <div class="col">
                         <label for="destination">Type your destination location</label>
-                        <input id="destination" name="destinationLocationCode" type="text">
+                        <input class="form-control mb-3" id="destination" name="destinationLocationCode" type="text">
                     </div>
                 </div>
 
-                <label for="departureDate">Type your departureu Date</label>
-                <input id="departureDate" name="departureDate" type="date">
+                <div class="row">
+                    <div class="col">
+                        <label for="departureDate">Type your departureu Date</label>
+                        <input class="form-control mb-3" id="departureDate" name="departureDate" type="date">
+                    </div>
 
-                <label for="adults">Type your Adults</label>
-                <input id="adults" name="adults" type="number">
+                    <div class="col">
+                        <label for="adults">Type your Adults</label>
+                        <input class="form-control mb-3" id="adults" name="adults" type="number">
+                    </div>
+                </div>
 
                 <div>
                     <label for="submit"></label>
