@@ -2,8 +2,7 @@
     let flighShow = $('#flightShow')
     let ticketList = $('#ticketList')
     let airform = $('#airline-pick')
-
-    $("#loadingAni").hide();
+    let errorShow = $('#errorShow')
 
     function combineObj(dataArray) {
         let obj = {}
@@ -49,13 +48,20 @@
 
         $.when(
             $.ajax(requestConfig).then(function (responseMessage) {
+                errorShow.empty()
                 console.log(responseMessage)
-                responseMessage.data.forEach((item) => {
-                    ticketList.append(`<li><div>from ${item.itineraries[0].segments[0].departure.iataCode}</div><div>to ${item.itineraries[0].segments[0].arrival.iataCode}</div><div>Price ${item.price.base}</div></li>`)
-                })
+                if (responseMessage.data !== undefined) {
+                    responseMessage.data.forEach((item) => {
+                        ticketList.append(`<li><div class="card"><div class="card-body">from ${item.itineraries[0].segments[0].departure.iataCode}</div><div class="card-body">to ${item.itineraries[0].segments[0].arrival.iataCode}</div><div class="card-body">Price ${item.price.base}</div></div></li>`)
+                    })
+                } else {
+                    errorShow.append(`<h1>Error ticket info</h1>`)
+                }
             })
         ).done(function (response) {
-            $("#loadingAni").hide();
+            setTimeout(() => {
+                $("#loadingAni").hide()
+            }, 2000)
         })
     })
 
