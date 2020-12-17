@@ -14,11 +14,11 @@
 }
 
 .loadContain h1 {
-    color: #2ec4b6;
+    color: #b0b0bb;
 }
 
 .btn {
-    background: #2ec4b6;
+    background: #b0b0bb;
     width: 200px;
     padding: 15px;
     color: #f4f4f4;
@@ -44,7 +44,7 @@
     margin: -25.9px -5px;
     position: absolute;
     display: block;
-    background: #249b90;
+    background: #babaf6;
     padding: 0.98em;
     border-radius: 3em;
     -webkit-animation: fill 3.4s linear forwards;
@@ -59,7 +59,6 @@
 }
 
 .btn__complete:after {
-    font-family: FontAwesome;
     content: "\f00c";
     color: #f4f4f4;
     margin: -18px 3px;

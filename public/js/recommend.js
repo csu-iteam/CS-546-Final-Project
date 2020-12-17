@@ -192,8 +192,8 @@
                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                     newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
-                    newDiv[i].append(`<button class="more-around">See more around this place</button>`);
-                    newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
+                    newDiv[i].append(`<button class="more-around btn btn-outline-primary">See more around this place</button>`);
+                    newDiv[i].append(`<button class="go-here btn btn-outline-primary">Like this place? Add to plan!</button>`);
 
                 }
             } else {
@@ -309,7 +309,7 @@
                                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                                     newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
-                                    newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
+                                    newDiv[i].append(`<button class="go-here btn btn-outline-primary">Like this place? Add to plan!</button>`);
 
                                 }
                             }
@@ -433,7 +433,7 @@
                             newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                             newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
                             newDiv[i].append(`<p>Description: ${targetPic.snippet}</p>`);
-                            newDiv[i].append(`<button class="go-here">Like this place? Add to plan!</button>`);
+                            newDiv[i].append(`<button class="go-here  btn btn-outline-primary">Like this place? Add to plan!</button>`);
 
                         }
                     }

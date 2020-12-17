@@ -4,16 +4,23 @@ const router = express.Router()
 const hotelApi = require('../config/hotelApi')
 const citydata = require('../data')
 
+let errorBox = []
+
 async function renderHotelList(data, res) {
     let results = citydata.cityQuery.getCityDestinationIdlList(data)
 
-    let hotelList = await queryHotelList(results.desIdArray)
+    try {
+        let hotelList = await queryHotelList(results.desIdArray)
+        res.render('layouts/hotel',
+            {
+                location: results.cityList,
+                hotels: hotelList
+            })
 
-    res.render('layouts/hotel',
-        {
-            location: results.cityList,
-            hotels: hotelList
-        })
+    } catch (error) {
+        res.render('layouts/error',
+            {errorMes: error})
+    }
 }
 
 async function queryHotelList(data) {
@@ -41,6 +48,7 @@ async function queryHotelList(data) {
             return response.data.data.body.searchResults.results
         }).catch(function (error) {
             console.log(error)
+            res.render('layouts/error', {errorMes: error})
         }))
     }
     return hotelList
@@ -68,7 +76,12 @@ router.get('/meal/:loc', async (req, res) => {
 
 router.get('/airline/:loc', async function (req, res) {
     const locQuery = req.params.loc.trim()
-    await citydata.cityQuery.queryCity(locQuery)
+    try {
+        await citydata.cityQuery.queryCity(locQuery)
+    } catch (error) {
+        res.render('layouts/error',
+            {errorMes: error})
+    }
     if (locQuery !== null) {
         //console.log(await citydata.cityQuery.getIATAList(locQuery))
     }
@@ -85,9 +98,14 @@ router.post('/airline', async function (req, res) {
     // locQuery.originLocationCode = oriCity
     // locQuery.destinationLocationCode = destCity
 
-    let resu = await citydata.cityQuery.queryAirTicket(locQuery)
-    console.log(resu)
-    res.json(resu)
+    try {
+        let resu = await citydata.cityQuery.queryAirTicket(locQuery)
+        console.log(resu)
+        res.json(resu)
+    } catch (error) {
+        errorBox.push(error)
+        res.redirect('/price/error')
+    }
 })
 
 router.get('/apiTest', async function (req, res) {
@@ -109,6 +127,12 @@ router.get('/apiTest', async function (req, res) {
     // await axios.get(queryUrl, config).then(async (response) => {
     //     console.log(response.data)
     // })
+})
+
+router.get('error', async function (req, res) {
+    console.log(errorBox)
+    res.render('layouts/error',
+        {errorMes: errorBox.pop()})
 })
 
 module.exports = router

@@ -1,5 +1,15 @@
 <main>
-    <div>
-        {{plan}}
+    <h1>Places added to your Plan</h1>
+    <div id="show-plan-div">
+        {{#each plan}}
+        <ul>
+            <li>{{this.name}}
+                <ul>
+                    <li>location: {{this.location_id}}</li>
+                    <li>duration: {{this.duration}}</li>
+                </ul>
+            </li>
+        </ul>
+        {{/each}}
     </div>
 </main>

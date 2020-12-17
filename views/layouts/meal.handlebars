@@ -3,20 +3,20 @@
         defer></script>
 <link rel="stylesheet" href="/public/css/map.css">
 <div class="container allRes">
+    <div class="row">
+        <h1>Find nearby Restaurant</h1>
+    </div>
     <div id="mapResult" class="allRes2 row">
-        <div class="row">
-            <h1>Find nearby Restaurant</h1>
-        </div>
         <div class="hotel-search container row">
-            <div id="findhotels" class="container">Find hotels in:</div>
+            <div id="findhotels" class="container">Find meals in:</div>
 
             <div id="locationField">
-                <label for="autocomplete"></label>
-                <input id="autocomplete" placeholder="Enter a city" type="text"/>
+                <label for="autocomplete">City name</label>
+                <input class="form-control" id="autocomplete" placeholder="Enter a city" type="text"/>
             </div>
 
             <div id="controls">
-                <label for="country"></label><select id="country">
+                <label for="country">Country</label><select class="form-control" id="country">
                 <option value="all">All</option>
                 <option value="au">Australia</option>
                 <option value="br">Brazil</option>
