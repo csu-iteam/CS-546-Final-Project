@@ -13,7 +13,9 @@
         placeForm = $('#placeForm'),
         dDate = $('#startDate'),
         scheme = $('#scheme');
+    savePlan = $('#savePlan');
     errorBox.hide();
+    savePlan.hide();
 
     // addPlace.on('click', function (event) {
     //     event.preventDefault();
@@ -177,8 +179,32 @@
                 url: '/plan/generate_plan'
             }
             $.ajax(requestMakePlan).then(function (result) {
-                //scheme.empty();
+                scheme.empty();
                 var plan = result.plan;
+                //check if generate success
+                if (!plan) {
+                    scheme.html("faild to generate plan due to no specific flight.")
+                } else {
+                    //show plan result
+
+
+                    //saveplan
+                    savePlan.show();
+                    savePlan.on('click', function (event) {
+                        event.preventDefault();
+                        var savePlanList = {
+                            method: 'POST',
+                            url: '/login/insertplans',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                planList: plan
+                            })
+                        }
+                        $.ajax(savePlanList).then(function (responseMessage) {
+                            var newElement = $(responseMessage);
+                        });
+                    })
+                }
 
                 $('#scheme').append($('<p>test</p>'));
                 //let newDiv = document.createElement("div")
@@ -190,7 +216,7 @@
                 // }
                 scheme.html(JSON.stringify(result));
             })
-            scheme.append(`<p>123</p>`)
+            //scheme.append(`<p>123</p>`)
         }
     })
 
