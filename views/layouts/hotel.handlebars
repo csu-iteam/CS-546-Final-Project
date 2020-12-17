@@ -1,10 +1,10 @@
-<div>
+<div class="container">
     <div>Hotel</div>
     {{#each location}}
-        <h2><a href="{{hotel_url}}">{{name}}</a></h2>
+        <ul class="list-group"><a href="{{hotel_url}}">{{name}}</a></ul>
         {{#each ../hotels}}
             {{#each this}}
-                <h3>{{this.name}}</h3>
+                <li class="list-group-item">{{this.name}}</li>
             {{/each}}
         {{/each}}
         <p></p>
