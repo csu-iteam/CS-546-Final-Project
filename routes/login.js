@@ -120,6 +120,12 @@ router.post('/database/plansdelete', async (req, res) => {
 	await res.redirect('/login/personal/plans');
 });
 
+router.post('/database/logsdelete', async (req, res) => {
+	const id = req.body.id;
+	const userData = await log.deleteById(id);
+	await res.redirect('/login/personal/logs');
+});
+
 router.get('/database/logs', async (req, res) => {
 	if (req.session.username) {
 		const userData = await user.getByUsername(req.session.username);

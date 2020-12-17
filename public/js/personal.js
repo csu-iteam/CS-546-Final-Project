@@ -80,7 +80,6 @@ function mainLogs() {
         
             $.ajax(makelogreview).then(function (responseMessage) {
                 var newElement = $(responseMessage);
-                console.log(newElement)
                 if (newElement[0].status === false) {
                     $("#" + logreviewsubmit).append($("<div>You have to login first!</div>"));
                 }
@@ -202,13 +201,13 @@ function getLog() {
             logList.append($("<dt><a class='loghref' id=" + "loghref" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             //logList.append($("<form id='submitanother' method='post' action='/login/personal/getlogs'><input type='hidden' name='description' value=" + i.feel + "/>"));
             //logList.append($("<a href='http://localhost:3000/login/personal/getlogs' οnclick='document.getElementById('submitanother').submit();' class='loghref' id=" + "loghref" + i._id + ">" + i.title + "<br></a></form>"));
-            logList.append($("<dt id=" + "tlog" + i._id + "class=" + i._id + ">" + i.feel + "<br></dt>"));
+            logList.append($("<dt id=" + "tlog" + i._id + " class=" + i._id + ">" + i.feel + "<br></dt>"));
             logList.append($("<div class=" + i._id + "><br></div>"));
             logList.append($("<dt class=" + i._id + ">Author: " + i.addition.username + "<br></dt>"));
             logList.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
             logList.append($("<dd class=" + i._id + ">Reading: " + i.reading + "</dd>"));
             logList.append($("<dd class=" + i._id + ">Like: " + i.like + "</dd>"));
-            logList.append($("<button class='close-sign' id=" + i._id + ">&times</button>"));
+            logList.append($("<button class='close-sign1' id=" + i._id + ">&times</button>"));
             logList.append($("<div class=" + i._id + "><br><br></div>"));
         }
         logList.append($("</dl>"));
@@ -235,6 +234,27 @@ function getLog() {
                 $(location).attr('href', 'http://localhost:3000/login/personal/getlogs');
             });
             //getReviews(logId);
+        });
+
+        $(".close-sign1").click(function (event) {
+            event.preventDefault();
+            var item = $(this).attr('id');
+            $('.' + item).hide();
+            $('#tlog' + item).hide();
+            $('#' + item).hide();
+            $('.loghref').hide();
+            var logdelete = {
+                method: 'POST',
+                url: '/login/database/logsdelete',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: item
+                })
+            };
+
+            $.ajax(logdelete).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+            });
         });
         
     });

@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const logs = mongoCollections.logs;
+const users = require('./users');
 let { ObjectId } = require('mongodb');
 
 async function insertLogs(userId, title, planId, feel, reviews, date, like, reading, addition) {
