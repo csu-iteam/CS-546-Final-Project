@@ -1,22 +1,25 @@
 <main>
-<h1>Welcome to our travel plan website!</h1>	
-<div>{{update}}</div>
-<form id="input-submit"  name="login-register" method="POST" action="/login/personal">
-	<div>
-		<label for="input-username">Username：</label>
-		<input id="input-username" type="text" name="username" />
-	</div>
-	<div>
-		<label for="input-password">Password：</label>
-		<input id="input-password" type="password" name="password"/>
-	</div>
-	<div>
-		<button type="submit" name="login" id="button">Submit</button>
-		<button onclick="location.href='http://localhost:3000/login/register'" type="button" id="button1">Register</button>
-	</div>
-</form>
+    <h1>Welcome to our travel plan website!</h1>
+    <div>{{update}}</div>
+    <form id="input-submit" name="login-register" method="POST" action="/login/personal">
+        <div class="form-group">
+            <label for="input-username">Username：</label>
+            <input id="input-username" class="form-control" type="text" name="username"/>
+        </div>
+        <div>
+            <label for="input-password">Password：</label>
+            <input id="input-password" class="form-control" type="password" name="password"/>
+        </div>
+        <div>
+            <button class="btn btn-outline-primary" type="submit" name="login" id="button">Submit</button>
+            <button class="btn btn-outline-primary" onclick="location.href='http://localhost:3000/login/register'"
+                    type="button" id="button1">
+                Register
+            </button>
+        </div>
+    </form>
 
-<div id="error-checking" class="error">{{errorMessage}}</div>
-<div id="register-checking" class="register">{{registeredMessage}}</div>
+    <div id="error-checking" class="error">{{errorMessage}}</div>
+    <div id="register-checking" class="register">{{registeredMessage}}</div>
 </main>
 {{!-- <script src="/public/login.js"></script> --}}
