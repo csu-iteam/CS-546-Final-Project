@@ -34,8 +34,9 @@ async function findLowestCostPlan(sourceNodeList) {
         //tempPlan.push(endPosition);
         let mPlan = await makePlan(tempPlan);
         //console.log(mPlan);
-        if (mPlan.type == "faild")
-        else {
+        if (mPlan.type == "faild") {
+
+        } else {
             allPlansWithCost.push(mPlan);
         }
     }
@@ -171,7 +172,7 @@ async function makePlan(nodeList) {
             let arrivalTime = departureTime + flightDuration;
             let pastDays = parseInt(arrivalTime / 1440);
             timePoint = arrivalTime % 1440;
-            
+
             console.log("days" + day);
             console.log("tp" + timePoint);
             //arrivalTime = transformFlightTime(flight.itineraries[0].segments[0].arrival.at);
@@ -288,9 +289,9 @@ async function getFlight(startIata, endIata, startDate, startTime) {
     let flightList = data.data;
     for (let i = 0; i < flightList.length; i++) {
         let dTime = transformFlightTime(flightList[i].itineraries[0].segments[0].departure.at);
-        console.log(dTime+"x");
-        console.log(startTime+"y");
-        console.log(latestStartTime+"z");
+        console.log(dTime + "x");
+        console.log(startTime + "y");
+        console.log(latestStartTime + "z");
         if (dTime >= startTime) {
             if (!lowestFlight) {
                 lowestFlight = flightList[i];

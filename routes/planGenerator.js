@@ -23,7 +23,7 @@ router.post('/generate_plan', async (req, res) => {
         res.render('plan/planDetail', { plan: plan });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ error: "service failed" });
+        res.status(500).json({ error: "service faild" });
     }
 })
 
@@ -31,7 +31,7 @@ router.get('/show_plan', async (req, res) => {
     try {   
         res.render('plan/planDetail', { plan: planDataList });
     } catch (e) {
-        res.status(500).json({ error: "service failed" });
+        res.status(500).json({ error: "service faild" });
     }
 })  
 
