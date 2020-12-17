@@ -25,8 +25,8 @@ async function findLowestCostPlan(sourceNodeList) {
     //sourceNodeList.splice(sourceNodeList.length - 1, 1);
     //console.log("generate arrangement");
     let allPlans = generateArrangement(sourceNodeList, [], []);
-    console.log(allPlans[0]);
-    console.log(allPlans[1]);
+    //console.log(allPlans[0]);
+    //console.log(allPlans[1]);
 
     //console.log(allPlans);
     let allPlansWithCost = [];
