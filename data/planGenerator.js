@@ -170,7 +170,7 @@ async function makePlan(nodeList) {
                 flight = await getFlight(startIata, endIata, tempStartDate, timePoint + duration + minPrepareTime);
             }
             console.log(flight);
-            if(!flight) return {type="faild"};
+            if(!flight) return {type:"faild"};
             let departureTime = transformFlightTime(flight.itineraries[0].segments[0].departure.at);
             let flightDuration = convertPTToM(flight.itineraries[0].duration);
             let arrivalTime = departureTime + flightDuration;
