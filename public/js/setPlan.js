@@ -31,7 +31,7 @@
 
     searchPlace.on('click', function (event) {
         event.preventDefault();
-        var sTerms = searchTerm.val();
+        var sTerms = filterXSS(searchTerm.val());
         if (sTerms.trim() == "") {
             resultList.empty();
             errorBox.html("<label>please input search term!</label>");

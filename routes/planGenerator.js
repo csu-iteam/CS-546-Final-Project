@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const planGenerator = data.planGenerator;
+const xss=require("xss");
 
 router.get('/make_plan', async (req, res) => {
     // res.getHeaders('Access-Control-Allow-Origin:*');
@@ -15,7 +16,9 @@ router.get('/make_plan', async (req, res) => {
 router.post('/generate_plan', async (req, res) => {
     try {
         //console.log(req.body);
-        let sourceNodeList = JSON.parse(req.body.data);
+        let list=xss(req.body.data);
+        let sourceNodeList = JSON.parse(list);
+        console.log(typeof sourceNodeList);
         let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
 
         res.json({ plan: plan });
@@ -27,7 +30,8 @@ router.post('/generate_plan', async (req, res) => {
 
 router.get('/getPlace/:searchTerm', async (req, res) => {
     try {
-        let result = await planGenerator.getPoi(req.params.searchTerm);
+        let st=xss(req.params.searchTerm);
+        let result = await planGenerator.getPoi(st);
         res.json(result);
     } catch (e) {
         console.log(e);
