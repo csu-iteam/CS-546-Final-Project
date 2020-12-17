@@ -1,6 +1,6 @@
 let apiKey =
     {
-        'x-rapidapi-key': 'fb809eccf7mshf5ff715a5abefcbp164e50jsn2d1e18d2883b',
+        'x-rapidapi-key': 'b2e977b2e9msh77b94e0ede0d61dp101aa8jsn3a7448b904a0',
         'x-rapidapi-host': 'hotels4.p.rapidapi.com'
     }
 
