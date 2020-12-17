@@ -5,6 +5,7 @@ var logout_button = $("#logout-button");
 var logList = $("#logList");
 var thelogs = $("#logMainList");
 var reviewList = $("#reviewList");
+var userreviewList = $("#userreviewList");
 
 planItem.hide();
 logout_button.hide();
@@ -25,14 +26,15 @@ function mainLogs() {
             var c = 0;
             for (let j of i.addition.plansLocation) {
                 if (c !== i.addition.plansLocation.length - 1) {
-                    temp = temp + j + '-';
+                    temp = temp + j.name + ' duration: ' + j.duration + '  -  ';
                     c++;
                 }
                 else {
-                    temp = temp + j;
+                    temp = temp + j.name + ' duration: ' + j.duration;
                 }
             }
             thelogs.append($("<dd class=" + i._id + ">" + temp + "</dd>"));
+            thelogs.append($("<dd class=" + i._id + ">Starttime: " + i.addition.plansLocation[0].startDate + "</dd>"));
             thelogs.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
             thelogs.append($("<dt><a class='loghref1' id=" + "loghref1" + i._id + " href='http://localhost:3000/login/personal/plans'>" + i.title + "</a></dt>"));
             thelogs.append($("<dt class=" + i._id + ">" + i.feel + "<br></dt>"));
@@ -271,9 +273,14 @@ function getPlan() {
         var newElement = $(responseMessage);
         planList.append($("<dl>"));
         for (let i of newElement) {
-            planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].position + "..." + "</a></dt>"));
-            planList.append($("<dd class=" + i._id + ">Arrival Time: " + i.nodes[0].arrival_time + "</dd>"));
-            planList.append($("<dd class=" + i._id + ">Departure Time: " + i.nodes[0].departure_time + "</dd>"));
+            //JSON.stringify(i.nodes);
+            planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].startDate + "..." + "</a></dt>"));
+            for (let j of i.nodes) {
+                planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + j.name + " Duration: " + j.duration + "..." + "</a></dt>"));
+            }
+            //planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].position + "..." + "</a></dt>"));
+            //planList.append($("<dd class=" + i._id + ">Arrival Time: " + i.nodes[0].arrival_time + "</dd>"));
+            //planList.append($("<dd class=" + i._id + ">Departure Time: " + i.nodes[0].departure_time + "</dd>"));
             planList.append($("<button class='make-log' id=" + "log" + i._id + ">Make your log</button>"));
             planList.append($("<div id=" + "logtitle" + i._id + "><label>Make a title of this log：</label><input id=" + "loginput" + i._id + " type='text' name='log-title' /></div>"));
             planList.append($("<div id=" + "logfeel" + i._id + "><label>What is your thought of this trip：</label><input id=" + "loginput1" + i._id + " type='text' name='log-feel' /></div>"));
@@ -422,8 +429,52 @@ $("#logout-button").click(function (event) {
     });
 });
 
+function getReviews() {
+    var getReviews = {
+        method: 'GET',
+        url: '/login/database/getreviews',
+        contentType: 'application/json'
+    };
+
+    $.ajax(getReviews).then(function (responseMessage) {
+        var newElement = $(responseMessage);
+        userreviewList.append($("<dl>"));
+        for (let i of newElement) {
+            userreviewList.append($("<div class=" + i._id + ">" + '----------------' + "</div>"));
+            userreviewList.append($("<div class=" + i._id + ">" + i.content + "</div>"));
+            userreviewList.append($("<div class=" + i._id + "><br></div>"));
+            userreviewList.append($("<dt class=" + i._id + ">Author: " + i.addition + "<br></dt>"));
+            userreviewList.append($("<dt class=" + i._id + ">Created: " + i.date + "<br></dt>"));
+            userreviewList.append($("<button class='close-sign2' id=" + i._id + ">&times</button>"));
+            userreviewList.append($("<div class=" + i._id + "><br><br></div>"));
+        }
+        userreviewList.append($("</dl>"));
+
+        $(".close-sign2").click(function (event) {
+            event.preventDefault();
+            var item = $(this).attr('id');
+            $('.' + item).hide();
+            $('#' + item).hide();
+            var logdelete = {
+                method: 'POST',
+                url: '/login/database/reviewsdelete',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    id: item
+                })
+            };
+
+            $.ajax(logdelete).then(function (responseMessage) {
+                var newElement = $(responseMessage);
+            });
+        });
+        
+    });
+}
+
 checkLogStatus();
 getPlan();
 getLog();
 mainLogs();
 getReply();
+getReviews();

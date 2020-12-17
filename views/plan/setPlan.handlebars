@@ -211,6 +211,20 @@
                     planList.splice(0, 1);
                     planList.splice(0, 0, sn);
                     console.log(planList);
+                    //test (this part can be deleted) add to plan database
+                    var getPlanList = {
+                        method: 'POST',
+                        url: '/login/insertplans',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            planList: planList
+                        })
+                    };
+            
+                    $.ajax(getPlanList).then(function (responseMessage) {
+                        var newElement = $(responseMessage);
+                    });
+                    //-------------------------
                     var requestMakePlan = {
                         method: 'POST',
                         data: { data: JSON.stringify(planList) },
