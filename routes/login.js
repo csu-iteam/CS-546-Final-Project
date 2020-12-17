@@ -15,7 +15,7 @@ let globalfeel;
 let globalreviews;
 
 router.get('/', async (req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		await res.redirect('/login/personal');
 	}
 	else {
@@ -28,7 +28,7 @@ router.get('/logs', async (req, res) => {
 });
 
 router.get('/status', async (req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		const result = {};
 		result.status = true;
 		await res.json(result);
@@ -44,9 +44,9 @@ router.post('/makelog', async (req, res) => {
 	const info = req.body;
 	const userInfo = await user.getByUsername(req.session.username);
 	const userId = userInfo._id;
-	const logtitle = info.logtitle;
-	const logfeel = info.logfeel;
-	const planId = info.id;
+	const logtitle = xss(info.logtitle);
+	const logfeel = xss(info.logfeel);
+	const planId = xss(info.id);
 	let addition = {};
 	const array = [];
 	const plan_location = await plan.getById(planId);
@@ -64,13 +64,24 @@ router.post('/makelog', async (req, res) => {
 	await res.json(result1);
 });
 
-router.post('/makereview', async (req, res) => {
-	if (req.session.username) {
+router.post('/insertplans', async (req, res) => {
+	if (xss(req.session.username)) {
 		const info = req.body;
-		const userInfo = await user.getByUsername(req.session.username);
+		const userInfo = await user.getByUsername(xss(req.session.username));
+		const planList = xss(info.planList);
+		planList = JSON.parse(planList);
+		const result = await plan.insertPlans(userInfo._id.toString(), planList);
+		await res.json({});
+	}
+});
+
+router.post('/makereview', async (req, res) => {
+	if (xss(req.session.username)) {
+		const info = req.body;
+		const userInfo = await user.getByUsername(xss(req.session.username));
 		const userId = userInfo._id;
-		const logReview = info.logReview;
-		const logreviewId = info.id;
+		const logReview = xss(info.logReview);
+		const logreviewId = xss(info.id);
 	// 	let addition = {};
 	// 	const array = [];
 	// 	const plan_location = await plan.getById(planId);
@@ -93,7 +104,7 @@ router.post('/makereview', async (req, res) => {
 });
 
 router.get('/database/plans', async (req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		const userData = await user.getByUsername(req.session.username);
 		const data = await plan.getByUserId(userData._id);
 		let temp = [];
@@ -115,19 +126,38 @@ router.get('/database/plans', async (req, res) => {
 });
 
 router.post('/database/plansdelete', async (req, res) => {
-	const id = req.body.id;
+	const id = xss(req.body.id);
 	const userData = await plan.deleteById(id);
 	await res.redirect('/login/personal/plans');
 });
 
 router.post('/database/logsdelete', async (req, res) => {
-	const id = req.body.id;
-	const userData = await log.deleteById(id);
-	await res.redirect('/login/personal/logs');
+	if (xss(req.session.username)) {
+		const id = xss(req.body.id);
+		const userData = await log.deleteById(id);
+		const userData1 = await user.getByUsername(xss(req.session.username));
+		const temp = userData1.logsId;
+		let array = [];
+		for (let i of temp) {
+			if (i !== id) {
+				array.push(i);
+			}
+		}
+		const result = await user.updateByArray(userData1._id.toString(), array);
+		await res.redirect('/login/personal/logs');
+	}
+});
+
+router.post('/database/reviewsdelete', async (req, res) => {
+	if (xss(req.session.username)) {
+		const id = xss(req.body.id);
+		const userData = await review.deleteById(id);
+		await res.redirect('/login/personal/logs');
+	}
 });
 
 router.get('/database/logs', async (req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		const userData = await user.getByUsername(req.session.username);
 		const data = await log.getByUserId(userData._id);
 		await res.json(data);
@@ -137,12 +167,23 @@ router.get('/database/logs', async (req, res) => {
 });
 
 router.post('/database/reviews', async (req, res) => {
-	if (req.session.username) {
-		const data = await review.getById(req.body.logId);
+	if (xss(req.session.username)) {
+		const data = await review.getById(xss(req.body.logId));
 		for (let i of data) {
 			const userData = await user.getById(i.userId);
 			const name = userData.username;
 			i.username = name;
+		}
+		await res.json(data);
+	}
+});
+
+router.get('/database/getreviews', async (req, res) => {
+	if (xss(req.session.username)) {
+		const userData = await user.getByUsername(req.session.username);
+		const data = await review.getByUserId(userData._id);
+		for (let i of data) {
+			i.addition = xss(req.session.username);
 		}
 		await res.json(data);
 	}
@@ -156,22 +197,22 @@ router.get('/database/mainlogs', async (req, res) => {
 
 router.post('/database/logsUpdate', async (req, res) => {
 	//if (req.session.username) {
-	const data1 = await review.getById(req.body.logId);
+	const data1 = await review.getById(xss(req.body.logId));
 	for (let i of data1) {
 		const userData1 = await user.getById(i.userId);
 		const name = userData1.username;
 		i.username = name;
 	}
 	//}
-	const id = req.body.logId;
+	const id = xss(req.body.logId);
 	let change = {};
 	const data = await log.getById(id);
-	let temp = req.body.reading + data.reading;
-	let temp1 = req.body.like + data.like;
-	if (req.session.username) {
+	let temp = xss(req.body.reading) + data.reading;
+	let temp1 = xss(req.body.like) + data.like;
+	if (xss(req.session.username)) {
 		change = { reading: temp, like: temp1 };
 		const userData = await log.updateLog(id, change);
-		const users = await user.getByUsername(req.session.username);
+		const users = await user.getByUsername(xss(req.session.username));
 		let arrayLiked = [];
 		arrayLiked.push(id);
 		const userData1 = await user.updateUser(users._id.toString(), { logsId: arrayLiked });
@@ -192,7 +233,7 @@ router.post('/database/logsUpdate', async (req, res) => {
 
 router.post('/database/replies', async (req, res) => {
 	//if (req.session.username) {
-		const data = await reply.getByReviewId(req.body.reviewId);
+		const data = await reply.getByReviewId(xss(req.body.reviewId));
 		for (let i of data) {
 			const userData = await user.getById(i.userId);
 			const name = userData.username;
@@ -203,13 +244,13 @@ router.post('/database/replies', async (req, res) => {
 });
 
 router.post('/database/writereplies', async (req, res) => {
-	if (req.session.username) {
-		const userData = await user.getByUsername(req.session.username);
-		const data = await review.getByReviewId(req.body.reviewId);
+	if (xss(req.session.username)) {
+		const userData = await user.getByUsername(xss(req.session.username));
+		const data = await review.getByReviewId(xss(req.body.reviewId));
 		let myDate = new Date();
 		const date = myDate.toLocaleDateString() + " " + myDate.toLocaleTimeString();
-		const result = await reply.insertReplies(userData._id.toString(), req.body.reviewId, '', req.body.replyinput, date);
-		await res.json(result);
+		const result = await reply.insertReplies(userData._id.toString(), xss(req.body.reviewId), '', xss(req.body.replyinput), date);
+		await res.json({ status: true });
 	}
 	else {
 		await res.json({ status: false });
@@ -217,8 +258,8 @@ router.post('/database/writereplies', async (req, res) => {
 });
 
 router.get('/personal', async (req, res) => {
-	if (req.session.username) {
-		await res.render('form/personal', { username: req.session.username });
+	if (xss(req.session.username)) {
+		await res.render('form/personal', { username: xss(req.session.username) });
 	}
 	else {
 		await res.redirect('/login');
@@ -230,7 +271,7 @@ router.get('/register', async(req, res) => {
 });
 
 router.get('/personal/logs', async(req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		await res.render('form/logs', {});
 	}
 	else {
@@ -239,7 +280,7 @@ router.get('/personal/logs', async(req, res) => {
 });
 
 router.get('/personal/plans', async(req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		await res.render('form/plans', {});
 	}
 	else {
@@ -247,9 +288,9 @@ router.get('/personal/plans', async(req, res) => {
 	}
 });
 
-router.get('/personal/comments', async(req, res) => {
-	if (req.session.username) {
-		await res.render('form/comments', {});
+router.get('/personal/reviews', async(req, res) => {
+	if (xss(req.session.username)) {
+		await res.render('form/reviews', {});
 	}
 	else {
 		await res.redirect('/login');
@@ -257,7 +298,7 @@ router.get('/personal/comments', async(req, res) => {
 });
 
 router.get('/personal/account', async(req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		await res.render('form/account', {});
 	}
 	else {
@@ -266,8 +307,17 @@ router.get('/personal/account', async(req, res) => {
 });
 
 router.get('/personal/replies', async(req, res) => {
-	if (req.session.username) {
+	if (xss(req.session.username)) {
 		await res.render('form/replies', {});
+	}
+	else {
+		await res.redirect('/login');
+	}
+});
+
+router.get('/personal/likedlogs', async(req, res) => {
+	if (xss(req.session.username)) {
+		await res.render('form/likedlogs', {});
 	}
 	else {
 		await res.redirect('/login');
@@ -276,12 +326,12 @@ router.get('/personal/replies', async(req, res) => {
 
 router.post('/personal', async (req, res) => {
 	const info = req.body;
-	const userData = await user.getByUsername(info.username);
+	const userData = await user.getByUsername(xss(info.username));
 	if (userData) {
 		//const pass = userData.password;
-		if (await bcrypt.compare(info.password, userData.password)) {
+		if (await bcrypt.compare(xss(info.password), userData.password)) {
 		//if (info.password === pass) {
-			req.session.username = info.username;
+			req.session.username = xss(info.username);
 			await res.render('form/personal', { username: userData.username, status: true });
 		}
 		else {
@@ -298,12 +348,12 @@ router.post('/register', async (req, res) => {
 	const info = req.body;
 	//const userData = await user.getByLastName(info.lastNames);
 	//const userData1 = await user.getByFirstName(info.firstNames);
-	const userData = await user.getByUsername(info.userNames);
-	const userData1 = await user.getByEmail(info.userEmails);
+	const userData = await user.getByUsername(xss(info.userNames));
+	const userData1 = await user.getByEmail(xss(info.userEmails));
 	if ((userData) || (userData1)) {
 	//if ((userData.username === info.userNames) || (userData1.email === info.userEmails)) {
-		req.session.username = info.userNames;
-		await res.render('form/personal', { username: info.userNames, status: true });
+		req.session.username = xss(info.userNames);
+		await res.render('form/personal', { username: xss(info.userNames), status: true });
 	}
 	else {
 		if (xss(info.passwords) !== xss(info.confirms)) {
@@ -311,8 +361,8 @@ router.post('/register', async (req, res) => {
 		}
 		else {
 			await bcrypt.genSalt(16, function(err, salt) {
-				bcrypt.hash(info.passwords, salt, function(err, hash) {
-					user.insertUsers(info.userNames, info.lastNames, info.firstNames, info.userEmails, hash, '', [], [], '');
+				bcrypt.hash(xss(info.passwords), salt, function(err, hash) {
+					user.insertUsers(xss(info.userNames), xss(info.lastNames), xss(info.firstNames), xss(info.userEmails), hash, '', [], [], '');
 				});
 			});
 			//user.insertUsers(info.lastNames, info.firstNames, hashPassword, null, null, null, null);
