@@ -92,7 +92,7 @@
 
                     placeListU.append(`<li>${node.name}</li>`);
                     planList_u.push(node);
-                    console.log(planList_u);
+                    //console.log(planList_u);
                     // var requestConfig = {
                     //     method: 'POST',
                     //     url: '/plan/addPlaceFromRecommend',
@@ -267,7 +267,7 @@
                         }
                         placeListU.append(`<li>${node.name}</li>`);
                         planList_u.push(node);
-                        console.log(planList_u);
+                        //console.log(planList_u);
                     })
                     $(this).text('Added to your plan');
                 })
@@ -374,7 +374,7 @@
                                     }
                                     placeListU.append(`<li>${node.name}</li>`);
                                     planList_u.push(node);
-                                    console.log(planList_u);
+                                    //console.log(planList_u);
                                 })
                                 $(this).text('Added to your plan');
                             })
@@ -492,7 +492,7 @@
                             }
                             placeListU.append(`<li>${node.name}</li>`);
                             planList_u.push(node);
-                            console.log(planList_u);
+                            //console.log(planList_u);
                         })
                         $(this).text('Added to your plan');
                     })
@@ -581,7 +581,7 @@
                             event.preventDefault();
                             startPlace_u.empty();
                             let place_u = currentSearchList_u[this.id.split('b')[1]];
-                            console.log(currentSearchList_u);
+                            //console.log(currentSearchList_u);
                             let name_u = place_u.name;
                             startPlace_u.html(name_u);
                             let latitude_u = place_u.geometry.location.lat;
@@ -606,16 +606,16 @@
     })
     makePlan_u.on('click', function (event) {
         event.preventDefault();
-        let date_u = startDate_u.val();
+        let d_u = startDate_u.val();
         if (!startNode_u) {
             errorBox_u.html("please set your start place");
             errorBox_u.show();
-        } else if (date_u == "") {
+        } else if (d_u == "") {
             errorBox_u.html("please set your start date");
             errorBox_u.show();
         } else {
             errorBox_u.hide();
-            let sd_u = date_u.split("-");
+            let sd_u = d_u.split("-");
             let date_u = new Date();
             date_u.setFullYear(sd_u[0]);
             let month_u = parseInt(sd_u[1]);
@@ -623,14 +623,15 @@
             date_u.setMonth(month_u);
             date_u.setDate(sd_u[2]);
             startNode_u.startDate = date_u;
-            planList_u.splice(0, 0, startDate_u);
+            planList_u.splice(0, 0, startNode_u);
+            console.log(planList_u);
             var requestMakePlan_u = {
                 method: 'POST',
                 data: { data: JSON.stringify(planList_u) },
                 url: '/plan/generate_plan'
             }
             $.ajax(requestMakePlan_u).then(function (result) {
-                scheme.empty();
+                $('#scheme').empty();
                 var plan = result.plan;
                 for (let i = 0; i < plan.plan.length; i++) {
                     if (plan.plan[i].type == "start") {
