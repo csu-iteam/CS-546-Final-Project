@@ -61,6 +61,19 @@ async function updateUser(id, updated) {
 	return result1;
 }
 
+async function updateByArray(id, array) {
+	if (!id) throw 'The id has not provided.';
+	if ((typeof(id) !== 'string') || (id.length === 0))
+		throw 'The id is not a string or it is empty.';
+	if (!array) throw 'The update information has not been provided.';
+	const data = ObjectId(id);
+	const user = await users();
+	const obj = {};
+	obj.logsId = array;
+	const result = await user.updateOne({ _id: data }, { $set: obj });
+	return result;
+}
+
 // async function getByPassword(p) {
 //     const user = await users();
 //     const result = await user.findOne({ password: p });
@@ -127,5 +140,6 @@ module.exports = {
 	getById,
     updateUser,
     deleteById,
-    removeAll
+	removeAll,
+	updateByArray
 };
