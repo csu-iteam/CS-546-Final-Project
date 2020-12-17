@@ -138,13 +138,17 @@
                             let name = place.name;
                             let latitude = place.geometry.location.lat;
                             let longitude = place.geometry.location.lng;
-                            let address = place.formatted_address.split(",");
-                            let location_id = address[address.length - 3];
+                            //let address = place.formatted_address.split(",");
+                            let splitedArray = place.plus_code.compound_code.split(',');
+                            let cityArray=splitedArray[splitedArray.length-2].split(" ");
+                            
+                            let location_id =cityArray[1];
+                            console.log(location_id);
                             let duration = (parseInt(6 * Math.random()) + 1) * 30;
                             var node = {
                                 id: placeId,
                                 name: name,
-                                location_id: location_id.trim(),
+                                location_id: location_id,
                                 duration: duration,
                                 coordinates: {
                                     latitude: latitude,
