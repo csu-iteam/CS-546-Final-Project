@@ -34,7 +34,7 @@ async function findLowestCostPlan(sourceNodeList) {
         //tempPlan.push(endPosition);
         let mPlan = await makePlan(tempPlan);
         //console.log(mPlan);
-        if (mPlan.type == "faild")
+        if (mPlan.type == "faild") continue;
         else {
             allPlansWithCost.push(mPlan);
         }
@@ -91,8 +91,8 @@ async function makePlan(nodeList) {
             day++;
             timePoint = dailyStartTime;
         }
-        console.log(nodeList[0].location_id);
-        console.log(nodeList[1].location_id);
+         console.log(nodeList[0].location_id);
+         console.log(nodeList[1].location_id);
         if (isInSameCity(nodeList[i - 1].location_id, nodeList[i].location_id)) {
             //same city
             let trafficRoute = await getCityTraffic(nodeList[i - 1].coordinates, nodeList[i].coordinates);
@@ -759,55 +759,55 @@ async function getPoi(searchTerm) {
         ],
         "status": "OK"
     };
-    let data3 = {
-        "candidates": [
-            {
-                "formatted_address": "1 Tiantan E Rd, Dongcheng, China, 100061",
-                "geometry": {
-                    "location": {
-                        "lat": 39.8821803,
-                        "lng": 116.4066056
+    let data3={
+        "candidates" : [
+           {
+              "formatted_address" : "1 Tiantan E Rd, Dongcheng, China, 100061",
+              "geometry" : {
+                 "location" : {
+                    "lat" : 39.8821803,
+                    "lng" : 116.4066056
+                 },
+                 "viewport" : {
+                    "northeast" : {
+                       "lat" : 39.88353012989272,
+                       "lng" : 116.4079554298927
                     },
-                    "viewport": {
-                        "northeast": {
-                            "lat": 39.88353012989272,
-                            "lng": 116.4079554298927
-                        },
-                        "southwest": {
-                            "lat": 39.88083047010727,
-                            "lng": 116.4052557701072
-                        }
+                    "southwest" : {
+                       "lat" : 39.88083047010727,
+                       "lng" : 116.4052557701072
                     }
-                },
-                "name": "Temple of Heaven",
-                "photos": [
-                    {
-                        "height": 1206,
-                        "html_attributions": [
-                            "\u003ca href=\"https://maps.google.com/maps/contrib/112902215904151571449\"\u003eFernando\u003c/a\u003e"
-                        ],
-                        "photo_reference": "ATtYBwLGOYQEGFBFMaiK7R0RuxZnAyImei7LzYvDJsGrFvtEloxrbuOSnzjfR9pPLUMmdypAMBnBDnoHUPf-_vl2eVz7ByPt17mA3iZ1s5OOM6R5JRY6Pi6xRBRNKGRuBgBhIm0Yzl1ZBzUwziNxdGgx4LAXcxo3u8xAEsqYyAwHUOa87gaO",
-                        "width": 2048
-                    }
-                ],
-                "plus_code": {
-                    "compound_code": "VCJ4+VJ Dongcheng, Beijing, China",
-                    "global_code": "8PFRVCJ4+VJ"
-                }
-            }
+                 }
+              },
+              "name" : "Temple of Heaven",
+              "photos" : [
+                 {
+                    "height" : 1206,
+                    "html_attributions" : [
+                       "\u003ca href=\"https://maps.google.com/maps/contrib/112902215904151571449\"\u003eFernando\u003c/a\u003e"
+                    ],
+                    "photo_reference" : "ATtYBwLGOYQEGFBFMaiK7R0RuxZnAyImei7LzYvDJsGrFvtEloxrbuOSnzjfR9pPLUMmdypAMBnBDnoHUPf-_vl2eVz7ByPt17mA3iZ1s5OOM6R5JRY6Pi6xRBRNKGRuBgBhIm0Yzl1ZBzUwziNxdGgx4LAXcxo3u8xAEsqYyAwHUOa87gaO",
+                    "width" : 2048
+                 }
+              ],
+              "plus_code" : {
+                 "compound_code" : "VCJ4+VJ Dongcheng, Beijing, China",
+                 "global_code" : "8PFRVCJ4+VJ"
+              }
+           }
         ],
-        "status": "OK"
-    }
-    if (i == 0) {
-        i++;
-        return data;
-    } else if (i == 1) {
-        i++;
-        return data3;
-    } else {
-        return data2;
-    }
-
+        "status" : "OK"
+     }
+     if(i==0){
+         i++;
+         return data;
+     }else if(i==1){
+         i++;
+         return data3;
+     }else{
+         return data2;
+     }
+    
 }
 
 function convertPTToM(PTString) {

@@ -9,7 +9,7 @@ router.get('/make_plan', async (req, res) => {
     //  res.setHeader('Access-Control-Allow-Origin','*');
     //  res.setHeader('Access-Control-Allow-Method','GET');
     //console.log(res);
-    res.render('plan/setplan');
+    res.render('plan/setPlan');
 })
 
 router.post('/generate_plan', async (req, res) => {
