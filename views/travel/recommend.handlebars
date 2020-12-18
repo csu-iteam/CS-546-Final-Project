@@ -1,4 +1,9 @@
 <main class="mx-3 mb-3">
+    <h1>Have no idea about where to go?</h1>
+    <div>
+        <button class="btn btn-outline-primary" onclick="location.href='http://localhost:3000/plan/make_plan'">Already
+            know where to go? Click this!</button>
+    </div>
     <div id="planlist_u">
         <div>
             <label for="startDate_u">choose your start date:</label>
@@ -23,7 +28,7 @@
         <button id="makePlan_u" class="btn btn-outline-primary">make plan!</button>
     </div>
     <div id="scheme"></div>
-    <h1>Have no idea about where to go?</h1>
+
     <h2>Recommend places</h2>
     <h3>(We suggest do not add more than 3 places at one time)</h3>
     <div id="recommendPics-div-origin">
@@ -32,7 +37,7 @@
             <img src="{{this.url.source_url}}" alt="{{this.name}}" width="384" height="216" class="image">
             <p>{{this.name}}</p>
             <p>Duration: {{this.duration}} minutes</p>
-            <ul>Coordinates:
+            <ul>
                 <li>Latitude: {{this.coordinates.latitude}}</li>
                 <li>Longitude: {{this.coordinates.longitude}}</li>
             </ul>

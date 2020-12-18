@@ -205,7 +205,7 @@
                     newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384" height="216" class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                    newDiv[i].append(`<ul></ul>`);
                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -316,7 +316,7 @@
                                     newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                                    newDiv[i].append(`<ul></ul>`);
                                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -434,7 +434,7 @@
                             newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                             newDiv[i].append(`<p>${targetPic.name}</p>`);
                             newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                            newDiv[i].append(`<ul>Coordinates: </ul>`);
+                            newDiv[i].append(`<ul></ul>`);
                             newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                             newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                             newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -552,7 +552,7 @@
 
     search_u.on('click', function (event) {
         event.preventDefault();
-        let searchTerm_u_val = searchTerm_u.val();
+        let searchTerm_u_val = filterXSS(searchTerm_u.val());
         if (searchTerm_u_val.trim() == "") {
             errorBox_u.html("please enter searchTerm");
             errorBox_u.show();
