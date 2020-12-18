@@ -161,7 +161,7 @@ function clearMarkers() {
 // Set the country restriction based on user input.
 // Also center and zoom the map on the given country.
 function setAutocompleteCountry() {
-    const country = document.getElementById("country").value;
+    const country = filterXSS(document.getElementById("country").value);
 
     if (country == "all") {
         autocomplete.setComponentRestrictions({country: []});

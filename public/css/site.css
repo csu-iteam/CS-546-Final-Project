@@ -73,3 +73,7 @@ footer {
 	height: "216px";
 	display: block;
 }
+
+.dropdown::marker {
+	display: none;
+}
