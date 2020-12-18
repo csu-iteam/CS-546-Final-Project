@@ -11,7 +11,7 @@ const constructorMethod = (app) => {
     app.use('/plan',planRoutes);
 
     app.use('*', (req, res) => {
-        res.render('layouts/main')
+        res.redirect('/recommend')
     })
 }
 module.exports = constructorMethod
