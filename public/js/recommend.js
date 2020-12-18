@@ -72,11 +72,13 @@
                     let name = place.name;
                     let latitude = place.geometry.location.lat;
                     let longitude = place.geometry.location.lng;
-                    let splitedArray = place.plus_code.compound_code.split(',');
-                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                    let location_id = "";
-                    for (let i = 1; i < thisArray.length; i++) {
-                        location_id = location_id + ' ' + thisArray[i];
+                    let location_id;
+                    if (!(place.plus_code)) {
+                        location_id = place.name;
+                    } else {
+                        let splitedArray = place.plus_code.compound_code.split(',');
+                        let city = splitedArray[splitedArray.length - 2];
+                        location_id = city.slice(city.indexOf(' ') + 1);
                     }
                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -248,11 +250,13 @@
                         let name = place.name;
                         let latitude = place.geometry.location.lat;
                         let longitude = place.geometry.location.lng;
-                        let splitedArray = place.plus_code.compound_code.split(',');
-                        let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                        let location_id = "";
-                        for (let i = 1; i < thisArray.length; i++) {
-                            location_id = location_id + ' ' + thisArray[i];
+                        let location_id;
+                        if (!(place.plus_code)) {
+                            location_id = place.name;
+                        } else {
+                            let splitedArray = place.plus_code.compound_code.split(',');
+                            let city = splitedArray[splitedArray.length - 2];
+                            location_id = city.slice(city.indexOf(' ') + 1);
                         }
                         let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -355,11 +359,13 @@
                                     let name = place.name;
                                     let latitude = place.geometry.location.lat;
                                     let longitude = place.geometry.location.lng;
-                                    let splitedArray = place.plus_code.compound_code.split(',');
-                                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                                    let location_id = "";
-                                    for (let i = 1; i < thisArray.length; i++) {
-                                        location_id = location_id + ' ' + thisArray[i];
+                                    let location_id;
+                                    if (!(place.plus_code)) {
+                                        location_id = place.name;
+                                    } else {
+                                        let splitedArray = place.plus_code.compound_code.split(',');
+                                        let city = splitedArray[splitedArray.length - 2];
+                                        location_id = city.slice(city.indexOf(' ') + 1);
                                     }
                                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -473,11 +479,13 @@
                             let name = place.name;
                             let latitude = place.geometry.location.lat;
                             let longitude = place.geometry.location.lng;
-                            let splitedArray = place.plus_code.compound_code.split(',');
-                            let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                            let location_id = "";
-                            for (let i = 1; i < thisArray.length; i++) {
-                                location_id = location_id + ' ' + thisArray[i];
+                            let location_id;
+                            if (!(place.plus_code)) {
+                                location_id = place.name;
+                            } else {
+                                let splitedArray = place.plus_code.compound_code.split(',');
+                                let city = splitedArray[splitedArray.length - 2];
+                                location_id = city.slice(city.indexOf(' ') + 1);
                             }
                             let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -552,7 +560,7 @@
 
     search_u.on('click', function (event) {
         event.preventDefault();
-        let searchTerm_u_val = filterXSS(searchTerm_u.val());
+        let searchTerm_u_val = filterXSS(searchTerm_u.val());
         if (searchTerm_u_val.trim() == "") {
             errorBox_u.html("please enter searchTerm");
             errorBox_u.show();
@@ -586,9 +594,14 @@
                             startPlace_u.html(name_u);
                             let latitude_u = place_u.geometry.location.lat;
                             let longitude_u = place_u.geometry.location.lng;
-                            let splitedArray_u = place_u.plus_code.compound_code.split(',');
-                            let cityArray_u = splitedArray_u[splitedArray_u.length - 2].split(" ");
-                            let location_id_u = cityArray_u[1];
+                            let location_id_u;
+                            if (!(place_u.plus_code)) {
+                                location_id_u = place_u.name;
+                            } else {
+                                let splitedArray = place_u.plus_code.compound_code.split(',');
+                                let city = splitedArray[splitedArray.length - 2];
+                                location_id_u = city.slice(city.indexOf(' ') + 1);
+                            }
                             startNode_u = {
                                 name: name_u,
                                 location_id: location_id_u,
