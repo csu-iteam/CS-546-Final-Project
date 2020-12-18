@@ -71,6 +71,7 @@ router.post('/insertplans', async (req, res) => {
 		const info = req.body;
 		const userInfo = await user.getByUsername(xss(req.session.username));
 		const planList = info.planList;
+		console.log(planList)
 		const result = await plan.insertPlans(userInfo._id.toString(), planList);
 		await res.json({});
 	}

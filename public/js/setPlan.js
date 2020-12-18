@@ -180,7 +180,25 @@
             }
             $.ajax(requestMakePlan).then(function (result) {
                 scheme.empty();
+                var plan1 = result.plan.plan;
+                let plans = [];
                 var plan = result.plan;
+                // for (let i of plan) {
+                //     if (i.type === start) {
+                //         plans.push(i.startNode);
+                //     }
+                //     else if (i.type === poi) {
+                //         plans.push(i.poi);
+                //     }
+                //     else if (i.type === traffic) {
+                //         plans.push(i.traffic);
+                //     }
+                // }
+               plans.push(plan1);
+                
+                
+                
+                console.log(plans);
                 //check if generate success
                 if (!plan) {
                     scheme.html("faild to generate plan due to no specific flight.")
@@ -224,7 +242,7 @@
                             url: '/login/insertplans',
                             contentType: 'application/json',
                             data: JSON.stringify({
-                                planList: plan
+                                planList: plans
                             })
                         }
                         $.ajax(savePlanList).then(function (responseMessage) {

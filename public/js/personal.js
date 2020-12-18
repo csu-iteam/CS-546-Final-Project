@@ -274,10 +274,81 @@ function getPlan() {
         planList.append($("<dl>"));
         for (let i of newElement) {
             //JSON.stringify(i.nodes);
-            planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].startDate + "..." + "</a></dt>"));
-            for (let j of i.nodes) {
-                planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + j.name + " Duration: " + j.duration + "..." + "</a></dt>"));
+
+
+            for (let j = 0; j < i.nodes[0].length; j++) {
+                if (i.nodes[0][j].type == "start") {
+                    planList.append($(`<ol id="ol-${i}">Type: ${i.nodes[0][j].type}    Day: ${i.nodes[0][j].day + 1}</ol>`));
+                    planList.append($(`<li>Departure at: ${i.nodes[0][j].startNode.location_id}</li>`));
+                    let startDate = new Date(i.nodes[0][j].startNode.startDate);
+                    planList.append($(`<li>Departure time: ${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}</li>`));
+                } else if (i.nodes[0][j].type == "traffic") {
+                    planList.append($(`<ol id="ol-${i}">Type: ${i.nodes[0][j].type}    Day: ${i.nodes[0][j].day + 1}</ol>`));
+                    planList.append($(`<li>From: ${i.nodes[0][j].route.legs[0].start_address}</li>`));
+                    planList.append($(`<li>To: ${i.nodes[0][j].route.legs[0].end_address}</li>`));
+                    planList.append($(`<li>Distance: ${i.nodes[0][j].route.legs[0].distance.text}</li>`));
+                    planList.append($(`<li>Duration: ${i.nodes[0][j].route.legs[0].duration.text}</li>`));
+                    planList.append($(`<li>Travel mode: ${i.nodes[0][j].route.legs[0].steps[0].travel_mode}</li>`));
+                } else if (i.nodes[0][j].type == "flight") {
+                    planList.append($(`<ol id="ol-${i}">Type: ${i.nodes[0][j].type}    Day: ${i.nodes[0][j].day + 1}</ol>`));
+                    planList.append($(`<li>Departure iata code: ${i.nodes[0][j].flight.itineraries[0].segments[0].departure.iataCode}</li>`));
+                    planList.append($(`<li>Departure terminal: ${i.nodes[0][j].flight.itineraries[0].segments[0].departure.terminal}</li>`));
+                    planList.append($(`<li>Departure time: ${i.nodes[0][j].flight.itineraries[0].segments[0].departure.at}</li>`));
+                    let length = i.nodes[0][j].flight.itineraries[0].segments.length;
+                    planList.append($(`<li>Arrival iata code: ${i.nodes[0][j].flight.itineraries[0].segments[length - 1].arrival.iataCode}</li>`));
+                    planList.append($(`<li>Arrival terminal: ${i.nodes[0][j].flight.itineraries[0].segments[length - 1].arrival.terminal}</li>`));
+                    planList.append($(`<li>Arrival time: ${i.nodes[0][j].flight.itineraries[0].segments[length - 1].arrival.at}</li>`));
+                } else if (i.nodes[0][j].type == "poi") {
+                    planList.append($(`<ol id="ol-${i}">Type: ${i.nodes[0][j].type}    Day: ${i.nodes[0][j].day + 1}</ol>`));
+                    planList.append($(`<li>Target place: ${i.nodes[0][j].poi.name}</li>`));
+                    planList.append($(`<li>Duration: ${i.nodes[0][j].poi.duration} mins</li>`));
+                }
             }
+
+
+
+
+
+
+
+
+            // for (let j = 0; j < i.nodes.length; j++) {
+            //     if (i.nodes[j].type == "start") {
+            //         planList.append($(`<ol id="ol-${i}">Type: ${JSON.stringify(i.nodes[j].type)}    Day: ${JSON.stringify(i.nodes[j].day + 1)}</ol>`));
+            //         planList.append($(`<li>Departure at: ${JSON.stringify(i.nodes[j].startNode.location_id)}</li>`));
+            //         let startDate = new Date(i.nodes[j].startNode.startDate);
+            //         planList.append($(`<li>Departure time: ${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}</li>`));
+            //     } else if (i.nodes[j].type == "traffic") {
+            //         planList.append($(`<ol id="ol-${i}">Type: ${JSON.stringify(i.nodes[j].type)}    Day: ${JSON.stringify(i.nodes[j].day + 1)}</ol>`));
+            //         planList.append($(`<li>From: ${JSON.stringify(i.nodes[j].route.legs[0].start_address)}</li>`));
+            //         planList.append($(`<li>To: ${JSON.stringify(i.nodes[j].route.legs[0].end_address)}</li>`));
+            //         planList.append($(`<li>Distance: ${JSON.stringify(i.nodes[j].route.legs[0].distance.text)}</li>`));
+            //         planList.append($(`<li>Duration: ${JSON.stringify(i.nodes[j].route.legs[0].duration.text)}</li>`));
+            //         planList.append($(`<li>Travel mode: ${JSON.stringify(i.nodes[j].route.legs[0].steps[0].travel_mode)}</li>`));
+            //     } else if (i.nodes[j].type == "flight") {
+            //         planList.append($(`<ol id="ol-${i}">Type: ${JSON.stringify(i.nodes[j].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+            //         planList.append($(`<li>Departure iata code: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[0].departure.iataCode)}</li>`));
+            //         planList.append($(`<li>Departure terminal: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[0].departure.terminal)}</li>`));
+            //         planList.append($(`<li>Departure time: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[0].departure.at)}</li>`));
+            //         let length = i.nodes[j].flight.itineraries[0].segments.length;
+            //         planList.append($(`<li>Arrival iata code: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[length - 1].arrival.iataCode)}</li>`));
+            //         planList.append($(`<li>Arrival terminal: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[length - 1].arrival.terminal)}</li>`));
+            //         planList.append($(`<li>Arrival time: ${JSON.stringify(i.nodes[j].flight.itineraries[0].segments[length - 1].arrival.at)}</li>`));
+            //     } else if (i.nodes[j].type == "poi") {
+            //         planList.append($(`<ol id="ol-${i}">Type: ${JSON.stringify(i.nodes[j].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+            //         planList.append($(`<li>Target place: ${JSON.stringify(i.nodes[j].poi.name)}</li>`));
+            //         planList.append($(`<li>Duration: ${JSON.stringify(i.nodes[j].poi.duration)} mins</li>`));
+            //     }
+            // }
+
+
+
+
+           // planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].startDate + "..." + "</a></dt>"));
+            //for (let j of i.nodes) {
+             //   planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + j.name + " Duration: " + j.duration + "..." + "</a></dt>"));
+           // }
+           // planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[1].name + "..." + "</a></dt>"));
             //planList.append($("<dt><a href='http://localhost:3000' class=" + i._id + ">" + i.nodes[0].position + "..." + "</a></dt>"));
             //planList.append($("<dd class=" + i._id + ">Arrival Time: " + i.nodes[0].arrival_time + "</dd>"));
             //planList.append($("<dd class=" + i._id + ">Departure Time: " + i.nodes[0].departure_time + "</dd>"));
