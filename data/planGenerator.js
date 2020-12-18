@@ -704,7 +704,7 @@ async function getCityIata(cityName) {
 }
 let i = 0;
 async function getPoi(searchTerm) {
-    let {data} =await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchTerm}&inputtype=textquery&fields=photos,formatted_address,name,plus_code,geometry&key=AIzaSyDkFqsopNObdSVwPslxnZEFBOG6AVXeVgg`);
+    let {data} =await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${searchTerm}&inputtype=textquery&fields=photos,formatted_address,name,plus_code,geometry&language=en&key=AIzaSyDkFqsopNObdSVwPslxnZEFBOG6AVXeVgg`);
 
     // let data = {
     //     "candidates": [
