@@ -56,13 +56,16 @@
                     data-bs-toggle="dropdown">Query Something
             </button>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-
                 <div class="col">
                     <label for="Hotel" class="mx-3">Find Hotel in City</label>
                     <input class="form-control mx-3 w-75 mb-1" id="Hotel" type="text" name="city">
                 </div>
-                <a class="dropdown-item mb-1" href="/price/meal" aria-label="Meal">Find Meal</a>
-                <a class="dropdown-item mb-1" href="/price/airline" aria-label="Airline">Find Airline</a>
+                <button class="dropdown-item mb-1" onclick="location.href='/price/meal'" type="button"
+                        aria-label="Find some Meal">Find Meal
+                </button>
+                <button class="dropdown-item mb-1" onclick="location.href='/price/airline'" type="button"
+                        aria-label="find some Airline">Find Airline
+                </button>
             </div>
         </div>
 

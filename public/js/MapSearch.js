@@ -115,7 +115,7 @@ function onPlaceChanged() {
     }
 }
 
-// Search for hotels in the selected city, within the viewport of the map.
+// Search for meals in the selected city, within the viewport of the map.
 function search() {
     const search = {
         bounds: map.getBounds(),
