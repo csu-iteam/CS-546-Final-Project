@@ -186,7 +186,33 @@
                     scheme.html("faild to generate plan due to no specific flight.")
                 } else {
                     //show plan result
-
+                    for (let i = 0; i < plan.plan.length; i++) {
+                        if (plan.plan[i].type == "start") {
+                            $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                            $(`#ol-${i}`).append($(`<li>Departure at: ${JSON.stringify(plan.plan[i].startNode.location_id)}</li>`));
+                            let startDate = new Date(plan.plan[i].startNode.startDate);
+                            $(`#ol-${i}`).append($(`<li>Departure time: ${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}</li>`));
+                        } else if (plan.plan[i].type == "traffic") {
+                            $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                            $(`#ol-${i}`).append($(`<li>From: ${JSON.stringify(plan.plan[i].route.legs[0].start_address)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>To: ${JSON.stringify(plan.plan[i].route.legs[0].end_address)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Distance: ${JSON.stringify(plan.plan[i].route.legs[0].distance.text)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Duration: ${JSON.stringify(plan.plan[i].route.legs[0].duration.text)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Travel mode: ${JSON.stringify(plan.plan[i].route.legs[0].steps[0].travel_mode)}</li>`));
+                        } else if (plan.plan[i].type == "flight") {
+                            $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                            $(`#ol-${i}`).append($(`<li>Departure iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.iataCode)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Departure terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.terminal)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Departure time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.at)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Arrival iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.iataCode)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Arrival terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.terminal)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Arrival time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.at)}</li>`));
+                        } else if (plan.plan[i].type == "poi") {
+                            $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                            $(`#ol-${i}`).append($(`<li>Target place: ${JSON.stringify(plan.plan[i].poi.name)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Duration: ${JSON.stringify(plan.plan[i].poi.duration)} mins</li>`));
+                        }
+                    }
 
                     //saveplan
                     savePlan.show();
@@ -206,7 +232,7 @@
                     })
                 }
 
-                $('#scheme').append($('<p>test</p>'));
+                // $('#scheme').append($('<p>test</p>'));
                 //let newDiv = document.createElement("div")
                 //newDiv.html(`${plan}`);
                 //for (i of plan) {
@@ -214,7 +240,7 @@
                 //     newDiv.html(i);
                 //    scheme.append(newDiv);
                 // }
-                scheme.html(JSON.stringify(result));
+                // scheme.html(JSON.stringify(result));
             })
             //scheme.append(`<p>123</p>`)
         }
