@@ -204,9 +204,10 @@
                             $(`#ol-${i}`).append($(`<li>Departure iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.iataCode)}</li>`));
                             $(`#ol-${i}`).append($(`<li>Departure terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.terminal)}</li>`));
                             $(`#ol-${i}`).append($(`<li>Departure time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.at)}</li>`));
-                            $(`#ol-${i}`).append($(`<li>Arrival iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.iataCode)}</li>`));
-                            $(`#ol-${i}`).append($(`<li>Arrival terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.terminal)}</li>`));
-                            $(`#ol-${i}`).append($(`<li>Arrival time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].arrival.at)}</li>`));
+                            let length = plan.plan[i].flight.itineraries[0].segments.length;
+                            $(`#ol-${i}`).append($(`<li>Arrival iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.iataCode)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Arrival terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.terminal)}</li>`));
+                            $(`#ol-${i}`).append($(`<li>Arrival time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.at)}</li>`));
                         } else if (plan.plan[i].type == "poi") {
                             $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
                             $(`#ol-${i}`).append($(`<li>Target place: ${JSON.stringify(plan.plan[i].poi.name)}</li>`));
