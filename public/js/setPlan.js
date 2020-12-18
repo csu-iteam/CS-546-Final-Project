@@ -107,9 +107,14 @@
                                 let latitude = place.geometry.location.lat;
                                 let longitude = place.geometry.location.lng;
                                 //let address = place.formatted_address.split(",");
-                                let splitedArray = place.plus_code.compound_code.split(',');
-                                let city = splitedArray[splitedArray.length - 2];
-                                let location_id = city.slice(city.indexOf(' ') + 1);
+                                let location_id;
+                                if (!(place.plus_code)) {
+                                    location_id=place.name;
+                                } else {
+                                    let splitedArray = place.plus_code.compound_code.split(',');
+                                    let city = splitedArray[splitedArray.length - 2];
+                                    location_id = city.slice(city.indexOf(' ') + 1);
+                                }
                                 //console.log(location_id);
                                 let duration = (parseInt(6 * Math.random()) + 1) * 30;
                                 var node = {
@@ -194,10 +199,10 @@
                 //         plans.push(i.traffic);
                 //     }
                 // }
-               plans.push(plan1);
-                
-                
-                
+                plans.push(plan1);
+
+
+
                 console.log(plans);
                 //check if generate success
                 if (!plan) {
