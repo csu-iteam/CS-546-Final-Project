@@ -23,6 +23,7 @@ After logging in, users can modify their personal information, manage their trav
 ### test user info
 username:travelplan
 password:123546
+seed file in task folder
 ### dependencies
 "@khanacademy/tota11y": "^0.2.0",
 "axios": "^0.21.0",
@@ -38,3 +39,6 @@ password:123546
 "mongodb": "^3.6.3",
 "stream-json": "^1.7.1",
 "xss": "^1.0.8"
+### start service
+npm install
+npm start 
