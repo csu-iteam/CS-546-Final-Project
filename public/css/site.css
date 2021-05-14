@@ -26,6 +26,23 @@ h1 {
 	color: blue;
 }
 
+/* #button_logs {
+	background-color: blue;
+	font-size: 16px;
+	border-radius: 8px;
+    padding: 10px 25px;
+	text-align: center;
+	color: white;
+	display: inline-block;
+	width: 250px;
+	text-align: center;
+} */
+
+#user1 {
+	color: blue;
+	font-size: 25pt;
+}
+
 #search-plans label {
 	text-align: center;
 }
@@ -72,4 +89,8 @@ footer {
 	width: "384px";
 	height: "216px";
 	display: block;
+}
+
+.dropdown::marker {
+	display: none;
 }

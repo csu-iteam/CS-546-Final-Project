@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const planGenerator = data.planGenerator;
-let planDataList;
+const xss=require("xss");
 
 router.get('/make_plan', async (req, res) => {
     // res.getHeaders('Access-Control-Allow-Origin:*');
@@ -16,47 +16,27 @@ router.get('/make_plan', async (req, res) => {
 router.post('/generate_plan', async (req, res) => {
     try {
         //console.log(req.body);
-        let sourceNodeList = JSON.parse(req.body.data);
+        let list=xss(req.body.data);
+        let sourceNodeList = JSON.parse(list);
+        console.log(typeof sourceNodeList);
         let plan = await planGenerator.findLowestCostPlan(sourceNodeList);
 
-        //res.json({ plan: planDataList });
-        // planDataList = plan;
-        res.render('plan/planDetail', { plan: planDataList })
-        //console.log(planDataList);
+        res.json({ plan: plan });
     } catch (e) {
         console.log(e);
-        res.status(500).json({ error: "service faild" });
-    }
-})
-
-router.get('/show_plan', async (req, res) => {
-    try {
-        if (dataRecievedByRecommend) {
-            planDataList = dataRecievedByRecommend;
-        }
-        console.log(planDataList)
-        res.render('plan/planDetail', { plan: planDataList });
-    } catch (e) {
         res.status(500).json({ error: "service faild" });
     }
 })
 
 router.get('/getPlace/:searchTerm', async (req, res) => {
     try {
-        let result = await planGenerator.getPoi(req.params.searchTerm);
+        let st=xss(req.params.searchTerm);
+        let result = await planGenerator.getPoi(st);
         res.json(result);
     } catch (e) {
         console.log(e);
         res.status(500);
     }
-})
-
-let dataRecievedByRecommend = [];
-router.post('/addPlaceFromRecommend', async (req, res) => {
-    let theData = req.body.thisPlaceData;
-    res.json(theData);
-    dataRecievedByRecommend.push(theData);
-    // console.log(dataRecievedByRecommend)
 })
 
 module.exports = router;

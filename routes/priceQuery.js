@@ -63,15 +63,15 @@ router.get('/hotel/:loc', async (req, res) => {
     }
 })
 
-router.get('/meal/:loc', async (req, res) => {
-    const locQuery = req.params.loc.trim()
-    if (locQuery !== null) {
-        res.render('layouts/meal')
-    } else {
-        let messErr = 'No location'
-        res.render('layouts/error',
-            {errorMes: messErr})
-    }
+router.get('/meal', async (req, res) => {
+    // const locQuery = req.params.loc.trim()
+    // if (locQuery !== null) {
+    res.render('layouts/meal')
+    // } else {
+    //     let messErr = 'No location'
+    //     res.render('layouts/error',
+    //         {errorMes: messErr})
+    // }
 })
 
 router.get('/airline/:loc', async function (req, res) {
@@ -93,10 +93,10 @@ router.get('/airline', async function (req, res) {
 
 router.post('/airline', async function (req, res) {
     const locQuery = req.body
-    // let oriCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.originLocationCode))[0]
-    // let destCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.destinationLocationCode))[0]
-    // locQuery.originLocationCode = oriCity
-    // locQuery.destinationLocationCode = destCity
+    let oriCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.originLocationCode))[0]
+    let destCity = (await citydata.cityQuery.getCityAirportIATA(locQuery.destinationLocationCode))[0]
+    locQuery.originLocationCode = oriCity
+    locQuery.destinationLocationCode = destCity
 
     try {
         let resu = await citydata.cityQuery.queryAirTicket(locQuery)

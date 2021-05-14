@@ -9,8 +9,8 @@
         let keyData, valueData
         $.each(dataArray, function () {
             item = $(this)
-            keyData = item[0].name
-            valueData = item[0].value
+            keyData = filterXSS(item[0].name)
+            valueData = filterXSS(item[0].value)
             obj[keyData] = valueData
         })
         return obj

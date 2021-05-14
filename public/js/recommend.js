@@ -72,11 +72,13 @@
                     let name = place.name;
                     let latitude = place.geometry.location.lat;
                     let longitude = place.geometry.location.lng;
-                    let splitedArray = place.plus_code.compound_code.split(',');
-                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                    let location_id = "";
-                    for (let i = 1; i < thisArray.length; i++) {
-                        location_id = location_id + ' ' + thisArray[i];
+                    let location_id;
+                    if (!(place.plus_code)) {
+                        location_id = place.name;
+                    } else {
+                        let splitedArray = place.plus_code.compound_code.split(',');
+                        let city = splitedArray[splitedArray.length - 2];
+                        location_id = city.slice(city.indexOf(' ') + 1);
                     }
                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -92,7 +94,7 @@
 
                     placeListU.append(`<li>${node.name}</li>`);
                     planList_u.push(node);
-                    console.log(planList_u);
+                    //console.log(planList_u);
                     // var requestConfig = {
                     //     method: 'POST',
                     //     url: '/plan/addPlaceFromRecommend',
@@ -205,7 +207,7 @@
                     newDiv[i].append(`<img src=${validatedUrl} alt=${targetPic.name} width="384" height="216" class="image">`);
                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                    newDiv[i].append(`<ul></ul>`);
                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -248,11 +250,13 @@
                         let name = place.name;
                         let latitude = place.geometry.location.lat;
                         let longitude = place.geometry.location.lng;
-                        let splitedArray = place.plus_code.compound_code.split(',');
-                        let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                        let location_id = "";
-                        for (let i = 1; i < thisArray.length; i++) {
-                            location_id = location_id + ' ' + thisArray[i];
+                        let location_id;
+                        if (!(place.plus_code)) {
+                            location_id = place.name;
+                        } else {
+                            let splitedArray = place.plus_code.compound_code.split(',');
+                            let city = splitedArray[splitedArray.length - 2];
+                            location_id = city.slice(city.indexOf(' ') + 1);
                         }
                         let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -267,7 +271,7 @@
                         }
                         placeListU.append(`<li>${node.name}</li>`);
                         planList_u.push(node);
-                        console.log(planList_u);
+                        //console.log(planList_u);
                     })
                     $(this).text('Added to your plan');
                 })
@@ -316,7 +320,7 @@
                                     newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                                     newDiv[i].append(`<p>${targetPic.name}</p>`);
                                     newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                                    newDiv[i].append(`<ul>Coordinates: </ul>`);
+                                    newDiv[i].append(`<ul></ul>`);
                                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                                     newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                                     newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -355,11 +359,13 @@
                                     let name = place.name;
                                     let latitude = place.geometry.location.lat;
                                     let longitude = place.geometry.location.lng;
-                                    let splitedArray = place.plus_code.compound_code.split(',');
-                                    let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                                    let location_id = "";
-                                    for (let i = 1; i < thisArray.length; i++) {
-                                        location_id = location_id + ' ' + thisArray[i];
+                                    let location_id;
+                                    if (!(place.plus_code)) {
+                                        location_id = place.name;
+                                    } else {
+                                        let splitedArray = place.plus_code.compound_code.split(',');
+                                        let city = splitedArray[splitedArray.length - 2];
+                                        location_id = city.slice(city.indexOf(' ') + 1);
                                     }
                                     let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -374,7 +380,7 @@
                                     }
                                     placeListU.append(`<li>${node.name}</li>`);
                                     planList_u.push(node);
-                                    console.log(planList_u);
+                                    //console.log(planList_u);
                                 })
                                 $(this).text('Added to your plan');
                             })
@@ -434,7 +440,7 @@
                             newDiv[i].append(`<img src=${targetPic.url.source_url} alt=${targetPic.name} width="384" height="216" class="image">`);
                             newDiv[i].append(`<p>${targetPic.name}</p>`);
                             newDiv[i].append(`<p>Duration: ${targetPic.duration} minutes</p>`);
-                            newDiv[i].append(`<ul>Coordinates: </ul>`);
+                            newDiv[i].append(`<ul></ul>`);
                             newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.latitude}</li>`);
                             newDiv[i].find('ul').append(`<li>Latitude: ${targetPic.coordinates.longitude}</li>`);
                             newDiv[i].append(`<span>Location: </span><p class="location-p">${targetPic.location_id}</p>`);
@@ -473,11 +479,13 @@
                             let name = place.name;
                             let latitude = place.geometry.location.lat;
                             let longitude = place.geometry.location.lng;
-                            let splitedArray = place.plus_code.compound_code.split(',');
-                            let thisArray = splitedArray[splitedArray.length - 2].split(' ');
-                            let location_id = "";
-                            for (let i = 1; i < thisArray.length; i++) {
-                                location_id = location_id + ' ' + thisArray[i];
+                            let location_id;
+                            if (!(place.plus_code)) {
+                                location_id = place.name;
+                            } else {
+                                let splitedArray = place.plus_code.compound_code.split(',');
+                                let city = splitedArray[splitedArray.length - 2];
+                                location_id = city.slice(city.indexOf(' ') + 1);
                             }
                             let duration = (parseInt(6 * Math.random()) + 1) * 30;
 
@@ -492,7 +500,7 @@
                             }
                             placeListU.append(`<li>${node.name}</li>`);
                             planList_u.push(node);
-                            console.log(planList_u);
+                            //console.log(planList_u);
                         })
                         $(this).text('Added to your plan');
                     })
@@ -552,7 +560,7 @@
 
     search_u.on('click', function (event) {
         event.preventDefault();
-        let searchTerm_u_val = searchTerm_u.val();
+        let searchTerm_u_val = filterXSS(searchTerm_u.val());
         if (searchTerm_u_val.trim() == "") {
             errorBox_u.html("please enter searchTerm");
             errorBox_u.show();
@@ -573,29 +581,37 @@
                     var searchId_u = 0;
                     for (let i_u of currentSearchList_u) {
                         let li_u = document.createElement('li');
-                        li.innerHTML = `<label>${i_u.name}</label>
-                                <button id="b${searchId_u}">set start point</button>`;
-                        li.id = `sr${search_u}`;
-                        searchResult_u.append(li);
-                        $(`#sr${search_u}`).on('click', function (event) {
+                        li_u.innerHTML = `<label>${i_u.name}</label>
+                                <button id="b${searchId_u}" class="btn btn-outline-primary">set start point</button>`;
+                        li_u.id = `sr${searchId_u}`;
+                        searchResult_u.append(li_u);
+                        $(`#b${searchId_u}`).on('click', function (event) {
                             event.preventDefault();
                             startPlace_u.empty();
-                            let place_u = currentSearchList[this.id.split('sr')[1]];
+                            let place_u = currentSearchList_u[this.id.split('b')[1]];
+                            //console.log(currentSearchList_u);
                             let name_u = place_u.name;
+                            startPlace_u.html(name_u);
                             let latitude_u = place_u.geometry.location.lat;
                             let longitude_u = place_u.geometry.location.lng;
-                            let splitedArray_u = place_u.plus_code.compound_code.split(',');
-                            let cityArray_u = splitedArray_u[splitedArray_u.length - 2].split(" ");
-                            let location_id_u = cityArray_u[1];
+                            let location_id_u;
+                            if (!(place_u.plus_code)) {
+                                location_id_u = place_u.name;
+                            } else {
+                                let splitedArray = place_u.plus_code.compound_code.split(',');
+                                let city = splitedArray[splitedArray.length - 2];
+                                location_id_u = city.slice(city.indexOf(' ') + 1);
+                            }
                             startNode_u = {
                                 name: name_u,
-                                location_id: location_id,
+                                location_id: location_id_u,
                                 coordinates: {
                                     latitude: latitude_u,
                                     longitude: longitude_u
                                 }
                             }
                         })
+                        searchId_u++;
                     }
                 }
             })
@@ -603,16 +619,16 @@
     })
     makePlan_u.on('click', function (event) {
         event.preventDefault();
-        let date_u = startDate_u.val();
+        let d_u = startDate_u.val();
         if (!startNode_u) {
             errorBox_u.html("please set your start place");
             errorBox_u.show();
-        } else if (date_u == "") {
+        } else if (d_u == "") {
             errorBox_u.html("please set your start date");
             errorBox_u.show();
         } else {
             errorBox_u.hide();
-            let sd_u = date_u.split("-");
+            let sd_u = d_u.split("-");
             let date_u = new Date();
             date_u.setFullYear(sd_u[0]);
             let month_u = parseInt(sd_u[1]);
@@ -620,13 +636,46 @@
             date_u.setMonth(month_u);
             date_u.setDate(sd_u[2]);
             startNode_u.startDate = date_u;
-            planList_u.splice(0, 0, startDate_u);
+            planList_u.splice(0, 0, startNode_u);
+            console.log(planList_u);
             var requestMakePlan_u = {
                 method: 'POST',
                 data: { data: JSON.stringify(planList_u) },
                 url: '/plan/generate_plan'
             }
-            $.ajax(requestMakePlan_u);
+            $.ajax(requestMakePlan_u).then(function (result) {
+                $('#scheme').empty();
+                var plan = result.plan;
+                for (let i = 0; i < plan.plan.length; i++) {
+                    if (plan.plan[i].type == "start") {
+                        $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                        $(`#ol-${i}`).append($(`<li>Departure at: ${JSON.stringify(plan.plan[i].startNode.location_id)}</li>`));
+                        let startDate = new Date(plan.plan[i].startNode.startDate);
+                        $(`#ol-${i}`).append($(`<li>Departure time: ${startDate.getFullYear()}-${startDate.getMonth() + 1}-${startDate.getDate()}</li>`));
+                    } else if (plan.plan[i].type == "traffic") {
+                        $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                        $(`#ol-${i}`).append($(`<li>From: ${JSON.stringify(plan.plan[i].route.legs[0].start_address)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>To: ${JSON.stringify(plan.plan[i].route.legs[0].end_address)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Distance: ${JSON.stringify(plan.plan[i].route.legs[0].distance.text)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Duration: ${JSON.stringify(plan.plan[i].route.legs[0].duration.text)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Travel mode: ${JSON.stringify(plan.plan[i].route.legs[0].steps[0].travel_mode)}</li>`));
+                    } else if (plan.plan[i].type == "flight") {
+                        $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                        $(`#ol-${i}`).append($(`<li>Departure iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.iataCode)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Departure terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.terminal)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Departure time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[0].departure.at)}</li>`));
+                        let length = plan.plan[i].flight.itineraries[0].segments.length;
+                        $(`#ol-${i}`).append($(`<li>Arrival iata code: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.iataCode)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Arrival terminal: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.terminal)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Arrival time: ${JSON.stringify(plan.plan[i].flight.itineraries[0].segments[length - 1].arrival.at)}</li>`));
+                    } else if (plan.plan[i].type == "poi") {
+                        $('#scheme').append($(`<ol id="ol-${i}">Type: ${JSON.stringify(plan.plan[i].type)}    Day: ${JSON.stringify(plan.plan[i].day + 1)}</ol>`));
+                        $(`#ol-${i}`).append($(`<li>Target place: ${JSON.stringify(plan.plan[i].poi.name)}</li>`));
+                        $(`#ol-${i}`).append($(`<li>Duration: ${JSON.stringify(plan.plan[i].poi.duration)} mins</li>`));
+                    }
+                }
+
+            });
         }
     })
 })(window.jQuery);
